@@ -9,6 +9,7 @@ import { ProjectBoardComponent } from './components/project-board/project-board.
 import { TableComponent } from './components/table/table.component';
 import { CardComponent } from './components/card/card.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
+import { SignupPageComponent } from './components/signup-page/signup-page.component';
 
 const appRoutes: Routes = [
   {
@@ -35,7 +36,8 @@ const appRoutes: Routes = [
     ProjectBoardComponent,
     TableComponent,
     CardComponent,
-    LoginPageComponent
+    LoginPageComponent,
+    SignupPageComponent
   ],
   imports: [
     BrowserModule,
