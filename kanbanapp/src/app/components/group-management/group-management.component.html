@@ -14,7 +14,7 @@
             <p>{{ member.name }}</p> 
             <div class="member-options">  
               <a href="" routerLink="/group-management" (click)="member.hide = !member.hide">{{ member.permission }}</a>
-              <a href="" routerLink="/group-management" (click)="deleteMember(member.name)"><i class="far fa-trash-alt"></i></a>
+              <a href="" routerLink="/group-management" (click)="deleteMember(member.name)" style="margin-left: 5px"><i class="far fa-trash-alt"></i></a>
             </div>
           </div>
           <div [hidden]="member.hide" style="display: block;">
