@@ -6,8 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./group-management.component.css']
 })
 export class GroupManagementComponent implements OnInit {
-  private members: Member[];
-  private permissions: string[];
+  members: Member[];
+  permissions: string[];
 
   constructor() {
   }
