@@ -1,7 +1,21 @@
-div {
+.dashboard {
     background: #ffffff;
-    display: flex;
+    display: block;
     padding: 0 5px;
     height: 50vh;
     overflow-x: auto;
+}
+
+.project-header {
+    display: block;
+    height: auto;
+    padding: 0 5px;
+}
+
+.project-header * {
+    display: inline-block;
+}
+
+#members-btn {
+    float: right;
 }

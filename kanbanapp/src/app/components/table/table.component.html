@@ -5,5 +5,5 @@
     </div>
  
     <input #addCardInput type="text" (keyup.enter)="onEnter(addCardInput.value); addCardInput.value=''; displayAddCard=false;" *ngIf="displayAddCard" autofocus>
-    <a href="#" class="table__newcard" (click)="toggleDisplayAddCard();">Add a card...</a>
+    <a href="#" class="table__newcard" (click)="toggleDisplayAddCard();" routerLink="/project-board">Add a card...</a>
 </div>

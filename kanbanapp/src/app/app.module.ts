@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import { RouterModule, Routes } from '@angular/router';
 
 import { AppComponent } from './app.component';
@@ -10,6 +11,7 @@ import { TableComponent } from './components/table/table.component';
 import { CardComponent } from './components/card/card.component';
 import { LoginPageComponent } from './components/login-page/login-page.component';
 import { SignupPageComponent } from './components/signup-page/signup-page.component';
+import { GroupManagementComponent } from './components/group-management/group-management.component';
 
 const appRoutes: Routes = [
   {
@@ -25,9 +27,15 @@ const appRoutes: Routes = [
     data: {
       title: 'Project Board'
     }
+  },
+  {
+    path: 'group-management',
+    component: GroupManagementComponent,
+    data: {
+      title: 'Group Management'
+    }
   }
 ];
-
 
 @NgModule({
   declarations: [
@@ -37,11 +45,13 @@ const appRoutes: Routes = [
     TableComponent,
     CardComponent,
     LoginPageComponent,
-    SignupPageComponent
+    SignupPageComponent,
+    GroupManagementComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    NgbModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,
       { enableTracing: true } // <-- debugging purposes only

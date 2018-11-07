@@ -1,3 +1,9 @@
-<div>
-  <app-table *ngFor="let table of tables" [table]="table" [cardStore]="cardStore"></app-table>
+<div class="container">
+  <div class="project-header">
+      <h2 id="project-name">My Project</h2>
+      <a href="" id="members-btn" class="btn btn-outline-secondary" routerLink="/group-management">Members</a>
+  </div>
+  <div class="dashboard">
+    <app-table *ngFor="let table of tables" [table]="table" [cardStore]="cardStore"></app-table>
+  </div>
 </div>

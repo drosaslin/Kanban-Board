@@ -1,0 +1,24 @@
+.group-header {
+    text-align: center;
+}
+
+.members-container {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5em;
+    border-color: grey;
+    padding: 10px;
+}
+
+.members * {
+    display: inline;
+}
+
+.member-options {
+    float: right;
+}
+
+.fa-trash-alt{
+    color: rgb(87, 87, 87);
+    font-size: 1.3em;
+}

@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="group-header">
+      <h2 id="group-name">My Group</h2>
+  </div>
+
+  <br>
+
+  <div class="members-container">
+    <h3>Members</h3>
+    <div>
+      <ul class="list-group">
+        <li class="list-group-item members" *ngFor="let member of members">
+          <div>
+            <p>{{ member.name }}</p> 
+            <div class="member-options">  
+              <a href="" routerLink="/group-management" (click)="member.hide = !member.hide">{{ member.permission }}</a>
+              <a href="" routerLink="/group-management" (click)="deleteMember(member.name)"><i class="far fa-trash-alt"></i></a>
+            </div>
+          </div>
+          <div [hidden]="member.hide" style="display: block;">
+            <ul style="float: right;">
+              <br>
+              <li *ngFor="let permission of permissions" style="display: block;">
+                <a href="" routerLink="/group-management" (click)="changeMemberPermission(member.name, permission)">{{ permission }}</a>
+              </li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
