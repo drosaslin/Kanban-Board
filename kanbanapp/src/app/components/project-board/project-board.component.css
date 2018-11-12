@@ -1,6 +1,6 @@
 .dashboard {
     background: #ffffff;
-    display: block;
+    display: flex;
     padding: 0 5px;
     height: 50vh;
     overflow-x: auto;
