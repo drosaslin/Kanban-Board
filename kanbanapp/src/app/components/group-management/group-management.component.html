@@ -9,21 +9,15 @@
     <h3>Members</h3>
     <div>
       <ul class="list-group">
-        <li class="list-group-item members" *ngFor="let member of members">
-          <div>
-            <p>{{ member.name }}</p> 
-            <div class="member-options">  
-              <a href="" routerLink="/group-management" (click)="member.hide = !member.hide">{{ member.permission }}</a>
-              <a href="" routerLink="/group-management" (click)="deleteMember(member.name)" style="margin-left: 5px"><i class="far fa-trash-alt"></i></a>
+        <li class="list-group-item member-container" *ngFor="let member of members">
+          <p class="member">{{ member.name }}</p> 
+          <div class="member-options">
+            <div class="permission-list">
+              <select id="department" name="member.permission" [(ngModel)]="member.permission" class="form-control">
+                <option *ngFor="let permission of permissions">{{ permission }}</option>
+              </select>
             </div>
-          </div>
-          <div [hidden]="member.hide" style="display: block;">
-            <ul style="float: right;">
-              <br>
-              <li *ngFor="let permission of permissions" style="display: block;">
-                <a href="" routerLink="/group-management" (click)="changeMemberPermission(member.name, permission)">{{ permission }}</a>
-              </li>
-            </ul>
+            <a href="" routerLink="/group-management" (click)="deleteMember(member.name)" style="margin-left: 5px"><i class="far fa-trash-alt trash-icon"></i></a>
           </div>
         </li>
       </ul>
