@@ -1,0 +1,41 @@
+.group-header {
+    text-align: center;
+}
+
+.members-container {
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 0.5em;
+    border-color: grey;
+    padding: 10px;
+}
+
+.member-container {
+    vertical-align: middle;
+}
+
+.member {
+    display: inline-block;
+    margin-top:  1.5%;
+}
+
+.member-options {
+    display: flex;
+    float: right;
+    margin-top: 1%;
+    height: auto;
+}
+
+.trash-icon {
+    padding-top: 40%;
+}
+
+.permission-list {
+    display: inline;
+    margin-right: 10px;
+}
+
+.fa-trash-alt{
+    color: rgb(2, 1, 1);
+    font-size: 1.3em;
+}

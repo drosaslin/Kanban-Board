@@ -1,0 +1,9 @@
+<div class="table" (dragover)="allowDrop($event)" (drop)="drop($event)">
+    <p class="table__title"><strong>{{ table.name }}</strong></p>
+    <div class="cards">
+        <app-card *ngFor="let cardId of table.cards" [card]="cardStore.getCard(cardId)"></app-card>
+    </div>
+ 
+    <input #addCardInput type="text" (keyup.enter)="onEnter(addCardInput.value); addCardInput.value=''; displayAddCard=false;" *ngIf="displayAddCard" autofocus>
+    <a href="#" class="table__newcard" (click)="toggleDisplayAddCard();" routerLink="/project-board">Add a card...</a>
+</div>
