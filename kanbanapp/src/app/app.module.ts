@@ -4,16 +4,33 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { LoginComponent } from './components/login/login.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { UserProfileComponent } from './components/user-profile/user-profile.component';
+import { LoginpageComponent } from './components/loginpage/loginpage.component';
+import { SignuppageComponent } from './components/signuppage/signuppage.component';
 
 const routes: Routes = [
   {
-    path: 'homepage', component: HomepageComponent,
+    path: '',
+    component: LoginpageComponent,
+    data: {
+      title: 'Login'
+    }
   },
   {
-    path: 'user-profile', component: UserProfileComponent
+    path: 'userRegistration',
+    component: SignuppageComponent,
+    data: {
+      title: 'Sign up'
+    }
+  },
+  {
+    path: 'homepage',
+    component: HomepageComponent
+  },
+  {
+    path: 'user-profile',
+    component: UserProfileComponent
   }
 ];
 
@@ -21,9 +38,10 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     NavbarComponent,
-    LoginComponent,
     HomepageComponent,
-    UserProfileComponent
+    UserProfileComponent,
+    LoginpageComponent,
+    SignuppageComponent
   ],
   imports: [
     BrowserModule,
