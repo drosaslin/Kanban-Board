@@ -1,0 +1,19 @@
+<div class="dashboard">
+  <div dragula="COLUMNS" [(dragulaModel)]="groups">
+    <div class="table" *ngFor="let group of groups; let index = index">
+      <span class="group-handle">
+        {{ group.name }}
+      </span>
+      <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
+        <li *ngFor="let item of group.items" class="task">
+          {{ item.name }}
+        </li>
+      </ul>
+      <input type="text" class="task-input" *ngIf="group.isAddTaskEnabled">
+      <button (click)="addTaskButtonClick(index)">add new task</button>
+    </div>
+  </div>
+  <div>
+    <button (click)="addTableButtonClick()">Add new table</button>
+  </div>
+</div>

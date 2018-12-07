@@ -1,0 +1,59 @@
+.dashboard {
+  display: flex;
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+.table {
+  display: inline-flex;
+  flex-direction: column;
+  margin-right: 20px;
+  width: 200px;
+  background-color: #e2e4e6;
+}
+
+.task-container {
+  list-style: none;
+  min-height: 15px;
+  padding: 0;
+}
+
+.task {
+  background-color: white;
+  margin: 8px;
+}
+
+.task-input {
+  margin-right: 8px;
+  margin-left: 8px;
+  margin-bottom: 8px;
+  margin-top: -16px;
+}
+
+/* in-flight clone */
+.gu-mirror {
+  position: fixed !important;
+  margin: 0 !important;
+  z-index: 9999 !important;
+  opacity: 0.8;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=80)";
+  filter: alpha(opacity=80);
+  pointer-events: none;
+}
+/* high-performance display:none; helper */
+.gu-hide {
+  left: -9999px !important;
+}
+/* added to mirrorContainer (default = body) while dragging */
+.gu-unselectable {
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+}
+/* added to the source element while its mirror is dragged */
+.gu-transit {
+  opacity: 0.2;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=20)";
+  filter: alpha(opacity=20);
+}
