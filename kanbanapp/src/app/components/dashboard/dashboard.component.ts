@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   private addTableButtonClick(): void {
     this.groups.push({
       name: 'New Table',
-      items: [{}],
+      items: [],
       isAddTaskEnabled: false
     });
   }

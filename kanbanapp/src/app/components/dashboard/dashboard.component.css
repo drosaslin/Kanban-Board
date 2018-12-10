@@ -1,33 +1,76 @@
+.container {
+  width: 100%;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.group-info {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.group-info * {
+  display: inline;
+  padding-right: 30px;
+  font-size: 20px;
+}
+
 .dashboard {
   display: flex;
   overflow-x: scroll;
+  /* overflow: hidden; */
   white-space: nowrap;
 }
 
 .table {
   display: inline-flex;
   flex-direction: column;
+  border-radius: 5px;
   margin-right: 20px;
-  width: 200px;
+  width: 250px;
   background-color: #e2e4e6;
+}
+
+.table-name {
+  display: inline-block;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 
 .task-container {
   list-style: none;
   min-height: 15px;
+  margin-bottom: 0;
   padding: 0;
 }
 
 .task {
   background-color: white;
-  margin: 8px;
+  border-radius: 5px;
+  min-height: 45px;
+  padding-left: 5px;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-bottom: 7px;
+}
+
+.task-name {
+  text-overflow: clip;
+  display: block;
+  width: 100%;
 }
 
 .task-input {
   margin-right: 8px;
   margin-left: 8px;
   margin-bottom: 8px;
-  margin-top: -16px;
+  margin-top: 0;
+}
+
+.add-task-btn {
+  min-height: 30px;
+  padding: 0;
 }
 
 /* in-flight clone */
