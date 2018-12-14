@@ -13,7 +13,7 @@
             <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
               <button class="dropdown-item">Edit</button>
-              <button class="dropdown-item">Delete</button>
+              <button class="dropdown-item" (click)="deleteTableButtonClick(group.name)">Delete</button>
             </div>
           </div>
         </span>
@@ -23,11 +23,11 @@
           </li>
         </ul>
         <input type="text" class="task-input" *ngIf="group.isAddTaskEnabled">
-        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
+        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
     <div>
-      <a href="#" routerLink="null" class="btn btn-secondary btn-lg" (click)="addTableButtonClick()" role="button" aria-disabled="true">+ add new table</a>
+      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()" role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>
 </div>

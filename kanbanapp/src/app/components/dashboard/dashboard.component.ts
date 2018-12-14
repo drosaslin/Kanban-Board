@@ -63,4 +63,13 @@ export class DashboardComponent implements OnInit {
       isAddTaskEnabled: false
     });
   }
+
+  private deleteTableButtonClick(tableName): void {
+    for(var n = 0; n < this.groups.length; n++) {
+      if(this.groups[n].name == tableName) {
+        this.groups.splice(n, 1);
+        break;
+      }
+    }
+  }
 }
