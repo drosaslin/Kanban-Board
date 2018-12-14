@@ -1,7 +1,7 @@
-.container {
+.dashboard-container {
   width: 100%;
-  margin-left: 5px;
-  margin-right: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .group-info {
@@ -17,8 +17,7 @@
 
 .dashboard {
   display: flex;
-  overflow-x: scroll;
-  /* overflow: hidden; */
+  overflow-x: auto;
   white-space: nowrap;
 }
 
@@ -71,6 +70,34 @@
 .add-task-btn {
   min-height: 30px;
   padding: 0;
+}
+
+.dropdown-button {
+  height: 2rem;
+  font-size: 2rem;
+  padding: 0;
+  margin-right: 8px;
+  background-color: transparent;
+  color: #5a6268;
+  border-color: transparent;
+}
+
+.dropdown-button:hover {
+  background-color: transparent;
+  color: white;
+}
+
+.dropdown-button:active {
+  box-shadow: none;
+  color: #5a6268;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.dropdown-button:focus {
+  background-color: transparent;
+  border-color: transparent;
+  box-shadow: none;
 }
 
 /* in-flight clone */

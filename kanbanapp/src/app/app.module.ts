@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DragulaModule } from 'ng2-dragula';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -55,6 +56,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    NgbModule,
     RouterModule.forRoot(routes),
     DragulaModule.forRoot()
   ],

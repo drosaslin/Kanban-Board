@@ -1,4 +1,4 @@
-<div class="container">
+<div class="dashboard-container">
   <div class="group-info">
     <p>Group Name</p>
     <p>Project Name</p>
@@ -9,6 +9,13 @@
       <div class="table" *ngFor="let group of groups; let index = index">
         <span class="group-handle">
           <p class="table-name"><strong>{{ group.name }}</strong></p>
+          <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
+            <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item">Edit</button>
+              <button class="dropdown-item">Delete</button>
+            </div>
+          </div>
         </span>
         <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
           <li *ngFor="let item of group.items" class="task">
