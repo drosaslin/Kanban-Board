@@ -1,0 +1,74 @@
+<div class="container w-100">
+  <div class="w-100 group-profile align-items-center">
+    <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
+    <h1 class="text-center group-name">Group Name</h1>
+  </div>
+
+  <ngb-tabset>
+    <ngb-tab title="Team Members">
+      <ng-template ngbTabContent>
+        <button href="#" class="btn btn-secondary d-inline float-right m-3">Invite</button>
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th scope="col">Member</th>
+              <th scope="col">Type</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Mark</td>
+              <td>
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">User</button>
+                    <button class="dropdown-item">Admin</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Jacob</td>
+              <td>
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">User</button>
+                    <button class="dropdown-item">Admin</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Larry</td>
+              <td>
+                <div ngbDropdown class="d-inline-block">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                    <button class="dropdown-item">User</button>
+                    <button class="dropdown-item">Admin</button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+    </ngb-tab>
+    <ngb-tab title="Dashboards">
+      <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+        <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+          craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+          cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+          yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+          shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+          sint qui sapiente accusamus tattooed echo park.</p>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
+</div>
