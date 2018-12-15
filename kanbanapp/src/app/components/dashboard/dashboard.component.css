@@ -114,6 +114,22 @@
   box-shadow: none;
 }
 
+.member-container {
+  position: relative;
+  display: inline-block;
+  background-color: darkslategray;
+  width: 8vh;
+  height: 8vh;
+}
+
+.member-container * {
+  position: absolute;
+  color: white;   
+  margin-left: 19%;            
+  top: 50%;                         
+  transform: translate(0, -50%);
+}
+
 /* Back Pulse */
 @-webkit-keyframes hvr-back-pulse {
   50% {
