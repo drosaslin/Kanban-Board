@@ -1,4 +1,4 @@
-<div class="container">
+<div class="dashboard-container">
   <div class="group-info">
     <p>Group Name</p>
     <p>Project Name</p>
@@ -9,18 +9,52 @@
       <div class="table" *ngFor="let group of groups; let index = index">
         <span class="group-handle">
           <p class="table-name"><strong>{{ group.name }}</strong></p>
+          <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
+            <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item">Edit</button>
+              <button class="dropdown-item" (click)="deleteTableButtonClick(group.name)">Delete</button>
+            </div>
+          </div>
         </span>
         <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
-          <li *ngFor="let item of group.items" class="task">
+          <li *ngFor="let item of group.items" class="task" (click)="open(content, item.name)">
             <p class="task-name">{{ item.name }}</p>
           </li>
         </ul>
         <input type="text" class="task-input" *ngIf="group.isAddTaskEnabled">
-        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
+        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
     <div>
-      <a href="#" routerLink="null" class="btn btn-secondary btn-lg" (click)="addTableButtonClick()" role="button" aria-disabled="true">+ add new table</a>
+      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()" role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>
 </div>
+
+
+<!-- MODAL -->
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form>
+        <div class="form-group">
+          <label for="dateOfBirth">Date of birth</label>
+          <div class="input-group">
+            <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+  </ng-template>

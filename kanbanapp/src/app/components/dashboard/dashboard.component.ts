@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { DragulaService } from 'ng2-dragula';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-dashboard',
@@ -8,6 +9,7 @@ import { DragulaService } from 'ng2-dragula';
 })
 
 export class DashboardComponent implements OnInit {
+  closeResult: string;
   groups: Array<any> = [
     {
       name: 'To Do',
@@ -21,7 +23,7 @@ export class DashboardComponent implements OnInit {
     }
   ];
 
-  constructor(private dragulaService: DragulaService) {
+  constructor(private dragulaService: DragulaService, private modalService: NgbModal) {
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
@@ -29,6 +31,25 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+  }
+
+  public open(content, itemName) {
+    console.log(itemName);
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return  `with: ${reason}`;
+    }
   }
 
   private addTaskButtonClick(index): void {
@@ -41,5 +62,14 @@ export class DashboardComponent implements OnInit {
       items: [],
       isAddTaskEnabled: false
     });
+  }
+
+  private deleteTableButtonClick(tableName): void {
+    for(var n = 0; n < this.groups.length; n++) {
+      if(this.groups[n].name == tableName) {
+        this.groups.splice(n, 1);
+        break;
+      }
+    }
   }
 }
