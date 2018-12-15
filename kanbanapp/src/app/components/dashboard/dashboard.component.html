@@ -44,15 +44,29 @@
     <div class="modal-body">
       <form>
         <div class="form-group">
-          <label for="">Members</label>
+
           <div>
-            <div class="member-container rounded-circle">
-              <p>DR</p>
-            </div>
-            <div class="member-container rounded-circle">
-                <p>DR</p>
+          <label class="label-title" for="">Members</label>
+            <div class="modal-division-container">
+              <div class="initials-container rounded-circle">
+                <a href="javascript:void(0);" class="member-initials">DR</a>
+                <div class="overlay rounded-circle">
+                  <a href="javascript:void(0);">
+                    <p class="member-delete">X</p>
+                  </a>
+                </div>
+              </div>
+              <div class="initials-container rounded-circle">
+                <a href="javascript:void(0);" class="member-initials">DR</a>
+                <div class="overlay rounded-circle">
+                  <a href="javascript:void(0);">
+                    <p class="member-delete">X</p>
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
+
           <label for="dueDate">Due Date</label>
           <div class="input-group">
             <input id="dueDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
