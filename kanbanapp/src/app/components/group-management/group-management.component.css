@@ -1,0 +1,58 @@
+@import "~bootstrap/dist/css/bootstrap.css";
+
+.group-photo{
+    width: 200px;
+    height: auto;
+}
+
+.container{
+    height: auto;
+}
+
+.group-profile{
+    padding: 10px;
+    height: auto;
+    margin: 0;
+}
+
+.nav-item{
+    padding: 10px;
+    border-color: blue;
+    border-radius: 10%;
+}
+
+li > a{
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.tab-pane{
+    padding: 10px 0;
+}
+
+table{
+    margin: 20px 0;
+}
+
+.fa-trash-alt{
+    color: rgb(2, 1, 1);
+    font-size: 1.3em;
+}
+
+.trash-icon {
+    padding-top: 40%;
+}
+
+.table {
+    overflow-y: visible !important;
+}
+
+.user-photo{
+    width: 40px;
+    height: auto;
+    margin-right: 5px;
+}
