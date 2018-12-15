@@ -1,51 +1,46 @@
+.page-container {
+    width: auto;
+    height: auto;
+}
+
 #personalBoardsButton {
     padding: 100px 300px;
     font-size: 100px;
 }
 
-* {box-sizing: border-box}
-body {font-family: "Lato", sans-serif;}
-
-/* Style the tab */
-.tab {
-  float: left;
-  border: 1px solid #ccc;
-  background-color: #f1f1f1;
-  width: 30%;
-  height: 300px;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  display: block;
-  background-color: inherit;
-  color: black;
-  padding: 22px 16px;
-  width: 100%;
+.button {
+  background-color: rgba(9,45,66,.13); 
   border: none;
-  outline: none;
-  text-align: left;
+  color: #7D7D7D;
+  padding: 45px 60px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
   cursor: pointer;
-  transition: 0.3s;
-  font-size: 17px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
 }
 
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #ddd;
+.personal-board-btn {
+    border-radius:15px;
 }
 
-/* Create an active/current "tab button" class */
-.tab button.active {
-  background-color: #ccc;
+.personal-board-btn:hover {
+    background-color: #adadad;
+    color: white;
 }
 
-/* Style the tab content */
-.tabcontent {
-  float: left;
-  padding: 0px 12px;
-  border: 1px solid #ccc;
-  width: 70%;
-  border-left: none;
-  height: 300px;
+.group-board-btn {
+    border-radius:15px;
+}
+
+.group-board-btn:hover {
+    background-color: #adadad;
+    color: white;
+}
+
+#interval {
+    padding:25px 100%;
 }

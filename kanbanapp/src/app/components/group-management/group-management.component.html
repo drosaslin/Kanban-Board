@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 <div class="container w-100">
   <div class="w-100 group-profile align-items-center">
     <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
@@ -8,51 +9,54 @@
     <ngb-tab title="Team Members">
       <ng-template ngbTabContent>
         <button href="#" class="btn btn-secondary d-inline float-right m-3">Invite</button>
-        <table class="table">
+        <table class="table table-hover">
           <thead class="thead-light">
             <tr>
-              <th scope="col">Member</th>
-              <th scope="col">Type</th>
+              <th scope="col" class="w-75">Member</th>
+              <th scope="col" class="w-25">Permission</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class=".align-middle">
             <tr>
-              <td>
+              <td class="h5">
                 <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Mark</td>
               <td>
                 <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button class="dropdown-item">User</button>
                     <button class="dropdown-item">Admin</button>
                   </div>
+                  <i class="fa fa-trash-alt"></i>
                 </div>
               </td>
             </tr>
             <tr>
-              <td>
+              <td class="h5">
                 <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Jacob</td>
               <td>
                 <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button class="dropdown-item">User</button>
                     <button class="dropdown-item">Admin</button>
                   </div>
+                  <i class="fa fa-trash-alt"></i>
                 </div>
               </td>
             </tr>
             <tr>
-              <td>
+              <td class="h5">
                 <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Larry</td>
               <td>
-                <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Member Type</button>
+                <div ngbDropdown class="d-inline-block dropdown">
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button class="dropdown-item">User</button>
                     <button class="dropdown-item">Admin</button>
                   </div>
                 </div>
+                <i class="fa fa-trash-alt"></i>
               </td>
             </tr>
           </tbody>
@@ -60,13 +64,12 @@
       </ng-template>
     </ngb-tab>
     <ngb-tab title="Dashboards">
-      <ng-template ngbTabContent>Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
-        <p>Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
-          craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
-          cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
-          yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
-          shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
-          sint qui sapiente accusamus tattooed echo park.</p>
+      <ng-template ngbTabContent>
+        <div class="w-100 m-3 dashboards">
+          <button type="button" class="btn btn-primary dashboard">Dashboard 1</button>
+          <button type="button" class="btn btn-success dashboard">Dashboard 2</button>
+          <button type="button" class="btn btn-secondary dashboard">Create new dashboard</button>
+        </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>

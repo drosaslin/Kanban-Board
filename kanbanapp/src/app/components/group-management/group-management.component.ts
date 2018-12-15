@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./group-management.component.css']
 })
 export class GroupManagementComponent implements OnInit {
-
+  userType = 'Member';
   constructor() { }
 
   ngOnInit() {
