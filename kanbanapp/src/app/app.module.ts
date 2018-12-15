@@ -11,6 +11,7 @@ import { UserProfileComponent } from './components/user-profile/user-profile.com
 import { LoginpageComponent } from './components/loginpage/loginpage.component';
 import { SignuppageComponent } from './components/signuppage/signuppage.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { GroupManagementComponent } from './components/group-management/group-management.component';
 
 const routes: Routes = [
   {
@@ -41,6 +42,13 @@ const routes: Routes = [
     data: {
       title: 'Dashboard'
     }
+  },
+  {
+    path: 'group-management',
+    component: GroupManagementComponent,
+    data: {
+      title: 'Group Management'
+    }
   }
 ];
 
@@ -52,7 +60,8 @@ const routes: Routes = [
     UserProfileComponent,
     LoginpageComponent,
     SignuppageComponent,
-    DashboardComponent
+    DashboardComponent,
+    GroupManagementComponent
   ],
   imports: [
     BrowserModule,
