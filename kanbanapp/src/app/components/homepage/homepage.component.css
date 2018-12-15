@@ -7,3 +7,40 @@
     padding: 100px 300px;
     font-size: 100px;
 }
+
+.button {
+  background-color: rgba(9,45,66,.13); 
+  border: none;
+  color: #7D7D7D;
+  padding: 45px 60px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.personal-board-btn {
+    border-radius:15px;
+}
+
+.personal-board-btn:hover {
+    background-color: #adadad;
+    color: white;
+}
+
+.group-board-btn {
+    border-radius:15px;
+}
+
+.group-board-btn:hover {
+    background-color: #adadad;
+    color: white;
+}
+
+#interval {
+    padding:25px 100%;
+}
