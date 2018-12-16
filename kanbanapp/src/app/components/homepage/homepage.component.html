@@ -7,13 +7,52 @@
   </div>
   
   <!-- Page Content -->
+
   <div style="margin-left:20%">
+    <!-- Modal -->
+    <ng-template #content let-modal>
+      <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <!-- <label for="dateOfBirth">Date of birth</label>
+            <div class="input-group">
+              <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+              </div>
+            </div> -->
+            <input type="text" id="fName" class="form-control" placeholder="Add New Board Title" required autofocus>
+          </div>
+          <!-- <div class="w3-dropdown-click">
+            <button onclick="myFunction()" class="w3-button">Click Me</button>
+            <div id="Demo" class="w3-dropdown-content w3-bar-block w3-animate-zoom">
+              <a href="#" class="w3-bar-item w3-button">Link 1</a>
+              <a href="#" class="w3-bar-item w3-button">Link 2</a>
+              <a href="#" class="w3-bar-item w3-button">Link 3</a>
+            </div>
+          </div> -->
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+      </div>
+    </ng-template>
+
+    <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
+    
 
     <div class="w3-container">
       <h3>Personal Board</h3>
-      <button class="button personal-board-btn">New Board</button>
+      <button class="button personal-board-btn" (click)="open(content)">New Board</button>
+      <pre>{{closeResult}}</pre>
     </div>
-    
+
     <div id="interval"></div>
 
     <div class="w3-container">
