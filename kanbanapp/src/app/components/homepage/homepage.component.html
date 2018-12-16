@@ -18,34 +18,43 @@
         </button>
       </div>
       <div class="modal-body">
-        <form>
+        <div>
           <div class="form-group">
-            <!-- <label for="dateOfBirth">Date of birth</label>
-            <div class="input-group">
-              <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-              </div>
-            </div> -->
             <input type="text" id="fName" class="form-control" placeholder="Add New Board Title" required autofocus>
           </div>
-          <!-- <div class="w3-dropdown-click">
-            <button onclick="myFunction()" class="w3-button">Click Me</button>
-            <div id="Demo" class="w3-dropdown-content w3-bar-block w3-animate-zoom">
-              <a href="#" class="w3-bar-item w3-button">Link 1</a>
-              <a href="#" class="w3-bar-item w3-button">Link 2</a>
-              <a href="#" class="w3-bar-item w3-button">Link 3</a>
+          <!-- dropdown list -->
+          <!-- Choose a team -->
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button class="dropdown-item">Team1</button>
+                  <button class="dropdown-item">Team2</button>
+                  <button class="dropdown-item">Team3</button>
+                </div>
+              </div>
             </div>
-          </div> -->
-        </form>
+          </div>
+          <br>
+          <!-- Choose authority -->
+          <div class="row">
+            <div class="col">
+              <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                  <button class="dropdown-item" (click)="privateBtn()">Private</button>
+                  <button class="dropdown-item">Public</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        <button type="button" class="btn btn-outline-dark" (click)="create()">Create</button>
       </div>
     </ng-template>
-
-    <!-- <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button> -->
-    
 
     <div class="w3-container">
       <h3>Personal Board</h3>

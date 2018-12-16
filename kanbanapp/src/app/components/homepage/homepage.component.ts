@@ -21,6 +21,14 @@ export class HomepageComponent implements OnInit {
     });
   }
 
+  privateBtn() {
+    console.log('AAAAAAAAAAA');
+  }
+
+  create() {
+    console.log('AAAAAAAAAAA');
+  }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
