@@ -1,11 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { DragulaModule } from 'ng2-dragula';
+import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FormsModule } from '@angular/forms';
 import { AngularFireModule } from 'angularfire2';
-import { AngularFireDatabaseModule} from 'angularfire2/database';
-import { AngularFireAuthModule} from 'angularfire2/auth';
+import { AngularFireDatabaseModule, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireAuthModule, AngularFireAuth } from 'angularfire2/auth';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -16,6 +17,8 @@ import { SignuppageComponent } from './components/signuppage/signuppage.componen
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GroupManagementComponent } from './components/group-management/group-management.component';
 import { environment } from '../environments/environment';
+
+import { AuthService } from './services/auth.service';
 
 const routes: Routes = [
   {
@@ -69,6 +72,7 @@ const routes: Routes = [
   ],
   imports: [
     BrowserModule,
+    FormsModule,
     NgbModule,
     RouterModule.forRoot(routes),
     DragulaModule.forRoot().ngModule,
@@ -76,7 +80,12 @@ const routes: Routes = [
     AngularFireDatabaseModule,
     AngularFireAuthModule
   ],
-  providers: [],
+  providers: [
+    DragulaService,
+    AngularFireAuth,
+    AngularFireDatabase,
+    AuthService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

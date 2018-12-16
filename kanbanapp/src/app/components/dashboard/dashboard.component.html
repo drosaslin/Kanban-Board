@@ -18,7 +18,7 @@
           </div>
         </span>
         <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
-          <li *ngFor="let item of group.items" class="task" (click)="open(content, item.name)">
+          <li *ngFor="let item of group.items" class="task" (click)="openTaskModal(content, item.name)">
             <p class="task-name">{{ item.name }}</p>
           </li>
         </ul>
@@ -32,7 +32,6 @@
   </div>
 </div>
 
-
 <!-- MODAL -->
 <ng-template #content let-modal>
     <div class="modal-header">
@@ -45,9 +44,9 @@
       <form>
         <div class="form-group">
 
-          <div>
-          <label class="label-title" for="">Members</label>
-            <div class="modal-division-container">
+          <div class="modal-division-container">
+          <label class="label-title" for=""><h5>Members</h5></label>
+            <div>
               <div class="initials-container rounded-circle">
                 <a href="javascript:void(0);" class="member-initials">DR</a>
                 <div class="overlay rounded-circle">
@@ -56,25 +55,62 @@
                   </a>
                 </div>
               </div>
-              <div class="initials-container rounded-circle">
-                <a href="javascript:void(0);" class="member-initials">DR</a>
-                <div class="overlay rounded-circle">
-                  <a href="javascript:void(0);">
-                    <p class="member-delete">X</p>
-                  </a>
-                </div>
+            </div>
+          </div>
+          
+          <div class="modal-division-container">
+            <label class="label-title" for="dueDate"><h5>Due Date</h5></label>
+            <div class="input-group">
+              <input id="dueDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+              </div>
+            </div>
+            </div>
+          </div>
+
+          <div class="modal-division-container">
+            <label class="label-title" for="description"><h5>Description</h5></label>
+            <div class="form-group">
+              <div (click)="descriptionTextBoxClick()">
+                <textarea class="form-control" [class.task-description]="!isDescriptionTextBoxEnabled"
+                rows="5" id="description" placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled"></textarea>
+              </div>
+              <div *ngIf="isDescriptionTextBoxEnabled" class="description-btn-container">
+                <button type="button" class="btn btn-success" (click)="saveDescriptionClick()">Save</button>
+                <button type="button" class="close close-description-btn" aria-label="Close" (click)="closeDescriptionClick()">&times;</button>
               </div>
             </div>
           </div>
 
-          <label for="dueDate">Due Date</label>
-          <div class="input-group">
-            <input id="dueDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+          <div class="modal-division-container">
+            <label class="label-title" for="commentTextbox"><h5>Add Comment</h5></label>
+            <div class="form-group">
+              <textarea class="form-control comment-textbox hvr-shadow" rows="5" 
+              id="commentTextbox" placeholder="Write a comment..." name="taskComment" [(ngModel)]="taskComment"></textarea>
+            </div>
+            <div class="comment-btn-container">
+              <button type="button" class="btn btn-success" [disabled]="!isAddCommentButtonEnabled">Add</button>
             </div>
           </div>
-        </div>
+          
+          <div class="modal-division-container">
+            <label class="label-title" for="comment"><h5>Members Comments</h5></label>
+            <div class="comments-container">
+              <div class="comment-container">
+                <div class="comment-data-container">
+                  <div class="initials-container rounded-circle">
+                    <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
+                  </div>
+                  <div class="member-comment">
+                    <p class="member-name"><strong>David Rosas</strong></p>
+                    <p class="comment">Very good</p>
+                  </div>
+                </div>
+                <hr class="col-xs-12">
+              </div>
+            </div>
+          </div>
       </form>
     </div>
     <div class="modal-footer">

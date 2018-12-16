@@ -86,11 +86,15 @@
 .task {
   background-color: white;
   border-radius: 5px;
-  min-height: 45px;
+  min-height: 65px;
   padding-left: 5px;
   margin-left: 8px;
   margin-right: 8px;
   margin-bottom: 7px;
+}
+
+.task:hover {
+  background-color: rgba(255, 255, 255, 0.582);
 }
 
 .task-name {
@@ -121,13 +125,23 @@
 
 /* -------------------MODAL--------------------- */
 
+.label-title h5 {
+  margin: 0;
+}
+
 .label-title {
   margin-bottom: 5px;
 }
 
 .modal-division-container {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
+
+.form-control {
+  max-height: 80px;
+}
+
+/* ****MEMBER INITIALS**** */
 
 .initials-container {
   position: relative;
@@ -190,7 +204,73 @@
   opacity: 1;
 }
 
+/* ****TASK DESCRIPTION**** */
+
+.task-description:hover {
+  background-color: rgba(161, 160, 160, 0.459);
+}
+
+.description-btn-container {
+  margin-top: 6px;
+}
+
+.close-description-btn {
+  position: absolute;
+  float: none;
+  margin-left: 10px;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+/* ****TASK COMMENT TEXTBOX**** */
+
+.comment-textbox:focus {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #ced4da;
+}
+
+.comment-btn-container {
+  margin-top: -10px;
+}
+
+/* ****TASK MEMBERS COMMENTS**** */
+
+.comment-container {
+  margin-bottom: 10px;
+}
+
+.comment-data-container {
+  display: flex;
+}
+
+.member-comment {
+  display: inline-block;
+  flex-grow: 1;
+  word-break: break-all;
+}
+
+.member-comment p {
+  margin-bottom: 0;
+}
+
 /* ------------------EFFECTS---------------------- */
+
+/* Shadow */
+.hvr-shadow {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: perspective(1px) translateZ(0);
+  transform: perspective(1px) translateZ(0);
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0);
+  -webkit-transition-duration: 0.3s;
+  transition-duration: 0.3s;
+  -webkit-transition-property: box-shadow;
+  transition-property: box-shadow;
+}
+.hvr-shadow:focus, .hvr-shadow:active {
+  box-shadow: 0 10px 10px -10px rgba(0, 0, 0, 0.5);
+}
 
 /* Back Pulse */
 @-webkit-keyframes hvr-back-pulse {
