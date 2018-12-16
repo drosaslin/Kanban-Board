@@ -14,11 +14,14 @@
    
     <div class="w3-container">
       <h3>Personal Board</h3>
-      <div *ngFor="let personalGroup of personalGroups; let index = index">
-        <button class="button group-board-btn" style = "display: inline-block;">{{ item.name }}</button>
-        <!-- <input type="text" class="task-input" *ngIf="group.isAddPersonalBoardEnabled">
-        <a href="#" routerLink="null" (click)="createPersonalBoardClick(index)" role="button" aria-disabled="true">add new task</a> -->
+      <div style="display: inline-block;" *ngFor="let personalGroup of personalGroups;">
+          <button class="button group-board-btn">{{ personalGroup.name }}</button>
       </div>
+      <!-- <div *ngFor="let personalGroup of personalGroups; let index = index">
+        <button class="button group-board-btn" style = "display: inline-block;">{{ item.name }}</button>
+        <input type="text" class="task-input" *ngIf="group.isAddPersonalBoardEnabled">
+        <a href="#" routerLink="null" (click)="createPersonalBoardClick(index)" role="button" aria-disabled="true">add new task</a> -->
+      <!-- </div> -->
       <button class="button personal-board-btn" (click)="open(content)">New Board</button>
       <pre>{{closeResult}}</pre>
     </div>

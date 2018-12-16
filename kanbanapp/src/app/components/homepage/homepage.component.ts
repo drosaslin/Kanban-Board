@@ -41,11 +41,9 @@ export class HomepageComponent implements OnInit {
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
-    }
-    else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
-    }
-    else {
+    } else {
       return `with: ${reason}`;
     }
   }
@@ -53,9 +51,12 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
   }
 
-  private createPersonalBoardClick(index): void {
-    console.log('B');
-    this.personalGroups[index].isAddPersonalBoardEnabled = !this.personalGroups[index].isAddPersonalBoardEnabled;
+  public createPersonalBoardClick(): void {
+    const newName = {
+      name: 'new board 2'
+    };
+
+    this.personalGroups.push(newName);
   }
 }
 
