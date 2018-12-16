@@ -40,6 +40,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('init');
   }
 
   public openTaskModal(content, itemName) {
