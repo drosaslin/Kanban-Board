@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-homepage',
@@ -11,7 +12,15 @@ export class HomepageComponent implements OnInit {
 
   closeResult: string;
 
-  constructor(private modalService: NgbModal) {}
+  personalGroups: Array<any> = [
+    {
+      name: 'new board',
+      isAddPersonalBoardEnabled: false
+    }
+  ];
+
+  constructor(private modalService: NgbModal) {
+  }
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
@@ -19,6 +28,7 @@ export class HomepageComponent implements OnInit {
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+    console.log('AAAAAAAAAAA');
   }
 
   privateBtn() {
@@ -44,4 +54,9 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
   }
 
+  private createPersonalBoardClick(index): void {
+    console.log('B');
+    this.personalGroups[index].isAddPersonalBoardEnabled = !this.personalGroups[index].isAddPersonalBoardEnabled;
+  }
 }
+
