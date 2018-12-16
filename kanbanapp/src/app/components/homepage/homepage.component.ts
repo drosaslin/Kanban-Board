@@ -1,5 +1,6 @@
 import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DragulaService } from 'ng2-dragula';
 
 @Component({
   selector: 'app-homepage',
