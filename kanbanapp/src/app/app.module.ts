@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DragulaModule } from 'ng2-dragula';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule} from 'angularfire2/database';
+import { AngularFireAuthModule} from 'angularfire2/auth';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -12,6 +15,7 @@ import { LoginpageComponent } from './components/loginpage/loginpage.component';
 import { SignuppageComponent } from './components/signuppage/signuppage.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GroupManagementComponent } from './components/group-management/group-management.component';
+import { environment } from '../environments/environment';
 
 const routes: Routes = [
   {
@@ -67,7 +71,10 @@ const routes: Routes = [
     BrowserModule,
     NgbModule,
     RouterModule.forRoot(routes),
-    DragulaModule.forRoot()
+    DragulaModule.forRoot().ngModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    AngularFireAuthModule
   ],
   providers: [],
   bootstrap: [AppComponent]
