@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 
 @Component({
   selector: 'app-signuppage',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SignuppageComponent implements OnInit {
 
-  constructor() { }
+  constructor(public afAuth: AngularFireAuth) {}
 
   ngOnInit() {
   }
