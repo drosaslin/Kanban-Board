@@ -15,13 +15,8 @@
     <div class="w3-container">
       <h3>Personal Board</h3>
       <div style="display: inline-block;" *ngFor="let personalGroup of personalGroups;">
-          <button class="button group-board-btn">{{ personalGroup.name }}</button>
+        <button class="button group-board-btn">{{ personalGroup.name }}</button>
       </div>
-      <!-- <div *ngFor="let personalGroup of personalGroups; let index = index">
-        <button class="button group-board-btn" style = "display: inline-block;">{{ item.name }}</button>
-        <input type="text" class="task-input" *ngIf="group.isAddPersonalBoardEnabled">
-        <a href="#" routerLink="null" (click)="createPersonalBoardClick(index)" role="button" aria-disabled="true">add new task</a> -->
-      <!-- </div> -->
       <button class="button personal-board-btn" (click)="open(content)">New Board</button>
       <pre>{{closeResult}}</pre>
     </div>
@@ -34,16 +29,6 @@
       <button class="button group-board-btn">Group2</button>
       <button class="button group-board-btn">New Board</button>
     </div>
-    
-    <!-- <div>
-      <div *ngFor="let personalGroup of personalGroups; let index = index">
-          
-        <p>{{ item.name }}</p>
-        <input type="text" class="task-input" *ngIf="group.isAddPersonalBoardEnabled">
-        <a href="#" routerLink="null" (click)="createPersonalBoardClick(index)" role="button" aria-disabled="true">add new task</a>
-      </div>
-    </div> -->
-
   </div>
 </div>
 
@@ -56,9 +41,9 @@
     </div>
     <div class="modal-body">
       <div>
-        <div class="form-group">
-          <input type="text" id="fName" class="form-control" placeholder="Add New Board Title" required autofocus>
-        </div>
+        <form class="form-group">
+          <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)] ="newBoardName"  placeholder="Add New Board Title" required autofocus>
+        </form>
         <!-- dropdown list -->
         <!-- Choose a team -->
         <div class="row">

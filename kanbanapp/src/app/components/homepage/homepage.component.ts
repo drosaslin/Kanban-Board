@@ -1,6 +1,7 @@
 import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DragulaService } from 'ng2-dragula';
+import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
 @Component({
   selector: 'app-homepage',
@@ -11,6 +12,8 @@ import { DragulaService } from 'ng2-dragula';
 export class HomepageComponent implements OnInit {
 
   closeResult: string;
+
+  newBoardName: string;
 
   personalGroups: Array<any> = [
     {
@@ -53,10 +56,10 @@ export class HomepageComponent implements OnInit {
 
   public createPersonalBoardClick(): void {
     const newName = {
-      name: 'new board 2'
+      name: this.newBoardName
     };
-
     this.personalGroups.push(newName);
+    this.newBoardName = '';
   }
 }
 
