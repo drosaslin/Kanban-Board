@@ -1,4 +1,5 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 <div class="page-container">
   <div class="w3-sidebar w3-bar-block" style="width:20%"> 
     <a href="#" class="w3-bar-item w3-button">看板</a>
@@ -10,52 +11,7 @@
 
   <div style="margin-left:20%">
     <!-- Modal -->
-    <ng-template #content let-modal>
-      <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div>
-          <div class="form-group">
-            <input type="text" id="fName" class="form-control" placeholder="Add New Board Title" required autofocus>
-          </div>
-          <!-- dropdown list -->
-          <!-- Choose a team -->
-          <div class="row">
-            <div class="col">
-              <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button class="dropdown-item">Team1</button>
-                  <button class="dropdown-item">Team2</button>
-                  <button class="dropdown-item">Team3</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <br>
-          <!-- Choose authority -->
-          <div class="row">
-            <div class="col">
-              <div ngbDropdown class="d-inline-block">
-                <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                  <button class="dropdown-item" (click)="privateBtn()">Private</button>
-                  <button class="dropdown-item">Public</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-dark" (click)="create()">Create</button>
-      </div>
-    </ng-template>
-
+   
     <div class="w3-container">
       <h3>Personal Board</h3>
       <button class="button personal-board-btn" (click)="open(content)">New Board</button>
@@ -66,8 +22,65 @@
 
     <div class="w3-container">
       <h3>Group Board</h3>
+      <button class="button group-board-btn">Group1</button>
+      <button class="button group-board-btn">Group2</button>
       <button class="button group-board-btn">New Board</button>
     </div>
     
+    <div>
+      <div *ngFor="let personalGroup of personalGroups; let index = index">
+          
+        <p>{{ item.name }}</p>
+        <!-- <input type="text" class="task-input" *ngIf="group.isAddPersonalBoardEnabled"> -->
+        <!-- <a href="#" routerLink="null" (click)="createPersonalBoardClick(index)" role="button" aria-disabled="true">add new task</a> -->
+      </div>
+    </div>
+
   </div>
 </div>
+
+<ng-template #content let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="form-group">
+          <input type="text" id="fName" class="form-control" placeholder="Add New Board Title" required autofocus>
+        </div>
+        <!-- dropdown list -->
+        <!-- Choose a team -->
+        <div class="row">
+          <div class="col">
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button class="dropdown-item">Team1</button>
+                <button class="dropdown-item">Team2</button>
+                <button class="dropdown-item">Team3</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <br>
+        <!-- Choose authority -->
+        <div class="row">
+          <div class="col">
+            <div ngbDropdown class="d-inline-block">
+              <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+                <button class="dropdown-item" (click)="privateBtn()">Private</button>
+                <button class="dropdown-item">Public</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="createPersonalBoardClick(index)">Create</button>
+    </div>
+</ng-template>
