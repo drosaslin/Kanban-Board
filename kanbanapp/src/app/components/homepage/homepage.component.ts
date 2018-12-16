@@ -15,7 +15,6 @@ export class HomepageComponent implements OnInit {
   personalGroups: Array<any> = [
     {
       name: 'new board',
-      isAddPersonalBoardEnabled: false
     }
   ];
 
