@@ -86,11 +86,11 @@
           <div class="modal-division-container">
             <label class="label-title" for="commentTextbox"><h5>Add Comment</h5></label>
             <div class="form-group">
-              <textarea class="form-control comment-textbox hvr-shadow" rows="5" 
-              id="commentTextbox" placeholder="Write a comment..." name="taskComment" [(ngModel)]="taskComment"></textarea>
+              <textarea class="form-control comment-textbox hvr-shadow" rows="5" id="commentTextbox" 
+              placeholder="Write a comment..." name="taskComment" [(ngModel)]="taskComment" (ngModelChange)="commentTextBoxChange()"></textarea>
             </div>
             <div class="comment-btn-container">
-              <button type="button" class="btn btn-success" [disabled]="!isAddCommentButtonEnabled">Add</button>
+              <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled">Add</button>
             </div>
           </div>
           
@@ -105,6 +105,11 @@
                   <div class="member-comment">
                     <p class="member-name"><strong>David Rosas</strong></p>
                     <p class="comment">Very good</p>
+                  </div>
+                  <div>
+                    <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
+                      <span aria-hidden="true">&times;</span>
+                    </button> 
                   </div>
                 </div>
                 <hr class="col-xs-12">

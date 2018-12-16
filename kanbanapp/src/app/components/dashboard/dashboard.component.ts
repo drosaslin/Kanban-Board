@@ -40,7 +40,6 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('init');
   }
 
   public openTaskModal(content, itemName) {
@@ -96,6 +95,14 @@ export class DashboardComponent implements OnInit {
 
   public closeDescriptionClick(): void {
     this.disableDescriptionTextBox();
+  }
+
+  public deleteCommentButtonClick(): void {
+    console.log('delete comment');
+  }
+
+  public commentTextBoxChange(): void {
+    this.isAddCommentButtonEnabled = this.taskComment.length > 0;
   }
 
   private setModalDefaultState(): void {

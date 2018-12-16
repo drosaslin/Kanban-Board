@@ -234,6 +234,11 @@
   margin-top: -10px;
 }
 
+.add-comment-btn:disabled {
+  background-color: lightgray;
+  border-color: lightgray;
+}
+
 /* ****TASK MEMBERS COMMENTS**** */
 
 .comment-container {
