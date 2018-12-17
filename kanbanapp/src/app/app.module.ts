@@ -19,11 +19,14 @@ import { GroupManagementComponent } from './components/group-management/group-ma
 import { environment } from '../environments/environment';
 
 import { AuthService } from './services/auth.service';
+import { AuthGuard } from './guards/auth.guard';
+import { LoginGuard } from './guards/login.guard';
 
 const routes: Routes = [
   {
     path: '',
     component: LoginpageComponent,
+    canActivate: [LoginGuard],
     data: {
       title: 'Login'
     }
@@ -31,28 +34,33 @@ const routes: Routes = [
   {
     path: 'userRegistration',
     component: SignuppageComponent,
+    canActivate: [LoginGuard],
     data: {
       title: 'Sign up'
     }
   },
   {
     path: 'homepage',
-    component: HomepageComponent
+    component: HomepageComponent,
+    canActivate: [AuthGuard]
   },
   {
-    path: 'user-profile',
-    component: UserProfileComponent
+    path: 'userProfile',
+    component: UserProfileComponent,
+    canActivate: [AuthGuard]
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [AuthGuard],
     data: {
       title: 'Dashboard'
     }
   },
   {
-    path: 'group-management',
+    path: 'groupManagement',
     component: GroupManagementComponent,
+    canActivate: [AuthGuard],
     data: {
       title: 'Group Management'
     }
@@ -84,7 +92,9 @@ const routes: Routes = [
     DragulaService,
     AngularFireAuth,
     AngularFireDatabase,
-    AuthService
+    AuthService,
+    AuthGuard,
+    LoginGuard
   ],
   bootstrap: [AppComponent]
 })

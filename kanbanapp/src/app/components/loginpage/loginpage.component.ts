@@ -21,7 +21,7 @@ export class LoginpageComponent implements OnInit {
   loginClick(): void {
     this.authService.login(this.email, this.password)
       .then((res) => {
-        this.router.navigate(['group-management']);
+        this.router.navigate(['homepage']);
       })
       .catch((err) => {
         this.router.navigate(['']);
