@@ -17,6 +17,9 @@ export class DashboardComponent implements OnInit {
   groups: Array<any>;
 
   constructor(private dragulaService: DragulaService, private modalService: NgbModal) {
+  }
+
+  ngOnInit() {
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
@@ -37,9 +40,6 @@ export class DashboardComponent implements OnInit {
 
     this.groups = group;
     this.setModalDefaultState();
-  }
-
-  ngOnInit() {
   }
 
   public openTaskModal(content, itemName) {

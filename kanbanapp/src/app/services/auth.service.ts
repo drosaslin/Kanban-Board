@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,9 @@ export class AuthService {
         .then(userData => _resolve(userData),
         err => _reject(err));
     });
+  }
+
+  getUserStatus() {
+    return this.afAuth.authState.map(auth => auth);
   }
 }
