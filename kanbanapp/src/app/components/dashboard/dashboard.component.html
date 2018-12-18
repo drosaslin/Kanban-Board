@@ -22,7 +22,7 @@
             <p class="task-name">{{ item.name }}</p>
           </li>
         </ul>
-        <input type="text" class="task-input" *ngIf="group.isAddTaskEnabled">
+        <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="group.isAddTaskEnabled">
         <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
@@ -55,9 +55,20 @@
                   </a>
                 </div>
               </div>
+              <div ngbDropdown #myDrop="ngbDropdown" class="add-member-container">
+                <div class="initials-container rounded-circle add-member">
+                  <a href="javascript:void(0);" id="dropdownBasic2" class="member-initials add-member-btn" ngbDropdownToggle>
+                    +
+                  </a>
+                </div>
+                <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="members-dropdown">
+                  <button class="dropdown-item">Genesis Yau</button>
+                  <button class="dropdown-item">David Rosas</button>
+                </div>
+              </div>
             </div>
           </div>
-          
+
           <div class="modal-division-container">
             <label class="label-title" for="dueDate"><h5>Due Date</h5></label>
             <div class="input-group">

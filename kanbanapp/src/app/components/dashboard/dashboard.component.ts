@@ -12,12 +12,14 @@ export class DashboardComponent implements OnInit {
   isAddCommentButtonEnabled: boolean;
   isDescriptionTextBoxEnabled: boolean;
   closeResult: string;
+  taskName: string;
   taskDescription: string;
   taskComment: string;
   groups: Array<any>;
 
-  constructor(private dragulaService: DragulaService, private modalService: NgbModal) {
-  }
+  constructor(
+    private dragulaService: DragulaService,
+    private modalService: NgbModal) { }
 
   ngOnInit() {
     this.dragulaService.createGroup('COLUMNS', {
@@ -28,12 +30,12 @@ export class DashboardComponent implements OnInit {
     const group: Array<any> = [
       {
         name: 'To Do',
-        items: [{name: 'Item A'}, {name: 'Item B'}, {name: 'Item C'}, {name: 'Item D'}],
+        items: [{ name: 'Item A' }, { name: 'Item B' }, { name: 'Item C' }, { name: 'Item D' }],
         isAddTaskEnabled: false
       },
       {
         name: 'Doing',
-        items: [{name: 'Item 1'}, {name: 'Item 2'}, {name: 'Item 3'}, {name: 'Item 4'}],
+        items: [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }, { name: 'Item 4' }],
         isAddTaskEnabled: false
       }
     ];
@@ -45,7 +47,7 @@ export class DashboardComponent implements OnInit {
   public openTaskModal(content, itemName) {
     this.setModalDefaultState();
 
-    this.modalService.open(content, {size: 'lg', ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -58,12 +60,8 @@ export class DashboardComponent implements OnInit {
     } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
       return 'by clicking on a backdrop';
     } else {
-      return  `with: ${reason}`;
+      return `with: ${reason}`;
     }
-  }
-
-  public addTaskButtonClick(index): void {
-    this.groups[index].isAddTaskEnabled = !this.groups[index].isAddTaskEnabled;
   }
 
   public addTableButtonClick(): void {
@@ -81,6 +79,19 @@ export class DashboardComponent implements OnInit {
         break;
       }
     }
+  }
+
+  public addTaskButtonClick(index): void {
+    const newItem = {
+      name: this.taskName
+    };
+
+    if (this.groups[index].isAddTaskEnabled) {
+      this.groups[index].items.push(newItem);
+    }
+
+    this.groups[index].isAddTaskEnabled = !this.groups[index].isAddTaskEnabled;
+    this.taskName = '';
   }
 
   public descriptionTextBoxClick(): void {

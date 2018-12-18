@@ -204,6 +204,34 @@
   opacity: 1;
 }
 
+.add-member-container {
+  display: inline-block;
+  position: absolute;
+}
+
+.add-member {
+  background-color: lightgray;
+}
+
+.add-member:hover {
+  background-color: gray;
+}
+
+.add-member-btn {
+  font-size: 30px;
+  color: white;
+  font-weight: 500;
+  padding-bottom: 5px;
+}
+
+.add-member-btn::after {
+  display: none;
+}
+
+.members-dropdown {
+  margin-top: -7px;
+}
+
 /* ****TASK DESCRIPTION**** */
 
 .task-description:hover {
