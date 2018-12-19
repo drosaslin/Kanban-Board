@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DragulaService, DrakeFactory } from 'ng2-dragula';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { DragulaService } from 'ng2-dragula';
+import { KanbanModel } from '../../kanban-model/model';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,12 +20,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
   constructor(
     private dragulaService: DragulaService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private model: KanbanModel
   ) { }
 
   ngOnInit() {
-    console.log('init');
-
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
