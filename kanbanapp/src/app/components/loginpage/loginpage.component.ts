@@ -18,12 +18,18 @@ export class LoginpageComponent implements OnInit {
   ngOnInit() {
   }
 
+  // Logs in
   loginClick(): void {
     this.authService.login(this.email, this.password)
+
+      // Redirects to homepage if the log in was successful
       .then((res) => {
         this.router.navigate(['homepage']);
       })
+
+      // Stays in the log in page if log in wasn't successful
       .catch((err) => {
+        alert('Wrong e-mail or password. Please try again.');
         this.router.navigate(['']);
       });
   }
