@@ -101,16 +101,19 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.taskName = '';
   }
 
+  // Enables the description's textbox if it is disabled
   public descriptionTextBoxClick(): void {
     if (!this.isDescriptionTextBoxEnabled) {
       this.isDescriptionTextBoxEnabled = true;
     }
   }
 
+  // Saves the description and disables the description's textbox
   public saveDescriptionClick(): void {
     this.disableDescriptionTextBox();
   }
 
+  // Disables the description's textbox
   public closeDescriptionClick(): void {
     this.disableDescriptionTextBox();
   }
@@ -119,15 +122,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     console.log('delete comment');
   }
 
+  // Enables the add comment button if there is any input in the comment's textox
   public commentTextBoxChange(): void {
-    this.isAddCommentButtonEnabled = this.taskComment.length > 0;
+    this.isAddCommentButtonEnabled = (this.taskComment.length > 0);
   }
 
+  // Set the default state of the task's modal
   private setModalDefaultState(): void {
     this.isDescriptionTextBoxEnabled = false;
     this.isAddCommentButtonEnabled = false;
   }
 
+  // Disable the description text box
   private disableDescriptionTextBox(): void {
     this.isDescriptionTextBoxEnabled = false;
   }

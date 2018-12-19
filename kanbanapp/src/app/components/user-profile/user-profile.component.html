@@ -1,50 +1,84 @@
-<div class="page-container">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+  crossorigin="anonymous">
+<div class="container w-100">
   <div class="w-100 group-profile align-items-center">
     <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
-    <h1 class="text-center group-name">Group Name</h1>
+    <h1 class="text-center group-name">David Rosas</h1>
   </div>
-  <div id="line"></div>
-  <div id="information">Information</div>
-  <div class="form-container">
-    <form class="form-user-profile">
-        <table>
-          <tr>
-            <th><div id="title">First name</div></th>
-            <th><input type="text" id="fName" class="form-control" placeholder="First Name" required autofocus><br></th>
-          </tr>
-          <tr>
-            <th><div id="title">Last name</div></th>
-            <th><input type="text" id="lName" class="form-control" placeholder="Last Name" required><br></th>
-          </tr>
-          <tr>
-              <th><div id="title">Nickname</div></th>
-              <th><input type="text" id="nName" class="form-control" placeholder="Nickname" required><br></th>
-          </tr>
-          <tr>
-              <th><div id="title">Username</div></th>
-              <input type="text" id="uName" class="form-control" placeholder="Username" required><br>
-          </tr>
-          <tr>
-              <th><div id="title">Email</div></th>
-              <th><input type="email" id="email" class="form-control" placeholder="Email" required><br></th>
-          </tr>
-          <tr>
-              <th><div id="title">Initials</div></th>
-              <th><input type="text" id="initials" class="form-control" placeholder="Initials" required><br></th>
-          </tr>
-          <tr>
-              <th><div id="title">Phone</div></th>
-              <th><input type="text" id="phone" class="form-control" placeholder="Phone" required><br></th>
-          </tr>
-          <tr>
-              <th><div id="title">Password</div></th>
-              <th><input type="password" id="password" class="form-control" placeholder="Password" required><br></th>
-          </tr>
-          <tr>
-            <th><button type="button" class="btn btn-success" autofocus id="editButton">Edit</button><th>
-            <th><button type="button" class="btn btn-success" disabled id="saveButton">Save</button><th>
-          </tr>
-        </table>
-    </form>
-  </div>
+
+  <ngb-tabset>
+    <ngb-tab title="Basic Info">
+      <ng-template ngbTabContent>
+        <div class="row info-row justify-content-center">
+          <div class="col-md-8">
+            <div class="card">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-12">
+                    <form>
+                      <div class="form-group row">
+                        <label for="username" class="col-3 col-form-label">
+                          <p class="data-label">User Name*</p>
+                        </label>
+                        <div class="col-8">
+                          <input name="userName" [(ngModel)]="userName" placeholder="Username" class="form-control here user-data"
+                            required="required" type="text" [disabled]="!isEditProfileEnabled">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="name" class="col-3 col-form-label">
+                          <p class="data-label">First Name</p>
+                        </label>
+                        <div class="col-8">
+                          <input name="firstName" [(ngModel)]="firstName" placeholder="First Name" class="form-control here user-data"
+                            type="text" [disabled]="!isEditProfileEnabled">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="lastname" class="col-3 col-form-label">
+                          <p class="data-label">Last Name</p>
+                        </label>
+                        <div class="col-8">
+                          <input name="lastName" [(ngModel)]="lastName" placeholder="Last Name" class="form-control here user-data"
+                            type="text" [disabled]="!isEditProfileEnabled">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="email" class="col-3 col-form-label">
+                          <p class="data-label">Email*</p>
+                        </label>
+                        <div class="col-8">
+                          <input name="email" [(ngModel)]="email" placeholder="Email" class="form-control here user-data"
+                            required="required" type="text" [disabled]="!isEditProfileEnabled">
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <label for="newpass" class="col-3 col-form-label">
+                          <p class="data-label">Password</p>
+                        </label>
+                        <div class="col-8">
+                          <input name="password" [(ngModel)]="password" placeholder="Password" class="form-control here user-data"
+                            type="text" disabled>
+                        </div>
+                      </div>
+                      <div class="form-group row btns-row justify-content-end">
+                        <div class="col-2 cancel-btn" *ngIf="isEditProfileEnabled">
+                          <button class="btn btn-danger">Cancel</button>
+                        </div>
+                        <div class="col-2">
+                          <button class="btn btn-success" (click)="editProfileClick()">{{ editButtonText }}</button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+
 </div>
