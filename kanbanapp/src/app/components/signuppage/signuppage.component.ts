@@ -24,19 +24,17 @@ export class SignuppageComponent implements OnInit {
     private db: AngularFireDatabase,
     private authService: AuthService) { }
 
+  // Starts a database listener
   ngOnInit() {
     this.authService.getUsers();
   }
 
+  // Calls the auth service method to create an account
   signUpClick(): void {
     if (this.password1 === this.password2) {
-      this.afAuth.auth.createUserWithEmailAndPassword(this.email, this.password1)
-        .then((res) => {
-          this.router.navigate(['']);
-        });
       this.authService.signup(this.firstName, this.lastName, this.email, this.username, this.password1);
     }
-
+    // Still needs to add error msg if input is not correct
   }
 
 }
