@@ -10,14 +10,13 @@
   <!-- Page Content -->
 
   <div style="margin-left:20%">
-    <!-- Modal -->
-   
+     
     <div class="w3-container">
       <h3>Personal Board</h3>
       <div style="display: inline-block;" *ngFor="let personalGroup of personalGroups;">
-        <button class="button group-board-btn">{{ personalGroup.name }}</button>
+        <button class="button group-board-btn btn btn-primary">{{ personalGroup.name }}</button>
       </div>
-      <button class="button personal-board-btn" (click)="open(content)">New Board</button>
+      <button class="button personal-board-btn btn btn-secondary" (click)="open(content)">New Board</button>
       <pre>{{closeResult}}</pre>
     </div>
 
@@ -25,13 +24,14 @@
 
     <div class="w3-container">
       <h3>Group Board</h3>
-      <button class="button group-board-btn">Group1</button>
-      <button class="button group-board-btn">Group2</button>
-      <button class="button group-board-btn">New Board</button>
+      <button class="button group-board-btn btn btn-primary">Group1</button>
+      <button class="button group-board-btn btn btn-success">Group2</button>
+      <button class="button group-board-btn btn btn-secondary">New Board</button>
     </div>
   </div>
 </div>
 
+<!-- Modal -->
 <ng-template #content let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>

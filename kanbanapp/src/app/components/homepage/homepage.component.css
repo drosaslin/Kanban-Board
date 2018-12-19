@@ -10,10 +10,10 @@
 
 .button {
   width: 150px;
-  height: 80px;
-  background-color: rgba(9,45,66,.13); 
+  height: 100px;
+  /*background-color: rgba(9,45,66,.13); */
   border: none;
-  color: rgb(155, 142, 142);
+  /*color: rgb(155, 142, 142);*/
   /* padding: 45px 60px; */
   text-align: center;
   text-decoration: none;
@@ -27,17 +27,9 @@
   transition-duration: 0.4s;
 }
 
-.personal-board-btn {
-    border-radius:15px;
-}
-
 .personal-board-btn:hover {
     background-color: #adadad;
     color: white;
-}
-
-.group-board-btn {
-    border-radius:15px;
 }
 
 .group-board-btn:hover {
