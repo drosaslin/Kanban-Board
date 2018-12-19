@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { DragulaService } from 'ng2-dragula';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { DragulaService, DrakeFactory } from 'ng2-dragula';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
@@ -8,7 +8,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   isAddCommentButtonEnabled: boolean;
   isDescriptionTextBoxEnabled: boolean;
   closeResult: string;
@@ -19,9 +19,12 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private dragulaService: DragulaService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal
+  ) { }
 
   ngOnInit() {
+    console.log('init');
+
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
@@ -42,6 +45,10 @@ export class DashboardComponent implements OnInit {
 
     this.groups = group;
     this.setModalDefaultState();
+  }
+
+  ngOnDestroy() {
+    this.dragulaService.destroy('COLUMNS');
   }
 
   public openTaskModal(content, itemName) {
@@ -118,10 +125,10 @@ export class DashboardComponent implements OnInit {
 
   private setModalDefaultState(): void {
     this.isDescriptionTextBoxEnabled = false;
+    this.isAddCommentButtonEnabled = false;
   }
 
   private disableDescriptionTextBox(): void {
     this.isDescriptionTextBoxEnabled = false;
-    this.isAddCommentButtonEnabled = false;
   }
 }

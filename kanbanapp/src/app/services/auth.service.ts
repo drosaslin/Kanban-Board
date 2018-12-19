@@ -10,6 +10,7 @@ export class AuthService {
 
   constructor(public afAuth: AngularFireAuth) { }
 
+  // Firebase login authentication
   public login(email: string, password: string) {
     return new Promise((_resolve, _reject) => {
       this.afAuth.auth.signInWithEmailAndPassword(email, password)
