@@ -33,8 +33,9 @@ export class SignuppageComponent implements OnInit {
   signUpClick(): void {
     if (this.password1 === this.password2) {
       this.authService.signup(this.firstName, this.lastName, this.email, this.username, this.password1);
+    } else {
+      alert('Both passwords do not match. Please try again.');
     }
-    // Still needs to add error msg if input is not correct
   }
 
 }

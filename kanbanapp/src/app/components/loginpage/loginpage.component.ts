@@ -29,6 +29,7 @@ export class LoginpageComponent implements OnInit {
 
       // Stays in the log in page if log in wasn't successful
       .catch((err) => {
+        alert('Wrong e-mail or password. Please try again.');
         this.router.navigate(['']);
       });
   }
