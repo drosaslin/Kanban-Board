@@ -18,11 +18,11 @@
                     <form>
                       <div class="form-group row">
                         <label for="username" class="col-3 col-form-label">
-                          <p class="data-label">User Name*</p>
+                          <p class="data-label">User Name</p>
                         </label>
                         <div class="col-8">
-                          <input name="userName" [(ngModel)]="userName" placeholder="Username" class="form-control here user-data"
-                            required="required" type="text" [disabled]="!isEditProfileEnabled">
+                          <input name="userName" [(ngModel)]="userName" placeholder="Username" class="form-control here"
+                            [class.user-data]="!isEditProfileEnabled" required="required" type="text" [disabled]="!isEditProfileEnabled">
                         </div>
                       </div>
                       <div class="form-group row">
@@ -30,8 +30,8 @@
                           <p class="data-label">First Name</p>
                         </label>
                         <div class="col-8">
-                          <input name="firstName" [(ngModel)]="firstName" placeholder="First Name" class="form-control here user-data"
-                            type="text" [disabled]="!isEditProfileEnabled">
+                          <input name="firstName" [(ngModel)]="firstName" placeholder="First Name" class="form-control here"
+                            [class.user-data]="!isEditProfileEnabled" type="text" [disabled]="!isEditProfileEnabled">
                         </div>
                       </div>
                       <div class="form-group row">
@@ -39,17 +39,17 @@
                           <p class="data-label">Last Name</p>
                         </label>
                         <div class="col-8">
-                          <input name="lastName" [(ngModel)]="lastName" placeholder="Last Name" class="form-control here user-data"
-                            type="text" [disabled]="!isEditProfileEnabled">
+                          <input name="lastName" [(ngModel)]="lastName" placeholder="Last Name" class="form-control here"
+                            [class.user-data]="!isEditProfileEnabled" type="text" [disabled]="!isEditProfileEnabled">
                         </div>
                       </div>
                       <div class="form-group row">
                         <label for="email" class="col-3 col-form-label">
-                          <p class="data-label">Email*</p>
+                          <p class="data-label">Email</p>
                         </label>
                         <div class="col-8">
-                          <input name="email" [(ngModel)]="email" placeholder="Email" class="form-control here user-data"
-                            required="required" type="text" [disabled]="!isEditProfileEnabled">
+                          <input name="email" [(ngModel)]="email" placeholder="Email" class="form-control here"
+                            [class.user-data]="!isEditProfileEnabled" required="required" type="text" [disabled]="!isEditProfileEnabled">
                         </div>
                       </div>
                       <div class="form-group row">
@@ -63,7 +63,7 @@
                       </div>
                       <div class="form-group row btns-row justify-content-end">
                         <div class="col-2 cancel-btn" *ngIf="isEditProfileEnabled">
-                          <button class="btn btn-danger">Cancel</button>
+                          <button class="btn btn-danger" (click)="cancelButtonClick()">Cancel</button>
                         </div>
                         <div class="col-2">
                           <button class="btn btn-success" (click)="editProfileClick()">{{ editButtonText }}</button>
