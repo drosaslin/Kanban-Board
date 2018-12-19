@@ -41,6 +41,7 @@ export class HomepageComponent implements OnInit {
     console.log('AAAAAAAAAAA');
   }
 
+  // 離開彈跳式視窗方法不同時，提示不同訊息
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -54,6 +55,7 @@ export class HomepageComponent implements OnInit {
   ngOnInit() {
   }
 
+  // create new PersonalBoard button
   public createPersonalBoardClick(): void {
     const newName = {
       name: this.newBoardName

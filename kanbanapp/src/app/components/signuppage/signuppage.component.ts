@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { Observable } from 'rxjs';
 import * as firebase from 'firebase/app';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signuppage',
@@ -20,9 +21,11 @@ export class SignuppageComponent implements OnInit {
 
   constructor(public afAuth: AngularFireAuth,
     private router: Router,
-    private db: AngularFireDatabase) { }
+    private db: AngularFireDatabase,
+    private authService: AuthService) { }
 
   ngOnInit() {
+    this.authService.getUsers();
   }
 
   signUpClick(): void {
@@ -31,7 +34,7 @@ export class SignuppageComponent implements OnInit {
         .then((res) => {
           this.router.navigate(['']);
         });
-
+      this.authService.signup(this.firstName, this.lastName, this.email, this.username, this.password1);
     }
 
   }
