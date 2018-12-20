@@ -77,6 +77,7 @@ export class AuthService {
         // Creating default personal group for the user
         const groupRef = this.db.database.ref('groups').push({
           members: '',
+          name: 'Personal',
           admins: this.afAuth.auth.currentUser.uid,
           dashboards: [dashboardRef.key]
         });

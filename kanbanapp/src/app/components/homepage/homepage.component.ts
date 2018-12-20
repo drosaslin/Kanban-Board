@@ -1,5 +1,7 @@
 import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { DragulaService } from 'ng2-dragula';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 
@@ -10,22 +12,33 @@ import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_di
 })
 
 export class HomepageComponent implements OnInit {
-
+  groupsList: AngularFireList<any>;
+  userId: string;
   closeResult: string;
-
+  ref: any;
   newBoardName: string;
-
+  // personalGroups: Array<any>;
   personalGroups: Array<any> = [
     {
-      name: 'new board',
+      name: 'new board'
+    },
+    {
+      name: 'test'
     }
   ];
 
-  constructor(private modalService: NgbModal) {
+  constructor(public afAuth: AngularFireAuth, private modalService: NgbModal, private db: AngularFireDatabase, ) {
+    this.userId = afAuth.auth.currentUser.uid;
+    this.ref = db.database.ref('groups');
   }
 
+
+  // private loadPersonalDashboards() {
+
+  // }
+
   open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title'}).result.then((result) => {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = 'Closed with: ${result}';
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
@@ -53,6 +66,9 @@ export class HomepageComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.groupsList = this.db.list('groups');
+
+    return this.groupsList.snapshotChanges();
   }
 
   // create new PersonalBoard button
