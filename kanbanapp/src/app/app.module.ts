@@ -21,6 +21,7 @@ import { environment } from '../environments/environment';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
+import { KanbanModel } from './kanban-model/model';
 
 const routes: Routes = [
   {
@@ -94,7 +95,8 @@ const routes: Routes = [
     AngularFireDatabase,
     AuthService,
     AuthGuard,
-    LoginGuard
+    LoginGuard,
+    KanbanModel
   ],
   bootstrap: [AppComponent]
 })

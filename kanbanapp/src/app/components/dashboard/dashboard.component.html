@@ -4,6 +4,14 @@
     <div>
       <a href="javascript:void(0);" class="project-name" routerLink="/groupManagement">Project Name</a>
     </div>
+    <!-- <div class="initials-container rounded-circle">
+      <a href="javascript:void(0);" class="member-initials">DR</a>
+      <div class="overlay rounded-circle">
+        <a href="javascript:void(0);">
+          <p class="member-delete">X</p>
+        </a>
+      </div>
+    </div> -->
   </div>
 
   <div class="dashboard">
@@ -25,113 +33,126 @@
           </li>
         </ul>
         <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="group.isAddTaskEnabled">
-        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)" role="button" aria-disabled="true">add new task</a>
+        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)"
+          role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
     <div>
-      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()" role="button" aria-disabled="true">+ add new table</a>
+      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
+        role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>
 </div>
 
 <!-- MODAL -->
 <ng-template #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <form>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form>
+      <div class="form-group">
+
+        <div class="modal-division-container">
+          <label class="label-title" for="">
+            <h5>Members</h5>
+          </label>
+          <div>
+            <div class="initials-container rounded-circle">
+              <a href="javascript:void(0);" class="member-initials">DR</a>
+              <div class="overlay rounded-circle">
+                <a href="javascript:void(0);">
+                  <p class="member-delete">X</p>
+                </a>
+              </div>
+            </div>
+            <div ngbDropdown #myDrop="ngbDropdown" class="add-member-container">
+              <div class="initials-container rounded-circle add-member">
+                <a href="javascript:void(0);" id="dropdownBasic2" class="member-initials add-member-btn"
+                  ngbDropdownToggle>
+                  +
+                </a>
+              </div>
+              <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="members-dropdown">
+                <button class="dropdown-item">Genesis Yau</button>
+                <button class="dropdown-item">David Rosas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-division-container">
+          <label class="label-title" for="dueDate">
+            <h5>Due Date</h5>
+          </label>
+          <div class="input-group">
+            <input id="dueDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-division-container">
+        <label class="label-title" for="description">
+          <h5>Description</h5>
+        </label>
         <div class="form-group">
+          <div (click)="descriptionTextBoxClick()">
+            <textarea class="form-control" [class.task-description]="!isDescriptionTextBoxEnabled" rows="5" id="description"
+              placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled"></textarea>
+          </div>
+          <div *ngIf="isDescriptionTextBoxEnabled" class="description-btn-container">
+            <button type="button" class="btn btn-success" (click)="saveDescriptionClick()">Save</button>
+            <button type="button" class="close close-description-btn" aria-label="Close" (click)="closeDescriptionClick()">&times;</button>
+          </div>
+        </div>
+      </div>
 
-          <div class="modal-division-container">
-          <label class="label-title" for=""><h5>Members</h5></label>
-            <div>
+      <div class="modal-division-container">
+        <label class="label-title" for="commentTextbox">
+          <h5>Add Comment</h5>
+        </label>
+        <div class="form-group">
+          <textarea class="form-control comment-textbox hvr-shadow" rows="5" id="commentTextbox" placeholder="Write a comment..."
+            name="taskComment" [(ngModel)]="taskComment" (ngModelChange)="commentTextBoxChange()"></textarea>
+        </div>
+        <div class="comment-btn-container">
+          <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled">Add</button>
+        </div>
+      </div>
+
+      <div class="modal-division-container">
+        <label class="label-title" for="comment">
+          <h5>Members Comments</h5>
+        </label>
+        <div class="comments-container">
+          <div class="comment-container">
+            <div class="comment-data-container">
               <div class="initials-container rounded-circle">
-                <a href="javascript:void(0);" class="member-initials">DR</a>
-                <div class="overlay rounded-circle">
-                  <a href="javascript:void(0);">
-                    <p class="member-delete">X</p>
-                  </a>
-                </div>
+                <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
               </div>
-              <div ngbDropdown #myDrop="ngbDropdown" class="add-member-container">
-                <div class="initials-container rounded-circle add-member">
-                  <a href="javascript:void(0);" id="dropdownBasic2" class="member-initials add-member-btn" ngbDropdownToggle>
-                    +
-                  </a>
-                </div>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="members-dropdown">
-                  <button class="dropdown-item">Genesis Yau</button>
-                  <button class="dropdown-item">David Rosas</button>
-                </div>
+              <div class="member-comment">
+                <p class="member-name"><strong>David Rosas</strong></p>
+                <p class="comment">Very good</p>
+              </div>
+              <div>
+                <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
             </div>
+            <hr class="col-xs-12">
           </div>
-
-          <div class="modal-division-container">
-            <label class="label-title" for="dueDate"><h5>Due Date</h5></label>
-            <div class="input-group">
-              <input id="dueDate" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
-              <div class="input-group-append">
-                <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
-              </div>
-            </div>
-            </div>
-          </div>
-
-          <div class="modal-division-container">
-            <label class="label-title" for="description"><h5>Description</h5></label>
-            <div class="form-group">
-              <div (click)="descriptionTextBoxClick()">
-                <textarea class="form-control" [class.task-description]="!isDescriptionTextBoxEnabled"
-                rows="5" id="description" placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled"></textarea>
-              </div>
-              <div *ngIf="isDescriptionTextBoxEnabled" class="description-btn-container">
-                <button type="button" class="btn btn-success" (click)="saveDescriptionClick()">Save</button>
-                <button type="button" class="close close-description-btn" aria-label="Close" (click)="closeDescriptionClick()">&times;</button>
-              </div>
-            </div>
-          </div>
-
-          <div class="modal-division-container">
-            <label class="label-title" for="commentTextbox"><h5>Add Comment</h5></label>
-            <div class="form-group">
-              <textarea class="form-control comment-textbox hvr-shadow" rows="5" id="commentTextbox" 
-              placeholder="Write a comment..." name="taskComment" [(ngModel)]="taskComment" (ngModelChange)="commentTextBoxChange()"></textarea>
-            </div>
-            <div class="comment-btn-container">
-              <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled">Add</button>
-            </div>
-          </div>
-          
-          <div class="modal-division-container">
-            <label class="label-title" for="comment"><h5>Members Comments</h5></label>
-            <div class="comments-container">
-              <div class="comment-container">
-                <div class="comment-data-container">
-                  <div class="initials-container rounded-circle">
-                    <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
-                  </div>
-                  <div class="member-comment">
-                    <p class="member-name"><strong>David Rosas</strong></p>
-                    <p class="comment">Very good</p>
-                  </div>
-                  <div>
-                    <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
-                      <span aria-hidden="true">&times;</span>
-                    </button> 
-                  </div>
-                </div>
-                <hr class="col-xs-12">
-              </div>
-            </div>
-          </div>
-      </form>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
-    </div>
-  </ng-template>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+  </div>
+</ng-template>

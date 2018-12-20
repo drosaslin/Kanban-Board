@@ -118,6 +118,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.disableDescriptionTextBox();
   }
 
+  // Delete comment from comment box
   public deleteCommentButtonClick(): void {
     console.log('delete comment');
   }
