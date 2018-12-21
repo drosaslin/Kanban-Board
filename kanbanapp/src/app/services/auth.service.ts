@@ -11,17 +11,19 @@ import { FormGroup, FormControl, Validators } from '../../../node_modules/@angul
 })
 export class AuthService {
   userList: AngularFireList<any>;
-  form = new FormGroup({
-    $key: new FormControl(null),
-    firstName: new FormControl('', Validators.required),
-    lastName: new FormControl('', Validators.required),
-    username: new FormControl('', Validators.required),
-    email: new FormControl('', Validators.email),
-    password1: new FormControl('', Validators.minLength(6)),
-    password2: new FormControl('', Validators.minLength(6))
-  });
+  form: FormGroup;
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { }
+  constructor(public afAuth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { 
+    this.form = new FormGroup({
+      $key: new FormControl(null),
+      firstName: new FormControl('', Validators.required),
+      lastName: new FormControl('', Validators.required),
+      username: new FormControl('', Validators.required),
+      email: new FormControl('', Validators.email),
+      password1: new FormControl('', Validators.minLength(6)),
+      password2: new FormControl('', Validators.minLength(6))
+    });
+  }
 
   // Firebase login authentication
   public login(email: string, password: string) {
@@ -76,9 +78,9 @@ export class AuthService {
 
         // Creating default personal group for the user
         const groupRef = this.db.database.ref('groups').push({
-          members: '',
+          members: [],
           name: 'Personal',
-          admins: this.afAuth.auth.currentUser.uid,
+          admins: [this.afAuth.auth.currentUser.uid],
           dashboards: [dashboardRef.key]
         });
 

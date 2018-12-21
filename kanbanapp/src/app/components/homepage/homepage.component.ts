@@ -29,6 +29,7 @@ export class HomepageComponent implements OnInit {
 
   constructor(public afAuth: AngularFireAuth, private modalService: NgbModal, private db: AngularFireDatabase, ) {
     this.userId = afAuth.auth.currentUser.uid;
+    this.groupsList = db.list('groups');
     this.ref = db.database.ref('groups');
   }
 
