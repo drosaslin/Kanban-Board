@@ -1,7 +1,11 @@
 export class Group {
-    key: string;
-    name: string;
-    members: Array<any>;
-    dashboards: Array<any>;
-    admins: Array<any>;
+    private key: string;
+    private name: string;
+    private members: Array<any>;
+    private dashboards: Array<any>;
+    private admins: Array<any>;
+
+    public constructor() {
+        
+    }
 }

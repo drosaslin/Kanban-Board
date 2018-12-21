@@ -1,5 +1,9 @@
 export class Column {
-    key: string;
-    index: number;
-    name: string;
+    private key: string;
+    private index: number;
+    private name: string;
+
+    public constructor() {
+        
+    }
 }

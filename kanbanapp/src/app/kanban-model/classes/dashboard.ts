@@ -1,8 +1,12 @@
 export class Dashboard {
-    key: string;
-    name: string;
-    owner: string;
-    type: string;
-    tasks: Array<any>;
-    columns: Array<any>;
+    private key: string;
+    private name: string;
+    private owner: string;
+    private type: string;
+    private tasks: Array<any>;
+    private columns: Array<any>;
+
+    public constructor() {
+        
+    }
 }

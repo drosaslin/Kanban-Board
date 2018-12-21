@@ -1,6 +1,10 @@
 export class TaskComment {
-    key: string;
-    commenter: string;
-    date: string;
-    content: string;
+    private key: string;
+    private commenter: string;
+    private date: string;
+    private content: string;
+
+    public constructor() {
+        
+    }
 }

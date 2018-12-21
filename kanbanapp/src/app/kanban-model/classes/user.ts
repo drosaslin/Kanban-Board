@@ -1,7 +1,11 @@
 export class User {
-    key: string;
-    firstName: string;
-    lastName: string;
-    username: string;
-    groups: Array<any>;
+    private key: string;
+    private firstName: string;
+    private lastName: string;
+    private username: string;
+    private groups: Array<any>;
+
+    public constructor() {
+        
+    }
 }

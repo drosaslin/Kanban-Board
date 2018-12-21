@@ -1,11 +1,15 @@
 export class Task {
-    key: string;
-    content: string;
-    description: string;
-    dueDate: string;
-    label: Array<any>;
-    members: Array<any>;
-    index: number;
-    columnId: string;
-    comment: Array<any>;
+    private key: string;
+    private content: string;
+    private description: string;
+    private dueDate: string;
+    private label: Array<any>;
+    private members: Array<any>;
+    private index: number;
+    private columnId: string;
+    private comment: Array<any>;
+
+    public constructor() {
+        
+    }
 }
