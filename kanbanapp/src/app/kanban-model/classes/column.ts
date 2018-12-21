@@ -1,5 +1,5 @@
-class Column {
-
-    constructor() {
-    }
+export class Column {
+    key: string;
+    index: number;
+    name: string;
 }
