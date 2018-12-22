@@ -8,6 +8,10 @@
     font-size: 100px;
 }
 
+ul {
+    list-style-type: square;
+}
+
 .button {
   width: 150px;
   height: 100px;
