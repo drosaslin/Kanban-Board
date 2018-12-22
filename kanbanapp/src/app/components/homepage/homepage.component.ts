@@ -18,7 +18,6 @@ export class HomepageComponent implements OnInit {
   closeResult: string;
   ref: any;
   newBoardName: string;
-  // personalGroups: Array<any>;
   personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
   userGroups: Array<any> = [];
 
@@ -36,8 +35,6 @@ export class HomepageComponent implements OnInit {
     this.db.object('users/' + this.userId).valueChanges()
       .subscribe(user => {
         user$ = user;
-        console.log(user$);
-        console.log(user$.groups);
         this.loadUserGroups(user$.groups);
       });
   }
@@ -52,10 +49,12 @@ export class HomepageComponent implements OnInit {
         .subscribe(group => {
           group$ = group;
           this.userGroups.push(group$);
-          // console.log('name' + group$.name);
         });
     }
+  }
 
+  private loadDashboards(groups: any[]): void {
+    
   }
 
   open(content) {
