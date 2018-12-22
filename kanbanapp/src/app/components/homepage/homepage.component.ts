@@ -101,7 +101,7 @@ export class HomepageComponent implements OnInit, IObserver {
     return true;
   }
 
-  update(user: User, group: Group): void {
+  public update(user: User, group: Group): void {
     if (this.isNewUserGroup(group)) {
       this.userGroups.push(group);
     }
