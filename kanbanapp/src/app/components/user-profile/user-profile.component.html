@@ -3,7 +3,7 @@
 <div class="container w-100">
   <div class="w-100 group-profile align-items-center">
     <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
-    <h1 class="text-center group-name">David Rosas</h1>
+    <h1 class="text-center group-name">{{ firstName + ' ' + lastName }}</h1>
   </div>
 
   <ngb-tabset>
@@ -21,7 +21,7 @@
                           <p class="data-label">User Name</p>
                         </label>
                         <div class="col-8">
-                          <input name="userName" [(ngModel)]="userName" placeholder="Username" class="form-control here"
+                          <input name="username" [(ngModel)]="username" placeholder="Username" class="form-control here"
                             [class.user-data]="!isEditProfileEnabled" required="required" type="text" [disabled]="!isEditProfileEnabled">
                         </div>
                       </div>

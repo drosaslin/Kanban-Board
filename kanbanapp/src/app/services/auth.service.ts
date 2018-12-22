@@ -13,7 +13,7 @@ export class AuthService {
   userList: AngularFireList<any>;
   form: FormGroup;
 
-  constructor(public afAuth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) { 
+  constructor(public afAuth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) {
     this.form = new FormGroup({
       $key: new FormControl(null),
       firstName: new FormControl('', Validators.required),
@@ -106,5 +106,10 @@ export class AuthService {
   // Logout user
   public logout() {
     this.afAuth.auth.signOut();
+  }
+
+  // Get the id of the current user
+  public getCurrentUserId(): string {
+    return this.afAuth.auth.currentUser.uid;
   }
 }
