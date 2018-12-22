@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
+import { KanbanModel } from 'src/app/kanban-model/model';
 
 @Component({
   selector: 'app-navbar',
@@ -12,7 +13,8 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private model: KanbanModel
   ) { }
 
   ngOnInit() {
@@ -23,6 +25,7 @@ export class NavbarComponent implements OnInit {
   public logoutClick(): void {
     this.authService.logout();
     this.isLoggedIn = false;
+    this.model.resetModel();
     this.router.navigate(['']);
   }
 

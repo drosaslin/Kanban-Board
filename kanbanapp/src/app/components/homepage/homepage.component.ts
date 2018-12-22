@@ -91,20 +91,19 @@ export class HomepageComponent implements OnInit, IObserver {
     this.newBoardName = '';
   }
 
-  private isNewUserGroup(group: Group): boolean {
-    for (let n = this.userGroups.length - 1; n >= 0; n--) {
-      if (this.userGroups[n].getKey() === group.getKey()) {
-        return false;
-      }
-    }
+  // private isNewUserGroup(group: Group): boolean {
+  //   for (let n = this.userGroups.length - 1; n >= 0; n--) {
+  //     if (this.userGroups[n].getKey() === group.getKey()) {
+  //       return false;
+  //     }
+  //   }
 
-    return true;
-  }
+  //   return true;
+  // }
 
-  public update(user: User, group: Group): void {
-    if (this.isNewUserGroup(group)) {
-      this.userGroups.push(group);
-    }
+  public update(user: User, group: Array<Group>): void {
+    // console.log(group);
+    this.userGroups = group;
   }
 }
 

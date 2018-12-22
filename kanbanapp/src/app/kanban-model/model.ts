@@ -83,7 +83,7 @@ export class KanbanModel implements ISubject {
             this.userSubscription = this.database.object(this.usersBaseRoute + this.afAuth.auth.currentUser.uid).valueChanges()
                 .subscribe((user: any) => {
                     this.user = new User(user, this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid);
-                    this.loadUserGroups(user['groups']);
+                    this.loadUserGroups(this.user.getGroups());
                 });
         } else {
             this.notifyObservers();
@@ -91,8 +91,9 @@ export class KanbanModel implements ISubject {
     }
 
     // Retrieves the groups of the user, and stores their data in an array of type Group
-    public loadUserGroups(groups: any[]): void {
+    public loadUserGroups(groups: Array<string>): void {
         const groupSize: number = groups.length;
+        this.groups = [];
 
         for (let index = 0; index < groupSize; index++) {
             this.database.object(this.groupsBaseRoute + groups[index]).valueChanges()
@@ -123,7 +124,15 @@ export class KanbanModel implements ISubject {
 
     public notifyObservers(): void {
         for (let n = this.observers.length - 1; n >= 0; n--) {
-            this.observers[n].update(this.user, this.groups[this.groups.length - 1]);
+            this.observers[n].update(this.user, this.groups);
         }
+    }
+
+    public resetModel(): void {
+        this.observers = [];
+        this.groups = [];
+        this.user = null;
+        this.userSubscription.unsubscribe();
+        this.userSubscription = null;
     }
 }

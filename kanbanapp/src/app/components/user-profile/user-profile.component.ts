@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { KanbanModel } from '../../kanban-model/model';
 import { IObserver } from '../../kanban-model/interfaces/iobserver';
 import { User } from '../../kanban-model/classes/user';
@@ -88,7 +88,7 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.email = this.emailBackup;
   }
 
-  public update(user: User, group: Group): void {
+  public update(user: User, group: Array<Group>): void {
     this.firstName = this.model.getUser().getFirstName();
     this.lastName = this.model.getUser().getLastName();
     this.username = this.model.getUser().getUsername();
