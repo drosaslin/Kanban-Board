@@ -4,6 +4,7 @@ import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { DragulaService } from 'ng2-dragula';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
+import { NgModel } from '@angular/forms';
 
 @Component({
   selector: 'app-homepage',
@@ -17,26 +18,44 @@ export class HomepageComponent implements OnInit {
   closeResult: string;
   ref: any;
   newBoardName: string;
-  // personalGroups: Array<any>;
-  personalGroups: Array<any> = [
-    {
-      name: 'new board'
-    },
-    {
-      name: 'test'
-    }
-  ];
+  personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
+  userGroups: Array<any> = [];
 
-  constructor(public afAuth: AngularFireAuth, private modalService: NgbModal, private db: AngularFireDatabase, ) {
+  constructor(public afAuth: AngularFireAuth, private modalService: NgbModal, private db: AngularFireDatabase) {
     this.userId = afAuth.auth.currentUser.uid;
     this.groupsList = db.list('groups');
     this.ref = db.database.ref('groups');
+    this.loadUserData();
   }
 
 
-  // private loadPersonalDashboards() {
+  private loadUserData(): void {
+    let user$: any;
 
-  // }
+    this.db.object('users/' + this.userId).valueChanges()
+      .subscribe(user => {
+        user$ = user;
+        this.loadUserGroups(user$.groups);
+      });
+  }
+
+  private loadUserGroups(groups: any[]): void {
+    const groupSize = groups.length;
+    let group$: any;
+
+    for (let index = 0; index < groupSize; index++) {
+      console.log(index + ' ' + groups[index]);
+      this.db.object('groups/' + groups[index]).valueChanges()
+        .subscribe(group => {
+          group$ = group;
+          this.userGroups.push(group$);
+        });
+    }
+  }
+
+  private loadDashboards(groups: any[]): void {
+    
+  }
 
   open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -77,7 +96,7 @@ export class HomepageComponent implements OnInit {
     const newName = {
       name: this.newBoardName
     };
-    this.personalGroups.push(newName);
+    this.personalDashboards.push(newName);
     this.newBoardName = '';
   }
 }

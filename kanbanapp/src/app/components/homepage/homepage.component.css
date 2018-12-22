@@ -3,9 +3,18 @@
     height: auto;
 }
 
+.sidebar{
+    width: 20%;
+    background-color: #dedede;
+}
+
 #personalBoardsButton {
     padding: 100px 300px;
     font-size: 100px;
+}
+
+ul {
+    list-style-type: square;
 }
 
 .button {

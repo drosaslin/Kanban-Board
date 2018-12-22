@@ -1,9 +1,15 @@
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
+<!--Left sidebar with groups and dashboards-->
 <div class="page-container">
-  <div class="w3-sidebar w3-bar-block" style="width:20%"> 
+  <div class="w3-sidebar w3-bar-block sidebar"> 
     <h5 class="h5 m-3">Groups</h5>
+    <ul class="">
+    <div *ngFor="let userGroup of userGroups;">
+      <li class=""><a href="#" class="">{{ userGroup.name }}</a></li>
+    </div>
+  </ul>
     <a href="#" class="w3-bar-item wl-button"><i class="fas fa-plus mr-2"></i>Create new Group</a>
     <h5 class="h5vside-header ml-3">Dashboards</h5>
   </div>
@@ -14,8 +20,8 @@
      
     <div class="w3-container">
       <h3>Personal Board</h3>
-      <div style="display: inline-block;" *ngFor="let personalGroup of personalGroups;">
-        <button class="button group-board-btn btn btn-primary">{{ personalGroup.name }}</button>
+      <div style="display: inline-block;" *ngFor="let personalDashboard of personalDashboards;">
+        <button href="#" class="button group-board-btn btn btn-primary">{{ personalDashboard.name }}</button>
       </div>
       <button class="button personal-board-btn btn btn-secondary" (click)="open(content)">New Board</button>
       <pre>{{closeResult}}</pre>
