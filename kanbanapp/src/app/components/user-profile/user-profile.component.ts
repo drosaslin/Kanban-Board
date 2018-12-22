@@ -24,6 +24,7 @@ export class UserProfileComponent implements OnInit, IObserver {
   private lastName: string;
   private username: string;
   private email: string;
+  private initials: string;
   private password: string;
   private editButtonText: string;
   private isEditProfileEnabled: boolean;
@@ -38,10 +39,10 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.lastName = '';
     this.username = '';
     this.email = '';
+    this.initials = '';
 
     this.model.registerObserver(this);
     this.model.loadUserProfile();
-
     this.setDefaultState();
   }
 
@@ -93,5 +94,6 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.lastName = this.model.getUser().getLastName();
     this.username = this.model.getUser().getUsername();
     this.email = this.model.getUser().getEmail();
+    this.initials = this.firstName[0].toUpperCase() + this.lastName[0].toUpperCase();
   }
 }
