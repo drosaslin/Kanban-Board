@@ -1,15 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
-import { KanbanModel } from 'src/app/kanban-model/model';
+import { KanbanModel } from '../../kanban-model/model';
+import { IObserver } from '../../kanban-model/interfaces/iobserver';
+import { User } from 'src/app/kanban-model/classes/user';
+import { Group } from 'src/app/kanban-model/classes/group';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, IObserver {
   isLoggedIn: boolean;
+  username: string;
 
   constructor(
     private authService: AuthService,
@@ -18,6 +22,8 @@ export class NavbarComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.username = '';
+    this.model.registerObserver(this);
     this.authenticateUser();
   }
 
@@ -25,7 +31,6 @@ export class NavbarComponent implements OnInit {
   public logoutClick(): void {
     this.authService.logout();
     this.isLoggedIn = false;
-    this.model.resetModel();
     this.router.navigate(['']);
   }
 
@@ -39,5 +44,9 @@ export class NavbarComponent implements OnInit {
 
       this.isLoggedIn = false;
     });
+  }
+
+  public update(user: User, group: Array<Group>): void {
+    this.username = user.getUsername();
   }
 }
