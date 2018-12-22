@@ -102,7 +102,6 @@ export class HomepageComponent implements OnInit, IObserver {
   // }
 
   public update(user: User, group: Array<Group>): void {
-    // console.log(group);
     this.userGroups = group;
   }
 }

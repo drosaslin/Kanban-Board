@@ -67,13 +67,12 @@ export class KanbanModel implements ISubject {
             dashboards: [dashboardRef.key]
         });
 
-        // // Adding user additional information to users table in firebase database
-        // this.database.object(this.usersBaseRoute + this.user.getKey())
-        //     .update({
-        //         firstName: newFirstName,
-        //         lastName: newLastName,
-        //         username: newUsername
-        //     });
+        // Adding user additional information to users table in firebase database
+        this.user.getGroups().push(groupRef.key);
+        this.database.object(this.usersBaseRoute + this.user.getKey())
+            .update({
+                groups: this.user.getGroups()
+            });
     }
 
     // Retrieving user profile data and loading it in the User's class
