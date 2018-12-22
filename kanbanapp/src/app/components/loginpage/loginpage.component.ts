@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { KanbanModel } from 'src/app/kanban-model/model';
+import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
 
 @Component({
   selector: 'app-loginpage',
@@ -9,11 +11,13 @@ import { AuthService } from '../../services/auth.service';
 })
 
 export class LoginpageComponent implements OnInit {
-  email: string;
-  password: string;
+  private email: string;
+  private password: string;
+
   constructor(
     private router: Router,
-    private authService: AuthService) { }
+    private authService: AuthService,
+    private model: KanbanModel) { }
 
   ngOnInit() {
   }
@@ -24,6 +28,7 @@ export class LoginpageComponent implements OnInit {
 
       // Redirects to homepage if the log in was successful
       .then((res) => {
+        this.model.loadUserProfile();
         this.router.navigate(['homepage']);
       })
 

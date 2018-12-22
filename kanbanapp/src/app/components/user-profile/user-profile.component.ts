@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { KanbanModel } from '../../kanban-model/model';
 import { IObserver } from '../../kanban-model/interfaces/iobserver';
 import { User } from '../../kanban-model/classes/user';
+import { Group } from '../../kanban-model/classes/group';
 import { modelGroupProvider } from '@angular/forms/src/directives/ng_model_group';
 import { EmailValidator } from '@angular/forms';
 
@@ -87,7 +88,7 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.email = this.emailBackup;
   }
 
-  public update(user: User, email: string): void {
+  public update(user: User, group: Group): void {
     this.firstName = this.model.getUser().getFirstName();
     this.lastName = this.model.getUser().getLastName();
     this.username = this.model.getUser().getUsername();

@@ -1,30 +1,34 @@
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+  crossorigin="anonymous">
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <!--Left sidebar with groups and dashboards-->
 <div class="page-container">
-  <div class="w3-sidebar w3-bar-block sidebar"> 
+  <div class="w3-sidebar w3-bar-block sidebar">
     <h5 class="h5 m-3">Groups</h5>
     <ul class="">
-    <div *ngFor="let userGroup of userGroups;">
-      <li class=""><a href="#" class="">{{ userGroup.name }}</a></li>
-    </div>
-  </ul>
-    <a href="#" class="w3-bar-item wl-button"><i class="fas fa-plus mr-2"></i>Create new Group</a>
+      <div *ngFor="let userGroup of userGroups;">
+        <li class="">
+          <a href="javascript:void(0);" class="">{{ userGroup.getName() }}</a>
+        </li>
+      </div>
+    </ul>
+    <a href="javascript:void(0);" class="w3-bar-item wl-button" (click)="newGroupButtonClick(groupModal)"><i class="fas fa-plus mr-2" ></i>Create
+      new Group</a>
     <h5 class="h5vside-header ml-3">Dashboards</h5>
   </div>
-  
+
   <!-- Page Content -->
 
   <div style="margin-left:20%">
-     
+
     <div class="w3-container">
       <h3>Personal Board</h3>
       <div style="display: inline-block;" *ngFor="let personalDashboard of personalDashboards;">
-        <button href="#" class="button group-board-btn btn btn-primary">{{ personalDashboard.name }}</button>
+        <button class="button group-board-btn btn btn-primary">{{ personalDashboard.name }}</button>
       </div>
       <button class="button personal-board-btn btn btn-secondary" (click)="open(content)">New Board</button>
-      <pre>{{closeResult}}</pre>
+      <!-- <pre>{{closeResult}}</pre> -->
     </div>
 
     <div id="interval"></div>
@@ -39,51 +43,71 @@
 </div>
 
 <!-- Modal for new group-->
+<ng-template #groupModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Group</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form class="form-group">
+        <input type="text" class="form-control" name="newGroupName" [(ngModel)]="newGroupName" placeholder="Group Name"
+          required autofocus>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="createNewGroupButtonClick()">Create</button>
+  </div>
+</ng-template>
 
 
 <!-- Modal for new dashboard-->
 <ng-template #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div>
-        <form class="form-group">
-          <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)] ="newBoardName"  placeholder="Add New Board Title" required autofocus>
-        </form>
-        <!-- dropdown list -->
-        <!-- Choose a team -->
-        <div class="row">
-          <div class="col">
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item">Team1</button>
-                <button class="dropdown-item">Team2</button>
-                <button class="dropdown-item">Team3</button>
-              </div>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form class="form-group">
+        <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)]="newBoardName"
+          placeholder="Add New Board Title" required autofocus>
+      </form>
+      <!-- dropdown list -->
+      <!-- Choose a team -->
+      <div class="row">
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item">Team1</button>
+              <button class="dropdown-item">Team2</button>
+              <button class="dropdown-item">Team3</button>
             </div>
           </div>
         </div>
-        <br>
-        <!-- Choose authority -->
-        <div class="row">
-          <div class="col">
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item" (click)="privateBtn()">Private</button>
-                <button class="dropdown-item">Public</button>
-              </div>
+      </div>
+      <br>
+      <!-- Choose authority -->
+      <div class="row">
+        <div class="col">
+          <div ngbDropdown class="d-inline-block">
+            <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+              <button class="dropdown-item" (click)="privateBtn()">Private</button>
+              <button class="dropdown-item">Public</button>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="createPersonalBoardClick(index)">Create</button>
-    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="createPersonalBoardClick(index)">Create</button>
+  </div>
 </ng-template>

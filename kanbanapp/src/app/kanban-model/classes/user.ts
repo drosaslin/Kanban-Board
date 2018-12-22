@@ -4,7 +4,7 @@ export class User {
     private lastName: string;
     private username: string;
     private email: string;
-    private groups: Array<any>;
+    private groups: Array<string>;
 
     public constructor(newUser: any, newEmail: string, newKey: string) {
         this.key = newKey;
@@ -33,6 +33,10 @@ export class User {
 
     public getEmail(): string {
         return this.email;
+    }
+
+    public getGroups(): Array<string> {
+        return this.groups;
     }
 
     public setKey(newKey: string): void {

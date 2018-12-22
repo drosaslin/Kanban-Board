@@ -10,8 +10,8 @@ import { FormGroup, FormControl, Validators } from '../../../node_modules/@angul
   providedIn: 'root'
 })
 export class AuthService {
-  userList: AngularFireList<any>;
-  form: FormGroup;
+  private userList: AngularFireList<any>;
+  private form: FormGroup;
 
   constructor(public afAuth: AngularFireAuth, private db: AngularFireDatabase, private router: Router) {
     this.form = new FormGroup({

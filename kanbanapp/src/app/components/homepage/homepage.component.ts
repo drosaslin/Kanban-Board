@@ -5,6 +5,10 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { DragulaService } from 'ng2-dragula';
 import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
 import { NgModel } from '@angular/forms';
+import { KanbanModel } from 'src/app/kanban-model/model';
+import { User } from '../../kanban-model/classes/user';
+import { Group } from '../../kanban-model/classes/group';
+import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
 
 @Component({
   selector: 'app-homepage',
@@ -12,67 +16,56 @@ import { NgModel } from '@angular/forms';
   styleUrls: ['./homepage.component.css']
 })
 
-export class HomepageComponent implements OnInit {
-  groupsList: AngularFireList<any>;
-  userId: string;
-  closeResult: string;
-  ref: any;
-  newBoardName: string;
-  personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
-  userGroups: Array<any> = [];
+export class HomepageComponent implements OnInit, IObserver {
+  private groupsList: AngularFireList<any>;
+  private closeResult: string;
+  private newBoardName: string;
+  private newGroupName: string;
+  private personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
+  private userGroups: Array<Group>;
 
-  constructor(public afAuth: AngularFireAuth, private modalService: NgbModal, private db: AngularFireDatabase) {
-    this.userId = afAuth.auth.currentUser.uid;
-    this.groupsList = db.list('groups');
-    this.ref = db.database.ref('groups');
-    this.loadUserData();
+  constructor(
+    private modalService: NgbModal,
+    private model: KanbanModel
+    ) {}
+
+  ngOnInit() {
+    this.newGroupName = '';
+    this.newBoardName = '';
+    this.userGroups = [];
+
+    this.model.registerObserver(this);
+    this.model.loadUserProfile();
   }
 
-
-  private loadUserData(): void {
-    let user$: any;
-
-    this.db.object('users/' + this.userId).valueChanges()
-      .subscribe(user => {
-        user$ = user;
-        this.loadUserGroups(user$.groups);
-      });
-  }
-
-  private loadUserGroups(groups: any[]): void {
-    const groupSize = groups.length;
-    let group$: any;
-
-    for (let index = 0; index < groupSize; index++) {
-      console.log(index + ' ' + groups[index]);
-      this.db.object('groups/' + groups[index]).valueChanges()
-        .subscribe(group => {
-          group$ = group;
-          this.userGroups.push(group$);
-        });
-    }
-  }
-
-  private loadDashboards(groups: any[]): void {
-    
-  }
-
-  open(content) {
+  public open(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = 'Closed with: ${result}';
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
-    console.log('AAAAAAAAAAA');
   }
 
-  privateBtn() {
-    console.log('AAAAAAAAAAA');
+  public newGroupButtonClick(content: string): void {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = 'Closed with: ${result}';
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
   }
 
-  create() {
-    console.log('AAAAAAAAAAA');
+  public createNewGroupButtonClick(): void {
+    this.model.createNewGroup(this.newGroupName);
+    this.newGroupName = '';
   }
+
+  // privateBtn() {
+  //   console.log('AAAAAAAAAAA');
+  // }
+
+  // create() {
+  //   console.log('AAAAAAAAAAA');
+  // }
 
   // 離開彈跳式視窗方法不同時，提示不同訊息
   private getDismissReason(reason: any): string {
@@ -85,10 +78,8 @@ export class HomepageComponent implements OnInit {
     }
   }
 
-  ngOnInit() {
-    this.groupsList = this.db.list('groups');
+  public createGroupButtonClick(): void {
 
-    return this.groupsList.snapshotChanges();
   }
 
   // create new PersonalBoard button
@@ -98,6 +89,22 @@ export class HomepageComponent implements OnInit {
     };
     this.personalDashboards.push(newName);
     this.newBoardName = '';
+  }
+
+  private isNewUserGroup(group: Group): boolean {
+    for (let n = this.userGroups.length - 1; n >= 0; n--) {
+      if (this.userGroups[n].getKey() === group.getKey()) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  update(user: User, group: Group): void {
+    if (this.isNewUserGroup(group)) {
+      this.userGroups.push(group);
+    }
   }
 }
 
