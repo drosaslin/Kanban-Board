@@ -71,6 +71,7 @@ export class AuthService {
           owner: this.afAuth.auth.currentUser.uid,
           name: 'My dashboard',
           type: 'personal',
+          group: '',
           columns: [columnRef1.key,
           columnRef2.key,
           columnRef3.key]
@@ -82,6 +83,11 @@ export class AuthService {
           name: 'Personal',
           admins: [this.afAuth.auth.currentUser.uid],
           dashboards: [dashboardRef.key]
+        });
+
+        // Adds group Id to dashboard
+        this.db.database.ref('dashboards/' + dashboardRef.key).update({
+          group: groupRef.key
         });
 
         // Adding user additional information to users table in firebase db
