@@ -23,6 +23,7 @@ export class KanbanModel implements ISubject {
     currentSelectedGroup: string;
     user: User;
     groups: Array<Group>;
+    selectedGroup: Group;
 
     constructor(private database: AngularFireDatabase, public afAuth: AngularFireAuth) {
         this.observers = [];
@@ -275,6 +276,15 @@ export class KanbanModel implements ISubject {
     private updateGroup(group: any, groupIndex: number): void {
         this.groups[groupIndex].updateGroup(group);
         this.loadGroupDashboards(group['dashboards'], groupIndex);
+    }
+
+    public retrieveGroupById(groupId: string): void {
+        for (let n = 0; n < this.groups.length; n++) {
+            if (this.groups[n].getKey() === groupId) {
+                this.currentSelectedGroup = groupId;
+                this.selectedGroup = this.groups[n];
+            }
+        }
     }
 
     // private createDefaultColumns(): Array<string> {

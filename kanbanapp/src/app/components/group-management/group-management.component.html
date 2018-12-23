@@ -2,7 +2,7 @@
 <div class="container w-100">
   <div class="w-100 group-profile align-items-center">
     <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
-    <h1 class="text-center group-name">Group Name</h1>
+    <h1 class="text-center group-name">{{ model.selectedGroup.getName() }}</h1>
   </div>
 
   <ngb-tabset>
@@ -17,9 +17,9 @@
             </tr>
           </thead>
           <tbody class=".align-middle">
-            <tr>
+            <tr  *ngFor="let members of model.selectedGroup.getAdmins()">
               <td class="h5">
-                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Mark</td>
+                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">{{members}}</td>
               <td>
                 <div ngbDropdown class="d-inline-block">
                   <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
@@ -29,34 +29,6 @@
                   </div>
                   <i class="fa fa-trash-alt"></i>
                 </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="h5">
-                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Jacob</td>
-              <td>
-                <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button class="dropdown-item">User</button>
-                    <button class="dropdown-item">Admin</button>
-                  </div>
-                  <i class="fa fa-trash-alt"></i>
-                </div>
-              </td>
-            </tr>
-            <tr>
-              <td class="h5">
-                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">Larry</td>
-              <td>
-                <div ngbDropdown class="d-inline-block dropdown">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
-                  <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button class="dropdown-item">User</button>
-                    <button class="dropdown-item">Admin</button>
-                  </div>
-                </div>
-                <i class="fa fa-trash-alt"></i>
               </td>
             </tr>
           </tbody>
