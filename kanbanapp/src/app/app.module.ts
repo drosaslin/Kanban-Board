@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GroupManagementComponent } from './components/group-management/group-management.component';
 import { environment } from '../environments/environment';
 
+import { DataService } from './services/dataservice';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
@@ -96,7 +97,8 @@ const routes: Routes = [
     AuthService,
     AuthGuard,
     LoginGuard,
-    KanbanModel
+    KanbanModel,
+    DataService
   ],
   bootstrap: [AppComponent]
 })

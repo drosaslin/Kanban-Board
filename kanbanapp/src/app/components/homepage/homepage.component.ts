@@ -1,14 +1,12 @@
 import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { DragulaService } from 'ng2-dragula';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { NgModel } from '@angular/forms';
+import { AngularFireList } from 'angularfire2/database';
 import { KanbanModel } from 'src/app/kanban-model/model';
 import { User } from '../../kanban-model/classes/user';
 import { Group } from '../../kanban-model/classes/group';
 import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
+import { DataService } from 'src/app/services/dataservice';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -25,6 +23,8 @@ export class HomepageComponent implements OnInit, IObserver {
 
   constructor(
     private modalService: NgbModal,
+    private router: Router,
+    private selectedGroup: DataService,
     private model: KanbanModel
     ) {}
 
@@ -35,6 +35,11 @@ export class HomepageComponent implements OnInit, IObserver {
 
     this.model.registerObserver(this);
     this.model.loadUserProfile();
+  }
+
+  public userGroupButtonClick(groupId: string): void {
+    this.selectedGroup.changeSelectedGroup(groupId);
+    this.router.navigate(['groupManagement']);
   }
 
   public newGroupButtonClick(content: string): void {
@@ -62,14 +67,6 @@ export class HomepageComponent implements OnInit, IObserver {
     this.model.createNewDashboard(this.newDashboardName);
   }
 
-  // privateBtn() {
-  //   console.log('AAAAAAAAAAA');
-  // }
-
-  // create() {
-  //   console.log('AAAAAAAAAAA');
-  // }
-
   // 離開彈跳式視窗方法不同時，提示不同訊息
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -82,12 +79,6 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public update(user: User, group: Array<Group>): void {
-    this.userGroups = group;
-    for (let n = 0; n < this.userGroups.length; n++) {
-      // console.log(this.userGroups[n].getDashboards());
-      for (let i = 0; i < this.userGroups[n].getDashboards().length; i++) {
-        console.log(this.userGroups[n].getDashboards()[i].getName());
-      }
-    }
+    // may be deleted
   }
 }

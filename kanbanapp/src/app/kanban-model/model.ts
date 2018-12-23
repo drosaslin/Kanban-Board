@@ -17,6 +17,7 @@ export class KanbanModel implements ISubject {
     groupsSubscriptions: any[];
     dashboardsSubscriptions: any[];
     observers: IObserver[];
+    currentSelectedGroup: string;
     user: User;
     groups: Array<Group>;
 

@@ -9,7 +9,7 @@
     <ul class="">
       <div *ngFor="let userGroup of model.groups;">
         <li class="">
-          <a href="javascript:void(0);" class="">{{ userGroup.name }}</a>
+          <a href="javascript:void(0);" (click)="userGroupButtonClick(userGroup.key)">{{ userGroup.name }}</a>
         </li>
       </div>
     </ul>
@@ -23,7 +23,7 @@
     <div style="margin-left:20%">
       <div class="w3-container">
         <h3>{{ userGroup.name }}</h3>
-        <div *ngFor="let dashboard of userGroup.getDashboards();" style="display: inline-block;">
+        <div *ngFor="let dashboard of userGroup.dashboards;" style="display: inline-block;">
           <div style="display: inline-block;">
             <button class="button group-board-btn btn btn-primary">{{ dashboard.name }}</button>
           </div>

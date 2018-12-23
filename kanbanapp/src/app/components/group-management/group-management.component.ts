@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { DataService } from 'src/app/services/dataservice';
 
 @Component({
   selector: 'app-group-management',
@@ -6,10 +7,16 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./group-management.component.css']
 })
 export class GroupManagementComponent implements OnInit {
+  private currentGroup: string;
+
   userType = 'Member';
-  constructor() { }
+  constructor(
+    private selectedGroup: DataService
+  ) { }
 
   ngOnInit() {
+    this.selectedGroup.currentGroup.subscribe(groupId => this.currentGroup = groupId);
+    console.log(this.currentGroup);
   }
 
 }
