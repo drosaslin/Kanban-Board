@@ -3,12 +3,18 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class DataService {
-    private messageSource = new BehaviorSubject<string>(null);
-    public currentGroup = this.messageSource.asObservable();
+    private groupSource = new BehaviorSubject<string>(null);
+    private dashboardSource = new BehaviorSubject<string>(null);
+    public currentGroup = this.groupSource.asObservable();
+    public currentDashboard = this.dashboardSource.asObservable();
 
     public constructor() {}
 
     public changeSelectedGroup(groupId: string): void {
-        this.messageSource.next(groupId);
+        this.groupSource.next(groupId);
+    }
+
+    public changeSelectedDashboard(dashboardId: string): void {
+        this.dashboardSource.next(dashboardId);
     }
 }

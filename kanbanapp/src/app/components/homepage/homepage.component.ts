@@ -24,7 +24,7 @@ export class HomepageComponent implements OnInit, IObserver {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private selectedGroup: DataService,
+    private selectedItems: DataService,
     private model: KanbanModel
     ) {}
 
@@ -38,7 +38,7 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public userGroupButtonClick(groupId: string): void {
-    this.selectedGroup.changeSelectedGroup(groupId);
+    this.selectedItems.changeSelectedGroup(groupId);
     this.router.navigate(['groupManagement']);
   }
 

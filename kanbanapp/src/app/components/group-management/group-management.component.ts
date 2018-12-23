@@ -11,12 +11,13 @@ export class GroupManagementComponent implements OnInit {
 
   userType = 'Member';
   constructor(
-    private selectedGroup: DataService
+    private selectedItems: DataService
   ) { }
 
   ngOnInit() {
-    this.selectedGroup.currentGroup.subscribe(groupId => this.currentGroup = groupId);
+    this.selectedItems.currentGroup.subscribe(groupId => this.currentGroup = groupId);
     console.log(this.currentGroup);
+    console.log(this.selectedItems.currentDashboard);
   }
 
 }
