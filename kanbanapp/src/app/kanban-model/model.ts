@@ -6,12 +6,15 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { ISubject } from '../kanban-model/interfaces/isubject';
 import { IObserver } from '../kanban-model/interfaces/iobserver';
 import { Dashboard } from './classes/dashboard';
+import { Column } from './classes/column';
 
 @Injectable()
 export class KanbanModel implements ISubject {
     readonly usersBaseRoute = 'users/';
     readonly groupsBaseRoute = 'groups/';
     readonly dashboardsBaseRoute = 'dashboards/';
+    readonly columnsBaseRoute = 'columns/';
+    readonly tasksBaseRoute = 'tasks/';
 
     userSubscription: any;
     groupsSubscriptions: any[];
@@ -36,12 +39,13 @@ export class KanbanModel implements ISubject {
     }
 
     // Creates a new group with no dashboards
-    public createNewGroup(groupName: string): void {
+    public createNewGroup(groupName: string, dashboardKey: string): void {
         // creates a new group in the database
         const groupRef = this.database.database.ref('groups').push({
             members: [],
             name: groupName,
             admins: [this.user.getKey()]
+            // columns: [dashboardKey]
         });
 
         // Updates the group list of the user
@@ -52,8 +56,96 @@ export class KanbanModel implements ISubject {
             });
     }
 
-    public createNewDashboard(dashboardName: string): void {
-        console.log('creating' + dashboardName);
+    public createNewDashboard(dashboardName: string, groupId: string): void {
+        // const defaultColumns: Array<string> = this.createDefaultColumns();
+        const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
+            name: 'To do',
+            index: 0,
+            tasks: []
+        });
+
+        const columnRef2 = this.database.database.ref(this.columnsBaseRoute).push({
+            name: 'Doing',
+            index: 1,
+            tasks: []
+        });
+
+        const columnRef3 = this.database.database.ref(this.columnsBaseRoute).push({
+            name: 'Done',
+            index: 2,
+            tasks: []
+        });
+
+        // Creating default personal dashboard
+        const dashboardRef = this.database.database.ref(this.dashboardsBaseRoute).push({
+            owner: this.user.getKey(),
+            name: dashboardName,
+            type: 'personal',
+            columns: [columnRef1.key,
+            columnRef2.key,
+            columnRef3.key]
+        });
+
+        const newDashboards: Array<string> = [];
+        for (let n = this.groups.length - 1; n >= 0; n--) {
+            if (this.groups[n].key === groupId) {
+                for (let i = this.groups[n].dashboards.length - 1; i >= 0; i--) {
+                    newDashboards.push(this.groups[n].dashboards[i].key);
+                }
+                newDashboards.push(dashboardRef.key);
+                break;
+            }
+        }
+
+        this.database.object(this.groupsBaseRoute + groupId)
+            .update({
+                dashboards: newDashboards.reverse()
+            });
+    }
+
+    // Deletes all data related to the specified group id such as: columns, tables, tasks, group info;
+    // and updates the user info in the database
+    public deleteUserGroup(groupId: string): void {
+        const groupIds: Array<string> = [];
+
+        for (let n = this.groups.length - 1; n >= 0; n--) {
+            if (this.groups[n].key === groupId) {
+                this.deleteGroupDashboards(this.groups[n]);
+                this.groups.splice(n, 1);
+            } else {
+                groupIds.push(this.groups[n].key);
+            }
+        }
+
+        this.database.object(this.groupsBaseRoute + groupId).remove();
+        this.database.object(this.usersBaseRoute + this.user.getKey())
+            .update({
+                groups: groupIds.reverse()
+            });
+    }
+
+    // Iterate through all dashboards of a group and delete them one by one from the database
+    public deleteGroupDashboards(group: Group): void {
+        for (let n = group.dashboards.length - 1; n >= 0; n--) {
+            this.deleteDashboard(group.dashboards[n].key);
+        }
+    }
+
+    // Deletes the specified dashboard from the database
+    public deleteDashboard(dashboardId: string): void {
+        this.database.object(this.dashboardsBaseRoute + dashboardId).remove();
+    }
+
+    // Iterate through all columns of a dashboard and deletes them one by one from the database
+    public deleteDashboardColumns(columns: Array<Column>): void {
+        for (let n = columns.length - 1; n >= 0; n--) {
+            this.deleteColumn(columns[n].key);
+        }
+    }
+
+    // Deletes the specified column
+    public deleteColumn(columnId: string): void {
+        this.database.object(this.columnsBaseRoute + columnId).remove();
     }
 
     // Retrieving user profile data and loading it in the User's class
@@ -91,8 +183,12 @@ export class KanbanModel implements ISubject {
                 this.groupsSubscriptions.push(
                     this.database.object(this.groupsBaseRoute + groups[index]).valueChanges()
                         .subscribe((group: any) => {
-                            this.groups.push(new Group(group, groups[index]));
-                            this.loadGroupDashboards(group['dashboards'], this.groups.length - 1);
+                            if (this.isNewGroup(groups[index])) {
+                                this.groups.push(new Group(group, groups[index]));
+                                this.loadGroupDashboards(group['dashboards'], this.groups.length - 1);
+                            } else {
+                                this.updateGroup(group, index);
+                            }
                         })
                 );
             }
@@ -106,12 +202,16 @@ export class KanbanModel implements ISubject {
 
         const size = dashboards.length;
         for (let n = 0; n < size; n++) {
-            this.dashboardsSubscriptions.push(
-                this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
-                    .subscribe((dashboard: any) => {
-                        this.groups[groupIndex].getDashboards().push(new Dashboard(dashboard, dashboards[n]));
-                    })
-            );
+            if (this.isNewDashboard(dashboards[n], groupIndex)) {
+                this.dashboardsSubscriptions.push(
+                    this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
+                        .subscribe((dashboard: any) => {
+                            if (this.isNewDashboard(dashboard, groupIndex)) {
+                                this.groups[groupIndex].dashboards.push(new Dashboard(dashboard, dashboards[n]));
+                            }
+                        })
+                );
+            }
         }
     }
 
@@ -161,4 +261,40 @@ export class KanbanModel implements ISubject {
 
         return true;
     }
+
+    private isNewDashboard(dashboardId: string, groupIndex: number): boolean {
+        for (let n = this.groups[groupIndex].dashboards.length - 1; n >= 0; n--) {
+            if (this.groups[groupIndex].dashboards[n].key === dashboardId) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private updateGroup(group: any, groupIndex: number): void {
+        this.groups[groupIndex].updateGroup(group);
+        this.loadGroupDashboards(group['dashboards'], groupIndex);
+    }
+
+    // private createDefaultColumns(): Array<string> {
+    //     // Creating the three default columns for the dashboard
+    //     const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
+    //         name: 'To do',
+    //         index: 0,
+    //         tasks: []
+    //     });
+
+    //     const columnRef2 = this.database.database.ref(this.columnsBaseRoute).push({
+    //         name: 'Doing',
+    //         index: 1,
+    //         tasks: []
+    //     });
+
+    //     const columnRef3 = this.database.database.ref(this.columnsBaseRoute).push({
+    //         name: 'Done',
+    //         index: 2,
+    //         tasks: []
+    //     });
+    // }
 }

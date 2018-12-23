@@ -10,9 +10,9 @@ export class User {
         this.key = newKey;
         this.firstName = newUser['firstName'];
         this.lastName = newUser['lastName'];
-        this.groups = newUser['groups'];
         this.username = newUser['username'];
         this.email = newEmail;
+        this.groups = (newUser['groups'] == null) ? [] : newUser['groups'];
     }
 
     public getKey(): string {

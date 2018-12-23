@@ -3,15 +3,16 @@ import { Dashboard } from './dashboard';
 export class Group {
     key: string;
     name: string;
-    members: Array<any>;
-    admins: Array<any>;
+    members: Array<string>;
+    admins: Array<string>;
     dashboards: Array<Dashboard>;
 
     public constructor(newGroup: any, newKey: string) {
+        console.log(newGroup['dashboards']);
         this.key = newKey;
-        this.name = newGroup['name'];
-        this.members = newGroup['members'];
-        this.admins = newGroup['admins'];
+        this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
+        this.members = (newGroup['members'] == null) ? [] : newGroup['members'];
+        this.admins = (newGroup['admins'] == null) ? [] : newGroup['admins'];
         this.dashboards = [];
     }
 
@@ -33,5 +34,11 @@ export class Group {
 
     public getDashboards(): Array<Dashboard> {
         return this.dashboards;
+    }
+
+    public updateGroup(newGroup: any): void {
+        this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
+        this.members = (newGroup['members'] == null) ? [] : newGroup['members'];
+        this.admins = (newGroup['admins'] == null) ? [] : newGroup['admins'];
     }
 }

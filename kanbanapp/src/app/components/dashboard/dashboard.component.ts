@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { DragulaService } from 'ng2-dragula';
+import { ActivatedRoute } from '@angular/router';
 import { KanbanModel } from '../../kanban-model/model';
 
 @Component({
@@ -10,6 +11,9 @@ import { KanbanModel } from '../../kanban-model/model';
 })
 
 export class DashboardComponent implements OnInit, OnDestroy {
+  private dashboardId: string;
+  private groupId: string;
+
   isAddCommentButtonEnabled: boolean;
   isDescriptionTextBoxEnabled: boolean;
   closeResult: string;
@@ -21,10 +25,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   constructor(
     private dragulaService: DragulaService,
     private modalService: NgbModal,
+    private route: ActivatedRoute,
     private model: KanbanModel
   ) { }
 
   ngOnInit() {
+    this.groupId = this.route.snapshot.paramMap.get('groupId');
+    this.dashboardId = this.route.snapshot.paramMap.get('dashboardId');
+    console.log(this.dashboardId, this.groupId);
+
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'

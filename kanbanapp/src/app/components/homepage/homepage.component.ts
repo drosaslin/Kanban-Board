@@ -1,4 +1,4 @@
-import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireList } from 'angularfire2/database';
 import { KanbanModel } from 'src/app/kanban-model/model';
@@ -19,6 +19,7 @@ export class HomepageComponent implements OnInit, IObserver {
   private closeResult: string;
   private newDashboardName: string;
   private newGroupName: string;
+  private currentSelectedGroup: string;
   private userGroups: Array<Group>;
 
   constructor(
@@ -33,6 +34,7 @@ export class HomepageComponent implements OnInit, IObserver {
     this.newDashboardName = '';
     this.userGroups = [];
 
+    this.setDefaultCurrentSelectedGroup();
     this.model.registerObserver(this);
     this.model.loadUserProfile();
   }
@@ -40,6 +42,10 @@ export class HomepageComponent implements OnInit, IObserver {
   public userGroupButtonClick(groupId: string): void {
     this.selectedItems.changeSelectedGroup(groupId);
     this.router.navigate(['groupManagement']);
+  }
+
+  public dashboardButtonClick(groupId: string, dashboardId: string): void {
+    this.router.navigate(['dashboard', groupId, dashboardId]);
   }
 
   public newGroupButtonClick(content: string): void {
@@ -51,20 +57,33 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public createGroupButtonClick(): void {
-    this.model.createNewGroup(this.newGroupName);
+    this.model.createNewGroup(this.newGroupName, null);
     this.newGroupName = '';
   }
 
-  public newDashboardButtonClick(content: string) {
+  public deleteGroupButtonClick(groupId: string): void {
+    this.model.deleteUserGroup(groupId);
+  }
+
+  public newDashboardButtonClick(content: string, groupId: string) {
+    this.currentSelectedGroup = groupId;
+
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = 'Closed with: ${result}';
+      this.setDefaultCurrentSelectedGroup();
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
   }
 
-  public createDashboardclick(): void {
-    this.model.createNewDashboard(this.newDashboardName);
+  public createDashboardButtonClick(): void {
+    this.model.createNewDashboard(this.newDashboardName, this.currentSelectedGroup);
+    this.setDefaultCurrentSelectedGroup();
+    this.newDashboardName = '';
+  }
+
+  private setDefaultCurrentSelectedGroup(): void {
+    this.currentSelectedGroup = '';
   }
 
   // 離開彈跳式視窗方法不同時，提示不同訊息
