@@ -2,6 +2,7 @@ export class Dashboard {
     key: string;
     name: string;
     type: string;
+    group: string;
     owners: Array<string>;
     tasks: Array<any>;
     columns: Array<any>;
@@ -11,7 +12,7 @@ export class Dashboard {
         this.name = dashboard['name'];
         this.type = dashboard['type'];
         this.owners = dashboard['owners'];
-
+        this.group = dashboard['group'];
         console.log(this);
     }
 
@@ -37,5 +38,9 @@ export class Dashboard {
 
     public getColumns(): Array<any> {
         return this.columns;
+    }
+
+    public getGroup(): string {
+        return this.group;
     }
 }
