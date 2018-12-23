@@ -5,23 +5,28 @@ import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { ISubject } from '../kanban-model/interfaces/isubject';
 import { IObserver } from '../kanban-model/interfaces/iobserver';
+import { Dashboard } from './classes/dashboard';
 
 @Injectable()
 export class KanbanModel implements ISubject {
-    private readonly usersBaseRoute = 'users/';
-    private readonly groupsBaseRoute = 'groups/';
+    readonly usersBaseRoute = 'users/';
+    readonly groupsBaseRoute = 'groups/';
+    readonly dashboardsBaseRoute = 'dashboards/';
 
-    private userSubscription: any;
-    private groupsSubscription: any[];
-    private observers: IObserver[];
-    private user: User;
-    private groups: Array<Group>;
+    userSubscription: any;
+    groupsSubscriptions: any[];
+    dashboardsSubscriptions: any[];
+    observers: IObserver[];
+    user: User;
+    groups: Array<Group>;
 
     constructor(private database: AngularFireDatabase, public afAuth: AngularFireAuth) {
         this.observers = [];
         this.groups = [];
+        this.groupsSubscriptions = [];
+        this.dashboardsSubscriptions = [];
+        this.user = null;
         this.userSubscription = null;
-        this.groupsSubscription = null;
     }
 
     // Returns the current user's data
@@ -29,45 +34,16 @@ export class KanbanModel implements ISubject {
         return this.user;
     }
 
+    // Creates a new group with no dashboards
     public createNewGroup(groupName: string): void {
-        // Creating the three default columns for the dashboard
-        const columnRef1 = this.database.database.ref('columns').push({
-            name: 'To do',
-            index: 0,
-            tasks: []
-        });
-
-        const columnRef2 = this.database.database.ref('columns').push({
-            name: 'Doing',
-            index: 1,
-            tasks: []
-        });
-
-        const columnRef3 = this.database.database.ref('columns').push({
-            name: 'Done',
-            index: 2,
-            tasks: []
-        });
-
-        // Creating default personal dashboard
-        const dashboardRef = this.database.database.ref('dashboards').push({
-            owner: this.user.getKey(),
-            name: 'My dashboard',
-            type: 'personal',
-            columns: [columnRef1.key,
-            columnRef2.key,
-            columnRef3.key]
-        });
-
-        // Creating default personal group for the user
+        // creates a new group in the database
         const groupRef = this.database.database.ref('groups').push({
             members: [],
             name: groupName,
-            admins: [this.user.getKey()],
-            dashboards: [dashboardRef.key]
+            admins: [this.user.getKey()]
         });
 
-        // Adding user additional information to users table in firebase database
+        // Updates the group list of the user
         this.user.getGroups().push(groupRef.key);
         this.database.object(this.usersBaseRoute + this.user.getKey())
             .update({
@@ -75,10 +51,19 @@ export class KanbanModel implements ISubject {
             });
     }
 
+    public createNewDashboard(dashboardName: string): void {
+        console.log('creating' + dashboardName);
+    }
+
     // Retrieving user profile data and loading it in the User's class
     // This function will be called every time the user data changes in the database
     public loadUserProfile(): void {
         if (this.userSubscription === null) {
+            // This function will fire the first time the user is loaded, and every time a change in this user is made.
+            // The possible triggers of this function are the following:
+            // 1. load the user for the first time.
+            // 2. add, delete groups.
+            // 3. change user's info.
             this.userSubscription = this.database.object(this.usersBaseRoute + this.afAuth.auth.currentUser.uid).valueChanges()
                 .subscribe((user: any) => {
                     this.user = new User(user, this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid);
@@ -92,14 +77,40 @@ export class KanbanModel implements ISubject {
     // Retrieves the groups of the user, and stores their data in an array of type Group
     public loadUserGroups(groups: Array<string>): void {
         const groupSize: number = groups.length;
-        this.groups = [];
 
+        // Looping through all groups in the user and adds or deletes the group from the groups array if needed
         for (let index = 0; index < groupSize; index++) {
-            this.database.object(this.groupsBaseRoute + groups[index]).valueChanges()
-                .subscribe((group: any) => {
-                    this.groups.push(new Group(group, groups[index]));
-                    this.notifyObservers();
-                });
+            if (this.isNewGroup(groups[index])) {
+                // This function will fire the first time the user is loaded, and every time a change in this user is made.
+                // The possible triggers of this function are the following:
+                // 1. loads the group for the first time.
+                // 2. add, delete dashboards.
+                // 3. add, delete members or admins.
+                // 4. change group's name.
+                this.groupsSubscriptions.push(
+                    this.database.object(this.groupsBaseRoute + groups[index]).valueChanges()
+                        .subscribe((group: any) => {
+                            this.groups.push(new Group(group, groups[index]));
+                            this.loadGroupDashboards(group['dashboards'], this.groups.length - 1);
+                        })
+                );
+            }
+        }
+    }
+
+    public loadGroupDashboards(dashboards: any[], groupIndex: number): void {
+        if (dashboards == null) {
+            return;
+        }
+
+        const size = dashboards.length;
+        for (let n = 0; n < size; n++) {
+            this.dashboardsSubscriptions.push(
+                this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
+                    .subscribe((dashboard: any) => {
+                        this.groups[groupIndex].getDashboards().push(new Dashboard(dashboard, dashboards[n]));
+                    })
+            );
         }
     }
 
@@ -133,5 +144,20 @@ export class KanbanModel implements ISubject {
         this.user = null;
         this.userSubscription.unsubscribe();
         this.userSubscription = null;
+
+        for (let n = this.groupsSubscriptions.length - 1; n >= 0; n--) {
+            this.groupsSubscriptions[n].unsubscribe();
+            this.groupsSubscriptions[n] = null;
+        }
+    }
+
+    private isNewGroup(groupId: string): boolean {
+        for (let n = this.groups.length - 1; n >= 0; n--) {
+            if (this.groups[n].getKey() === groupId) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

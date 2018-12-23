@@ -19,9 +19,8 @@ import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
 export class HomepageComponent implements OnInit, IObserver {
   private groupsList: AngularFireList<any>;
   private closeResult: string;
-  private newBoardName: string;
+  private newDashboardName: string;
   private newGroupName: string;
-  private personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
   private userGroups: Array<Group>;
 
   constructor(
@@ -31,19 +30,11 @@ export class HomepageComponent implements OnInit, IObserver {
 
   ngOnInit() {
     this.newGroupName = '';
-    this.newBoardName = '';
+    this.newDashboardName = '';
     this.userGroups = [];
 
     this.model.registerObserver(this);
     this.model.loadUserProfile();
-  }
-
-  public open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = 'Closed with: ${result}';
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
   }
 
   public newGroupButtonClick(content: string): void {
@@ -54,9 +45,21 @@ export class HomepageComponent implements OnInit, IObserver {
     });
   }
 
-  public createNewGroupButtonClick(): void {
+  public createGroupButtonClick(): void {
     this.model.createNewGroup(this.newGroupName);
     this.newGroupName = '';
+  }
+
+  public newDashboardButtonClick(content: string) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = 'Closed with: ${result}';
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  public createDashboardclick(): void {
+    this.model.createNewDashboard(this.newDashboardName);
   }
 
   // privateBtn() {
@@ -78,31 +81,13 @@ export class HomepageComponent implements OnInit, IObserver {
     }
   }
 
-  public createGroupButtonClick(): void {
-
-  }
-
-  // create new PersonalBoard button
-  public createPersonalBoardClick(): void {
-    const newName = {
-      name: this.newBoardName
-    };
-    this.personalDashboards.push(newName);
-    this.newBoardName = '';
-  }
-
-  // private isNewUserGroup(group: Group): boolean {
-  //   for (let n = this.userGroups.length - 1; n >= 0; n--) {
-  //     if (this.userGroups[n].getKey() === group.getKey()) {
-  //       return false;
-  //     }
-  //   }
-
-  //   return true;
-  // }
-
   public update(user: User, group: Array<Group>): void {
     this.userGroups = group;
+    for (let n = 0; n < this.userGroups.length; n++) {
+      // console.log(this.userGroups[n].getDashboards());
+      for (let i = 0; i < this.userGroups[n].getDashboards().length; i++) {
+        console.log(this.userGroups[n].getDashboards()[i].getName());
+      }
+    }
   }
 }
-

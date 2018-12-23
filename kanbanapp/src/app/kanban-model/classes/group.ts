@@ -1,16 +1,18 @@
+import { Dashboard } from './dashboard';
+
 export class Group {
-    private key: string;
-    private name: string;
-    private members: Array<any>;
-    private admins: Array<any>;
-    private dashboards: Array<any>;
+    key: string;
+    name: string;
+    members: Array<any>;
+    admins: Array<any>;
+    dashboards: Array<Dashboard>;
 
     public constructor(newGroup: any, newKey: string) {
         this.key = newKey;
         this.name = newGroup['name'];
         this.members = newGroup['members'];
         this.admins = newGroup['admins'];
-        this.dashboards = newGroup['dashboards'];
+        this.dashboards = [];
     }
 
     public getKey(): string {
@@ -29,7 +31,7 @@ export class Group {
         return this.admins;
     }
 
-    public getDashboards(): Array<any> {
+    public getDashboards(): Array<Dashboard> {
         return this.dashboards;
     }
 }

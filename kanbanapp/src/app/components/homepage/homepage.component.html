@@ -7,38 +7,40 @@
   <div class="w3-sidebar w3-bar-block sidebar">
     <h5 class="h5 m-3">Groups</h5>
     <ul class="">
-      <div *ngFor="let userGroup of userGroups;">
+      <div *ngFor="let userGroup of model.groups;">
         <li class="">
-          <a href="javascript:void(0);" class="">{{ userGroup.getName() }}</a>
+          <a href="javascript:void(0);" class="">{{ userGroup.name }}</a>
         </li>
       </div>
     </ul>
-    <a href="javascript:void(0);" class="w3-bar-item wl-button" (click)="newGroupButtonClick(groupModal)"><i class="fas fa-plus mr-2" ></i>Create
+    <a href="javascript:void(0);" class="w3-bar-item wl-button" (click)="newGroupButtonClick(groupModal)"><i class="fas fa-plus mr-2"></i>Create
       new Group</a>
     <h5 class="h5vside-header ml-3">Dashboards</h5>
   </div>
 
   <!-- Page Content -->
 
-  <div style="margin-left:20%">
-
-    <div class="w3-container">
-      <h3>Personal Board</h3>
-      <div style="display: inline-block;" *ngFor="let personalDashboard of personalDashboards;">
-        <button class="button group-board-btn btn btn-primary">{{ personalDashboard.name }}</button>
+  <div *ngFor="let userGroup of model.groups;">
+    <div style="margin-left:20%">
+      <div class="w3-container">
+        <h3>{{ userGroup.name }}</h3>
+        <div *ngFor="let dashboard of userGroup.getDashboards();" style="display: inline-block;">
+          <div style="display: inline-block;">
+            <button class="button group-board-btn btn btn-primary">{{ dashboard.name }}</button>
+          </div>
+        </div>
+        <button class="button personal-board-btn btn btn-secondary" (click)="newDashboardButtonClick(dashboardModal)">New
+          Board</button>
       </div>
-      <button class="button personal-board-btn btn btn-secondary" (click)="open(content)">New Board</button>
-      <!-- <pre>{{closeResult}}</pre> -->
+
+      <div id="interval"></div>
     </div>
-
-    <div id="interval"></div>
-
-    <div class="w3-container">
+    <!-- <div class="w3-container">
       <h3>Group Board</h3>
       <button class="button group-board-btn btn btn-primary">Group1</button>
       <button class="button group-board-btn btn btn-success">Group2</button>
       <button class="button group-board-btn btn btn-secondary">New Board</button>
-    </div>
+    </div> -->
   </div>
 </div>
 
@@ -59,13 +61,13 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="createNewGroupButtonClick()">Create</button>
+    <button type="button" class="btn btn-outline-dark" (click)="createGroupButtonClick()">Create</button>
   </div>
 </ng-template>
 
 
 <!-- Modal for new dashboard-->
-<ng-template #content let-modal>
+<ng-template #dashboardModal let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
