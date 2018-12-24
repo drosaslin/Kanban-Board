@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DataService } from 'src/app/services/dataservice';
 import { Group } from '../../kanban-model/classes/group';
 import { KanbanModel } from 'src/app/kanban-model/model';
+import { IObserver } from '../../kanban-model/interfaces/iobserver';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { User } from 'src/app/kanban-model/classes/user';
 import { ActivatedRoute } from '@angular/router';
@@ -11,8 +12,8 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './group-management.component.html',
   styleUrls: ['./group-management.component.css']
 })
-export class GroupManagementComponent implements OnInit {
-  currentGroup: string;
+export class GroupManagementComponent implements OnInit, IObserver {
+  groupId: string;
   group: Group;
   groupAllMembers: Map<string, string>;
 
@@ -21,15 +22,18 @@ export class GroupManagementComponent implements OnInit {
     private selectedItems: DataService,
     private model: KanbanModel,
     private route: ActivatedRoute
-  ) {
-    this.route.params.subscribe(params => this.ngOnInit());
-   }
+  ) { }
 
   ngOnInit() {
-    this.selectedItems.currentGroup.subscribe(groupId => this.currentGroup = groupId);
-    this.model.retrieveGroupById(this.currentGroup);
+    this.groupId = this.route.snapshot.paramMap.get('groupId');
+    this.model.loadUserProfile();
+    this.model.registerObserver(this);
+    this.model.retrieveGroupById(this.groupId);
     // console.log(this.model.selectedGroup);
     // console.log(this.model.selectedGroup.getAdmins());
   }
 
+  public update(user: User, group: Group[]): void {
+    this.model.retrieveGroupById(this.groupId);
+  }
 }

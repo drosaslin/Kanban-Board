@@ -25,6 +25,7 @@ export class NavbarComponent implements OnInit, IObserver {
     this.username = '';
     this.model.registerObserver(this);
     this.authenticateUser();
+    this.model.loadUserProfile();
   }
 
   // Logout user and redirects it to login page

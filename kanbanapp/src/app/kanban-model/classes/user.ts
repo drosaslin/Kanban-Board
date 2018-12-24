@@ -7,6 +7,7 @@ export class User {
     private groups: Array<string>;
 
     public constructor(newUser: any, newEmail: string, newKey: string) {
+        console.log(newUser);
         this.key = newKey;
         this.firstName = newUser['firstName'];
         this.lastName = newUser['lastName'];

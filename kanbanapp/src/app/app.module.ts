@@ -60,7 +60,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'groupManagement',
+    path: 'groupManagement/:groupId',
     component: GroupManagementComponent,
     canActivate: [AuthGuard],
     data: {

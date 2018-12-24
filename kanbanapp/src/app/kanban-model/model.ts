@@ -7,6 +7,7 @@ import { ISubject } from '../kanban-model/interfaces/isubject';
 import { IObserver } from '../kanban-model/interfaces/iobserver';
 import { Dashboard } from './classes/dashboard';
 import { Column } from './classes/column';
+import { Task } from './classes/task';
 
 @Injectable()
 export class KanbanModel implements ISubject {
@@ -17,13 +18,15 @@ export class KanbanModel implements ISubject {
     readonly tasksBaseRoute = 'tasks/';
 
     userSubscription: any;
+    columnsSubscription: any;
+    tasksSubscription: any;
     groupsSubscriptions: any[];
     dashboardsSubscriptions: any[];
     observers: IObserver[];
-    currentSelectedGroup: string;
     user: User;
     groups: Array<Group>;
     selectedGroup: Group;
+    selectedDashboard: Dashboard;
 
     constructor(private database: AngularFireDatabase, public afAuth: AngularFireAuth) {
         this.observers = [];
@@ -32,6 +35,10 @@ export class KanbanModel implements ISubject {
         this.dashboardsSubscriptions = [];
         this.user = null;
         this.userSubscription = null;
+        this.columnsSubscription = null;
+        this.tasksSubscription = null;
+        this.selectedGroup = null;
+        this.selectedDashboard = null;
     }
 
     // Returns the current user's data
@@ -46,7 +53,6 @@ export class KanbanModel implements ISubject {
             members: [],
             name: groupName,
             admins: [this.user.getKey()]
-            // columns: [dashboardKey]
         });
 
         // Updates the group list of the user
@@ -82,9 +88,23 @@ export class KanbanModel implements ISubject {
             owner: this.user.getKey(),
             name: dashboardName,
             type: 'personal',
+            group: groupId,
             columns: [columnRef1.key,
             columnRef2.key,
             columnRef3.key]
+        });
+
+        // Adds dashboard Id to columns
+        this.database.database.ref(this.columnsBaseRoute + columnRef1.key).update({
+            dashboard: dashboardRef.key
+        });
+
+        this.database.database.ref(this.columnsBaseRoute + columnRef2.key).update({
+            dashboard: dashboardRef.key
+        });
+
+        this.database.database.ref(this.columnsBaseRoute + columnRef2.key).update({
+            dashboard: dashboardRef.key
         });
 
         const newDashboards: Array<string> = [];
@@ -103,6 +123,10 @@ export class KanbanModel implements ISubject {
                 dashboards: newDashboards.reverse()
             });
     }
+
+    // public addTaskToColumn(columnId: string): void {
+
+    // }
 
     // Deletes all data related to the specified group id such as: columns, tables, tasks, group info;
     // and updates the user info in the database
@@ -158,6 +182,7 @@ export class KanbanModel implements ISubject {
             // 1. load the user for the first time.
             // 2. add, delete groups.
             // 3. change user's info.
+            console.log(this.afAuth.auth.currentUser.uid);
             this.userSubscription = this.database.object(this.usersBaseRoute + this.afAuth.auth.currentUser.uid).valueChanges()
                 .subscribe((user: any) => {
                     this.user = new User(user, this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid);
@@ -175,7 +200,7 @@ export class KanbanModel implements ISubject {
         // Looping through all groups in the user and adds or deletes the group from the groups array if needed
         for (let index = 0; index < groupSize; index++) {
             if (this.isNewGroup(groups[index])) {
-                // This function will fire the first time the user is loaded, and every time a change in this user is made.
+                // This function will fire the first time the user is loaded, and every time a change in this group is made.
                 // The possible triggers of this function are the following:
                 // 1. loads the group for the first time.
                 // 2. add, delete dashboards.
@@ -190,12 +215,14 @@ export class KanbanModel implements ISubject {
                             } else {
                                 this.updateGroup(group, index);
                             }
+                            this.notifyObservers();
                         })
                 );
             }
         }
     }
 
+    // Looping through all the dashboards in a group, retrieving their data, and loading them into its respective group
     public loadGroupDashboards(dashboards: any[], groupIndex: number): void {
         if (dashboards == null) {
             return;
@@ -205,14 +232,52 @@ export class KanbanModel implements ISubject {
         for (let n = 0; n < size; n++) {
             if (this.isNewDashboard(dashboards[n], groupIndex)) {
                 this.dashboardsSubscriptions.push(
+                    // This function will fire the first time the user is loaded, and every time a change in this dashboard is made.
+                    // The possible triggers of this function are the following:
+                    // 1. loads the dashboard for the first time.
+                    // 2. add, delete tables or columns.
+                    // 3. change dashboard's data.
                     this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
                         .subscribe((dashboard: any) => {
                             if (this.isNewDashboard(dashboard, groupIndex)) {
                                 this.groups[groupIndex].dashboards.push(new Dashboard(dashboard, dashboards[n]));
                             }
+                            this.notifyObservers();
                         })
                 );
             }
+        }
+    }
+
+    public loadDashboardColumns(dashboardId: string): void {
+        if (this.columnsSubscription === null && this.selectedDashboard !== null) {
+            this.columnsSubscription =
+                this.database.list(this.columnsBaseRoute, columns => columns.orderByChild('dashboard').equalTo(dashboardId))
+                    .snapshotChanges().subscribe(columns => {
+                        columns.forEach(element => {
+                            if (this.isNewColumn(element.key)) {
+                                this.selectedDashboard.columns.unshift(new Column(element.payload.val(), element.key));
+                            }
+                        });
+                        this.selectedDashboard.sortColumns();
+                        this.notifyObservers();
+                    });
+        }
+    }
+
+    public loadDashboardTasks(dashboardId: string): void {
+        if (this.tasksSubscription === null && this.selectedDashboard !== null) {
+            this.tasksSubscription =
+                this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').equalTo(dashboardId))
+                    .snapshotChanges().subscribe(tasks => {
+                        tasks.forEach(element => {
+                            console.log(element.payload.val());
+                            if (this.isNewColumn(element.key)) {
+                                this.selectedDashboard.tasks.push(new Task(element.payload.val(), element.key));
+                            }
+                        });
+                        // this.notifyObservers();
+                    });
         }
     }
 
@@ -244,13 +309,10 @@ export class KanbanModel implements ISubject {
         this.observers = [];
         this.groups = [];
         this.user = null;
-        this.userSubscription.unsubscribe();
-        this.userSubscription = null;
+        this.selectedGroup = null;
+        this.selectedDashboard = null;
 
-        for (let n = this.groupsSubscriptions.length - 1; n >= 0; n--) {
-            this.groupsSubscriptions[n].unsubscribe();
-            this.groupsSubscriptions[n] = null;
-        }
+        this.unsubscribeFromDatabase();
     }
 
     private isNewGroup(groupId: string): boolean {
@@ -273,17 +335,71 @@ export class KanbanModel implements ISubject {
         return true;
     }
 
+    private isNewColumn(columnId: string): boolean {
+        // console.log(this.selectedDashboard);
+        if (this.selectedDashboard === null) {
+            return false;
+        }
+
+        for (let n = this.selectedDashboard.columns.length - 1; n >= 0; n--) {
+            if (this.selectedDashboard.columns[n].key === columnId) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private updateGroup(group: any, groupIndex: number): void {
         this.groups[groupIndex].updateGroup(group);
         this.loadGroupDashboards(group['dashboards'], groupIndex);
     }
 
     public retrieveGroupById(groupId: string): void {
+        if (this.groups == null) {
+            return;
+        }
+
         for (let n = 0; n < this.groups.length; n++) {
-            if (this.groups[n].getKey() === groupId) {
-                this.currentSelectedGroup = groupId;
+            if (this.groups[n].key === groupId) {
                 this.selectedGroup = this.groups[n];
+                break;
             }
+        }
+    }
+
+    public retrieveDashboardById(dashboardId: string): void {
+        if (this.selectedGroup == null) {
+            return;
+        }
+
+        for (let n = this.selectedGroup.dashboards.length - 1; n >= 0; n--) {
+            if (this.selectedGroup.dashboards[n].key === dashboardId) {
+                this.selectedDashboard = this.selectedGroup.dashboards[n];
+                break;
+            }
+        }
+
+        // this.loadDashboardColumns(dashboardId);
+    }
+
+    // Stop listening for changes in the database
+    private unsubscribeFromDatabase(): void {
+        this.userSubscription.unsubscribe();
+        this.columnsSubscription.unsubscribe();
+        this.tasksSubscription.unsubscribe();
+        this.userSubscription = null;
+        this.columnsSubscription = null;
+        this.tasksSubscription = null;
+
+        for (let n = this.groupsSubscriptions.length - 1; n >= 0; n--) {
+            this.groupsSubscriptions[n].unsubscribe();
+            this.groupsSubscriptions[n] = null;
+        }
+
+        for (let n = this.dashboardsSubscriptions.length - 1; n >= 0; n--) {
+            this.dashboardsSubscriptions[n].unsubscribe();
+            this.dashboardsSubscriptions[n] = null;
         }
     }
 

@@ -5,7 +5,6 @@ import { KanbanModel } from 'src/app/kanban-model/model';
 import { User } from '../../kanban-model/classes/user';
 import { Group } from '../../kanban-model/classes/group';
 import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
-import { DataService } from 'src/app/services/dataservice';
 import { Router } from '@angular/router';
 
 @Component({
@@ -25,7 +24,6 @@ export class HomepageComponent implements OnInit, IObserver {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private selectedItems: DataService,
     private model: KanbanModel
     ) {}
 
@@ -40,8 +38,7 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public userGroupButtonClick(groupId: string): void {
-    this.selectedItems.changeSelectedGroup(groupId);
-    this.router.navigate(['groupManagement']);
+    this.router.navigate(['groupManagement', groupId]);
   }
 
   public dashboardButtonClick(groupId: string, dashboardId: string): void {

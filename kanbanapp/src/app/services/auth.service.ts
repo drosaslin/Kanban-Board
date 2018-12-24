@@ -51,19 +51,33 @@ export class AuthService {
         const columnRef1 = this.db.database.ref('columns').push({
           name: 'To do',
           index: 0,
-          tasks: []
+          tasks: [],
+          dashboard: ''
         });
 
         const columnRef2 = this.db.database.ref('columns').push({
           name: 'Doing',
           index: 1,
-          tasks: []
+          tasks: [],
+          dashboard: ''
         });
 
         const columnRef3 = this.db.database.ref('columns').push({
           name: 'Done',
           index: 2,
-          tasks: []
+          tasks: [],
+          dashboard: ''
+        });
+
+        const taskRef = this.db.database.ref('tasks').push({
+          content: 'my first task',
+          description: '',
+          index: 0,
+          dueDate: '',
+          members: [],
+          comments: [],
+          column: columnRef1.key,
+          dashboard: ''
         });
 
         // Creating default personal dashboard
@@ -74,7 +88,8 @@ export class AuthService {
           group: '',
           columns: [columnRef1.key,
           columnRef2.key,
-          columnRef3.key]
+          columnRef3.key],
+          tasks: [taskRef.key]
         });
 
         // Creating default personal group for the user
@@ -88,6 +103,23 @@ export class AuthService {
         // Adds group Id to dashboard
         this.db.database.ref('dashboards/' + dashboardRef.key).update({
           group: groupRef.key
+        });
+
+        // Adds dashboard Id to columns
+        this.db.database.ref('columns/' + columnRef1.key).update({
+          dashboard: dashboardRef.key
+        });
+
+        this.db.database.ref('columns/' + columnRef2.key).update({
+          dashboard: dashboardRef.key
+        });
+
+        this.db.database.ref('columns/' + columnRef3.key).update({
+          dashboard: dashboardRef.key
+        });
+
+        this.db.database.ref('tasks/' + taskRef.key).update({
+          dashboard: dashboardRef.key
         });
 
         // Adding user additional information to users table in firebase db

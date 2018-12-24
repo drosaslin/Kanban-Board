@@ -4,17 +4,17 @@
 
 <div class="dashboard-container">
   <div class="group-info">
-    <p>Group Name</p>
+    <p>{{ model.selectedGroup.name }}</p>
     <div>
-      <a href="javascript:void(0);" class="project-name" routerLink="/groupManagement">Project Name</a>
+      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{ model.selectedDashboard.name }}</a>
     </div>
   </div>
 
   <div class="dashboard">
     <div dragula="COLUMNS" [(dragulaModel)]="groups">
-      <div class="table" *ngFor="let group of groups; let index = index">
+      <div class="table" *ngFor="let column of groups;">
         <span class="group-handle">
-          <p class="table-name"><strong>{{ group.name }}</strong></p>
+          <p class="table-name"><strong>{{ column.name }}</strong></p>
           <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
             <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
@@ -23,18 +23,19 @@
             </div>
           </div>
         </span>
-        <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
-          <li *ngFor="let item of group.items" class="task" (click)="openTaskModal(content, item.name)">
-            <p class="task-name">{{ item.name }}</p>
-          </li>
-        </ul>
-        <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="group.isAddTaskEnabled">
-        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)"
+        <!-- <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container"> -->
+        <!-- <ul dragula="ITEMS" class="task-container"> -->
+          <!-- <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, item.name)">
+            <p class="task-name">{{ task.name }}</p>
+          </li> -->
+        <!-- </ul> -->
+        <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="addTaskEnabler[column.key]">
+        <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(column.key)"
           role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
     <div>
-      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
+      <a href="#" routerLinkDisabled class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
         role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>

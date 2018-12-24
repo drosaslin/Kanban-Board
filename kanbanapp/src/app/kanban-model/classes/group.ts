@@ -8,7 +8,6 @@ export class Group {
     dashboards: Array<Dashboard>;
 
     public constructor(newGroup: any, newKey: string) {
-        console.log(newGroup['dashboards']);
         this.key = newKey;
         this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
         this.members = (newGroup['members'] == null) ? [] : newGroup['members'];

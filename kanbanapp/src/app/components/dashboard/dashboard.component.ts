@@ -1,8 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+import { IObserver } from '../../kanban-model/interfaces/iobserver';
 import { DragulaService } from 'ng2-dragula';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { KanbanModel } from '../../kanban-model/model';
+import { Group } from 'src/app/kanban-model/classes/group';
+import { User } from 'src/app/kanban-model/classes/user';
 
 @Component({
   selector: 'app-dashboard',
@@ -10,7 +13,7 @@ import { KanbanModel } from '../../kanban-model/model';
   styleUrls: ['./dashboard.component.css']
 })
 
-export class DashboardComponent implements OnInit, OnDestroy {
+export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   private dashboardId: string;
   private groupId: string;
 
@@ -20,19 +23,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   taskName: string;
   taskDescription: string;
   taskComment: string;
-  groups: Array<any>;
+  addTaskEnabler: Map<string, boolean>;
+  columns: Array<any>;
 
   constructor(
     private dragulaService: DragulaService,
     private modalService: NgbModal,
-    private route: ActivatedRoute,
+    private activateRoute: ActivatedRoute,
+    private router: Router,
     private model: KanbanModel
   ) { }
 
   ngOnInit() {
-    this.groupId = this.route.snapshot.paramMap.get('groupId');
-    this.dashboardId = this.route.snapshot.paramMap.get('dashboardId');
-    console.log(this.dashboardId, this.groupId);
+    this.groupId = this.activateRoute.snapshot.paramMap.get('groupId');
+    this.dashboardId = this.activateRoute.snapshot.paramMap.get('dashboardId');
+    this.model.loadUserProfile();
+    this.model.registerObserver(this);
+    this.model.retrieveGroupById(this.groupId);
+    this.model.retrieveDashboardById(this.dashboardId);
+    this.model.loadDashboardColumns(this.dashboardId);
+    this.model.loadDashboardTasks(this.dashboardId);
+    this.setAddTaskEnablers();
+    // this.setColums();
 
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
@@ -49,10 +61,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         name: 'Doing',
         items: [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }, { name: 'Item 4' }],
         isAddTaskEnabled: false
+      },
+      {
+        name: 'Done',
+        items: [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }, { name: 'Item 4' }],
+        isAddTaskEnabled: false
       }
     ];
 
-    this.groups = group;
+    this.columns = group;
+
     this.setModalDefaultState();
   }
 
@@ -81,7 +99,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public addTableButtonClick(): void {
-    this.groups.push({
+    this.columns.push({
       name: 'New Table',
       items: [],
       isAddTaskEnabled: false
@@ -89,24 +107,24 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   public deleteTableButtonClick(tableName): void {
-    for (let n = 0; n < this.groups.length; n++) {
-      if (this.groups[n].name === tableName) {
-        this.groups.splice(n, 1);
+    for (let n = 0; n < this.columns.length; n++) {
+      if (this.columns[n].name === tableName) {
+        this.columns.splice(n, 1);
         break;
       }
     }
   }
 
-  public addTaskButtonClick(index): void {
-    const newItem = {
-      name: this.taskName
-    };
+  public groupNameButtonClick(): void {
+    this.router.navigate(['groupManagement', this.groupId]);
+  }
 
-    if (this.groups[index].isAddTaskEnabled) {
-      this.groups[index].items.push(newItem);
-    }
+  public addTaskButtonClick(columnId: string): void {
+    // if (this.addTaskEnabler[columnId]) {
+    //   this.model.addTaskToColumn(columnId);
+    // }
 
-    this.groups[index].isAddTaskEnabled = !this.groups[index].isAddTaskEnabled;
+    this.addTaskEnabler[columnId] = !this.addTaskEnabler[columnId];
     this.taskName = '';
   }
 
@@ -137,6 +155,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.isAddCommentButtonEnabled = (this.taskComment.length > 0);
   }
 
+  private setAddTaskEnablers(): void {
+    const size = this.model.selectedDashboard.columns.length;
+    this.addTaskEnabler = new Map();
+
+    for (let n = 0; n < size; n++) {
+      this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
+    }
+  }
+
   // Set the default state of the task's modal
   private setModalDefaultState(): void {
     this.isDescriptionTextBoxEnabled = false;
@@ -146,5 +173,28 @@ export class DashboardComponent implements OnInit, OnDestroy {
   // Disable the description text box
   private disableDescriptionTextBox(): void {
     this.isDescriptionTextBoxEnabled = false;
+  }
+
+  private updateColumns(): void {
+    const size = this.model.selectedDashboard.columns.length;
+    for (let n = 0; n < size; n++) {
+
+
+      const column = {
+        name: this.model.selectedDashboard.columns[n].name,
+        items: [{ name: 'Item A' }, { name: 'Item B' }, { name: 'Item C' }, { name: 'Item D' }],
+      };
+
+      this.columns.push(column);
+    }
+  }
+
+  public update(user: User, group: Group[]): void {
+    this.model.retrieveGroupById(this.groupId);
+    this.model.retrieveDashboardById(this.dashboardId);
+    this.model.loadDashboardColumns(this.dashboardId);
+    this.model.loadDashboardTasks(this.dashboardId);
+    this.setAddTaskEnablers();
+    this.updateColumns();
   }
 }
