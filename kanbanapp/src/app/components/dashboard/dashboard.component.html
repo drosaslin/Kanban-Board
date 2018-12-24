@@ -23,12 +23,11 @@
             </div>
           </div>
         </span>
-        <!-- <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container"> -->
-        <!-- <ul dragula="ITEMS" class="task-container"> -->
-          <!-- <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, item.name)">
-            <p class="task-name">{{ task.name }}</p>
-          </li> -->
-        <!-- </ul> -->
+        <ul dragula="ITEMS" [(dragulaModel)]="column.tasks" class="task-container">
+          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, item.name)">
+            <p class="task-name">{{ task.content }}</p>
+          </li>
+        </ul>
         <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="addTaskEnabler[column.key]">
         <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(column.key)"
           role="button" aria-disabled="true">add new task</a>

@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { KanbanModel } from '../../kanban-model/model';
 import { Group } from 'src/app/kanban-model/classes/group';
 import { User } from 'src/app/kanban-model/classes/user';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-dashboard',
@@ -24,7 +25,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   taskDescription: string;
   taskComment: string;
   addTaskEnabler: Map<string, boolean>;
-  columns: Array<any>;
+  dragulaSub: any;
 
   constructor(
     private dragulaService: DragulaService,
@@ -35,20 +36,44 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   ) { }
 
   ngOnInit() {
+    this.dragulaSub = new Subscription();
     this.model.columnsSubscription = null;
     this.model.selectedDashboard = null;
     this.groupId = this.activateRoute.snapshot.paramMap.get('groupId');
     this.dashboardId = this.activateRoute.snapshot.paramMap.get('dashboardId');
-    console.log('init', this.dashboardId);
     this.model.registerObserver(this);
     this.model.loadUserProfile();
     this.setAddTaskEnablers();
-    // this.updateColumns();
 
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
     });
+
+    this.dragulaSub.add(this.dragulaService.dropModel('COLUMNS')
+      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+        this.model.updateColumnOrder();
+        // console.log('dropModel:');
+        // console.log(el);
+        // console.log(source);
+        // console.log(target);
+        // console.log(sourceModel);
+        // console.log(targetModel);
+        // console.log(item);
+      })
+    );
+
+    this.dragulaSub.add(this.dragulaService.dropModel('ITEMS')
+      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+        // console.log('dropModel:');
+        // console.log(el);
+        // console.log(source);
+        // console.log(target);
+        // console.log(sourceModel);
+        // console.log(targetModel);
+        // console.log(item);
+      })
+    );
 
     this.setModalDefaultState();
   }
@@ -57,9 +82,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.dragulaService.destroy('COLUMNS');
     this.groupId = '';
     this.dashboardId = '';
-    // this.model.columnsSubscription.unsubscribe();
-    // this.model.columnsSubscription = null;
-    // this.model.selectedDashboard = null;
+    this.dragulaSub.unsubscribe();
   }
 
   public openTaskModal(content, itemName) {
@@ -95,9 +118,9 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public addTaskButtonClick(columnId: string): void {
-    // if (this.addTaskEnabler[columnId]) {
-    //   this.model.addTaskToColumn(columnId);
-    // }
+    if (this.addTaskEnabler[columnId] && this.taskName !== '') {
+      this.model.createNewTask(columnId, this.taskName);
+    }
 
     this.addTaskEnabler[columnId] = !this.addTaskEnabler[columnId];
     this.taskName = '';
@@ -152,43 +175,15 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.isDescriptionTextBoxEnabled = false;
   }
 
-  // private updateColumns(): void {
-  //   const columnsSize = this.model.selectedDashboard.columns.length;
-  //   const tasksSize = this.model.selectedDashboard.tasks.length;
-  //   this.columns = [];
-  //   let column: any[] = [];
-  //   let tasks: any[] = [];
-
-  //   for (let n = 0; n < columnsSize; n++) {
-  //     for (let i = 0; i < tasksSize; i++) {
-  //       if (this.model.selectedDashboard.tasks[i].dashboardId === this.model.selectedDashboard.columns[n].key) {
-  //         tasks.push({
-  //           content: this.model.selectedDashboard.tasks[i].content
-  //         });
-  //       }
-  //     }
-  //     column.push({
-  //       name: this.model.selectedDashboard.columns[n].name,
-  //       items: tasks
-  //     });
-
-  //     this.columns.push(column);
-  //     column = [];
-  //     tasks = [];
-  //   }
-
-  //   // console.log(this.columns);
-  // }
-
   public update(user: User, group: Group[]): void {
     this.model.retrieveGroupById(this.groupId);
     this.model.retrieveDashboardById(this.dashboardId);
     this.model.loadDashboardColumns(this.dashboardId);
-    // this.model.loadDashboardTasks(this.dashboardId);
+    this.model.loadDashboardTasks(this.dashboardId);
     this.setAddTaskEnablers();
-    // this.updateColumns();
-    // console.log(this.model.selectedDashboard.columns);
-    // console.log('update', this.model.selectedDashboard.key);
-    // console.log(this.model.selectedDashboard.columns);
+
+    console.log(this.model.selectedDashboard);
+    console.log(this.model.selectedDashboard.columns[0].tasks);
+    // this.updateTasks();
   }
 }

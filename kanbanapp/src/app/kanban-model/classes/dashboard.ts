@@ -60,6 +60,18 @@ export class Dashboard {
         }
     }
 
+    public addTask(task: Task): void {
+        this.tasks.push(task);
+
+        for (let n = 0; n < this.columns.length; n++) {
+            if (this.columns[n].key === task.columnId) {
+                this.columns[n].tasks.push(task);
+                break;
+            }
+        }
+        console.log(10, this.columns);
+    }
+
     private swapColumns(index1: number, index2: number): void {
         const temp = this.columns[index1];
         this.columns[index1] = this.columns[index2];

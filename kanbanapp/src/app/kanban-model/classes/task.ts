@@ -15,9 +15,9 @@ export class Task {
         this.content = (task['content'] == null) ? '' : task['content'];
         this.description = (task['description'] == null) ? '' : task['description'];
         this.dueDate = (task['dueDate'] == null) ? '' : task['dueDate'];
-        this.dashboardId = (task['dashboardId'] == null) ? '' : task['dashboardId'];
+        this.dashboardId = (task['dashboard'] == null) ? '' : task['dashboard'];
         this.index = (task['index'] == null) ? -1 : task['index'];
-        this.columnId = (task['columnId'] == null) ? '' : task['columnId'];
+        this.columnId = (task['column'] == null) ? '' : task['column'];
         this.members = (task['members'] == null) ? [] : task['members'];
         this.comments = (task['comments'] == null) ? [] : task['comments'];
     }
