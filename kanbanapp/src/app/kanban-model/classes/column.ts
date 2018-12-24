@@ -10,4 +10,10 @@ export class Column {
         this.index = newColumn['index'];
         this.name = newColumn['name'];
     }
+
+    public updateColumn(column: any) {
+        this.dashboardId = column['dashboardId'];
+        this.index = column['index'];
+        this.name = column['name'];
+    }
 }

@@ -11,15 +11,15 @@
   </div>
 
   <div class="dashboard">
-    <div dragula="COLUMNS" [(dragulaModel)]="groups">
-      <div class="table" *ngFor="let column of groups;">
+    <div dragula="COLUMNS" [(dragulaModel)]="model.selectedDashboard.columns">
+      <div class="table" *ngFor="let column of model.selectedDashboard.columns;">
         <span class="group-handle">
           <p class="table-name"><strong>{{ column.name }}</strong></p>
           <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
             <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
               <button class="dropdown-item">Edit</button>
-              <button class="dropdown-item" (click)="deleteTableButtonClick(group.name)">Delete</button>
+              <button class="dropdown-item" (click)="deleteTableButtonClick(column.key)">Delete</button>
             </div>
           </div>
         </span>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div>
-      <a href="#" routerLinkDisabled class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
+      <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
         role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>

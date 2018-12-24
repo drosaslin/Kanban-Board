@@ -95,6 +95,6 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public update(user: User, group: Array<Group>): void {
-    // may be deleted
+    console.log(this.model.groups[0].dashboards);
   }
 }
