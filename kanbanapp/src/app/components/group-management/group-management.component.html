@@ -38,12 +38,34 @@
     <ngb-tab title="Dashboards">
       <ng-template ngbTabContent>
         <div class="w-100 m-3 dashboards">
-          <button type="button" class="btn btn-primary dashboard">Dashboard 1</button>
-          <button type="button" class="btn btn-success dashboard">Dashboard 2</button>
-          <button type="button" class="btn btn-secondary dashboard">Create new dashboard</button>
+          <div style="display: inline-block;" *ngFor="let dashboard of model.selectedGroup.dashboards">
+            <button type="button" class="btn btn-primary dashboard">{{ dashboard.name }}</button>
+          </div>
+          <button type="button" class="btn btn-secondary dashboard" (click)="newDashboardButtonClick(dashboardModal)">Create new board</button>
         </div>
       </ng-template>
     </ngb-tab>
   </ngb-tabset>
 
 </div>
+
+<!-- Modal for new dashboard-->
+<ng-template #dashboardModal let-modal>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <form class="form-group">
+          <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)]="newDashboardName"
+            placeholder="Add New Board Title" required autofocus>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-outline-dark" (click)="createDashboardButtonClick()">Create</button>
+    </div>
+  </ng-template>
