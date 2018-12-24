@@ -4,9 +4,9 @@
 
 <div class="dashboard-container">
   <div class="group-info">
-    <p>{{ model.selectedGroup.name }}</p>
+    <p>{{ model.selectedDashboard.name}}</p>
     <div>
-      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{ model.selectedDashboard.name }}</a>
+      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{  model.selectedGroup.name }}</a>
     </div>
   </div>
 
