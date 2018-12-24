@@ -35,47 +35,31 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   ) { }
 
   ngOnInit() {
+    this.model.columnsSubscription = null;
+    this.model.selectedDashboard = null;
     this.groupId = this.activateRoute.snapshot.paramMap.get('groupId');
     this.dashboardId = this.activateRoute.snapshot.paramMap.get('dashboardId');
-    this.model.loadUserProfile();
+    console.log('init', this.dashboardId);
     this.model.registerObserver(this);
-    this.model.retrieveGroupById(this.groupId);
-    this.model.retrieveDashboardById(this.dashboardId);
-    this.model.loadDashboardColumns(this.dashboardId);
-    this.model.loadDashboardTasks(this.dashboardId);
+    this.model.loadUserProfile();
     this.setAddTaskEnablers();
-    // this.setColums();
+    // this.updateColumns();
 
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
       moves: (el, source, handle) => handle.className === 'group-handle'
     });
 
-    const group: Array<any> = [
-      {
-        name: 'To Do',
-        items: [{ name: 'Item A' }, { name: 'Item B' }, { name: 'Item C' }, { name: 'Item D' }],
-        isAddTaskEnabled: false
-      },
-      {
-        name: 'Doing',
-        items: [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }, { name: 'Item 4' }],
-        isAddTaskEnabled: false
-      },
-      {
-        name: 'Done',
-        items: [{ name: 'Item 1' }, { name: 'Item 2' }, { name: 'Item 3' }, { name: 'Item 4' }],
-        isAddTaskEnabled: false
-      }
-    ];
-
-    this.columns = group;
-
     this.setModalDefaultState();
   }
 
   ngOnDestroy() {
     this.dragulaService.destroy('COLUMNS');
+    this.groupId = '';
+    this.dashboardId = '';
+    // this.model.columnsSubscription.unsubscribe();
+    // this.model.columnsSubscription = null;
+    // this.model.selectedDashboard = null;
   }
 
   public openTaskModal(content, itemName) {
@@ -99,20 +83,11 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public addTableButtonClick(): void {
-    this.columns.push({
-      name: 'New Table',
-      items: [],
-      isAddTaskEnabled: false
-    });
+    this.model.createNewColumn('New Table');
   }
 
-  public deleteTableButtonClick(tableName): void {
-    for (let n = 0; n < this.columns.length; n++) {
-      if (this.columns[n].name === tableName) {
-        this.columns.splice(n, 1);
-        break;
-      }
-    }
+  public deleteTableButtonClick(columnId: string): void {
+    this.model.deleteColumn(columnId);
   }
 
   public groupNameButtonClick(): void {
@@ -156,11 +131,13 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   private setAddTaskEnablers(): void {
-    const size = this.model.selectedDashboard.columns.length;
-    this.addTaskEnabler = new Map();
+    if (this.model.selectedDashboard != null) {
+      const size = this.model.selectedDashboard.columns.length;
+      this.addTaskEnabler = new Map();
 
-    for (let n = 0; n < size; n++) {
-      this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
+      for (let n = 0; n < size; n++) {
+        this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
+      }
     }
   }
 
@@ -175,26 +152,43 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.isDescriptionTextBoxEnabled = false;
   }
 
-  private updateColumns(): void {
-    const size = this.model.selectedDashboard.columns.length;
-    for (let n = 0; n < size; n++) {
+  // private updateColumns(): void {
+  //   const columnsSize = this.model.selectedDashboard.columns.length;
+  //   const tasksSize = this.model.selectedDashboard.tasks.length;
+  //   this.columns = [];
+  //   let column: any[] = [];
+  //   let tasks: any[] = [];
 
+  //   for (let n = 0; n < columnsSize; n++) {
+  //     for (let i = 0; i < tasksSize; i++) {
+  //       if (this.model.selectedDashboard.tasks[i].dashboardId === this.model.selectedDashboard.columns[n].key) {
+  //         tasks.push({
+  //           content: this.model.selectedDashboard.tasks[i].content
+  //         });
+  //       }
+  //     }
+  //     column.push({
+  //       name: this.model.selectedDashboard.columns[n].name,
+  //       items: tasks
+  //     });
 
-      const column = {
-        name: this.model.selectedDashboard.columns[n].name,
-        items: [{ name: 'Item A' }, { name: 'Item B' }, { name: 'Item C' }, { name: 'Item D' }],
-      };
+  //     this.columns.push(column);
+  //     column = [];
+  //     tasks = [];
+  //   }
 
-      this.columns.push(column);
-    }
-  }
+  //   // console.log(this.columns);
+  // }
 
   public update(user: User, group: Group[]): void {
     this.model.retrieveGroupById(this.groupId);
     this.model.retrieveDashboardById(this.dashboardId);
     this.model.loadDashboardColumns(this.dashboardId);
-    this.model.loadDashboardTasks(this.dashboardId);
+    // this.model.loadDashboardTasks(this.dashboardId);
     this.setAddTaskEnablers();
-    this.updateColumns();
+    // this.updateColumns();
+    // console.log(this.model.selectedDashboard.columns);
+    // console.log('update', this.model.selectedDashboard.key);
+    // console.log(this.model.selectedDashboard.columns);
   }
 }

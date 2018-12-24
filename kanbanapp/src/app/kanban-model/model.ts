@@ -107,7 +107,7 @@ export class KanbanModel implements ISubject {
             dashboard: dashboardRef.key
         });
 
-        this.database.database.ref(this.columnsBaseRoute + columnRef2.key).update({
+        this.database.database.ref(this.columnsBaseRoute + columnRef3.key).update({
             dashboard: dashboardRef.key
         });
 
@@ -126,6 +126,19 @@ export class KanbanModel implements ISubject {
             .update({
                 dashboards: newDashboards.reverse()
             });
+    }
+
+    public createNewColumn(columnName: string) {
+        console.log(this.selectedDashboard.key);
+        const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
+            name: columnName,
+            dashboard: this.selectedDashboard.key,
+            index: this.selectedDashboard.columns.length - 1,
+            tasks: []
+        });
+
+        this.database.database.ref(this.dashboardsBaseRoute + this.selectedDashboard.key).child('columns')
+            .child((this.selectedDashboard.columns.length).toString()).set(columnRef1.key);
     }
 
     // public addTaskToColumn(columnId: string): void {
@@ -175,6 +188,15 @@ export class KanbanModel implements ISubject {
     // Deletes the specified column
     public deleteColumn(columnId: string): void {
         this.database.object(this.columnsBaseRoute + columnId).remove();
+        // if (this.selectedDashboard != null) {
+        //     const size = this.selectedDashboard.columns.length;
+        //     for (let n = 0; n < size; n++) {
+        //         if (this.selectedDashboard.columns[n].key === columnId) {
+        //             this.selectedDashboard.columns.splice(n, 1);
+        //             break;
+        //         }
+        //     }
+        // }
     }
 
     // Retrieving user profile data and loading it in the User's class
@@ -186,7 +208,6 @@ export class KanbanModel implements ISubject {
             // 1. load the user for the first time.
             // 2. add, delete groups.
             // 3. change user's info.
-            console.log(this.afAuth.auth.currentUser.uid);
             this.userSubscription = this.database.object(this.usersBaseRoute + this.afAuth.auth.currentUser.uid).valueChanges()
                 .subscribe((user: any) => {
                     this.user = new User(user, this.afAuth.auth.currentUser.email, this.afAuth.auth.currentUser.uid);
@@ -243,9 +264,11 @@ export class KanbanModel implements ISubject {
                     // 3. change dashboard's data.
                     this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
                         .subscribe((dashboard: any) => {
-                            if (this.isNewDashboard(dashboard, groupIndex)) {
+                            if (this.isNewDashboard(dashboards[n], groupIndex)) {
                                 this.groups[groupIndex].dashboards.push(new Dashboard(dashboard, dashboards[n]));
+                                console.log('created', dashboards[n]);
                             }
+                            console.log(this.groups[groupIndex].dashboards);
                             this.notifyObservers();
                         })
                 );
@@ -255,12 +278,17 @@ export class KanbanModel implements ISubject {
 
     public loadDashboardColumns(dashboardId: string): void {
         if (this.columnsSubscription === null && this.selectedDashboard !== null) {
+            this.selectedDashboard.columns = [];
             this.columnsSubscription =
                 this.database.list(this.columnsBaseRoute, columns => columns.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(columns => {
                         columns.forEach(element => {
                             if (this.isNewColumn(element.key)) {
-                                this.selectedDashboard.columns.unshift(new Column(element.payload.val(), element.key));
+                                this.selectedDashboard.columns.push(new Column(element.payload.val(), element.key));
+                                console.log(1);
+                            } else {
+                                this.updateColumns(columns, element.key);
+                                console.log(2);
                             }
                         });
                         this.selectedDashboard.sortColumns();
@@ -275,10 +303,10 @@ export class KanbanModel implements ISubject {
                 this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(tasks => {
                         tasks.forEach(element => {
-                            console.log(element.payload.val());
-                            if (this.isNewColumn(element.key)) {
+                            // console.log(element.payload.val());
+                            // if (this.isNewColumn(element.key)) {
                                 this.selectedDashboard.tasks.push(new Task(element.payload.val(), element.key));
-                            }
+                            // }
                         });
                         // this.notifyObservers();
                     });
@@ -331,6 +359,7 @@ export class KanbanModel implements ISubject {
 
     private isNewDashboard(dashboardId: string, groupIndex: number): boolean {
         for (let n = this.groups[groupIndex].dashboards.length - 1; n >= 0; n--) {
+            console.log(this.groups[groupIndex].dashboards[n].key, dashboardId);
             if (this.groups[groupIndex].dashboards[n].key === dashboardId) {
                 return false;
             }
@@ -359,8 +388,27 @@ export class KanbanModel implements ISubject {
         this.loadGroupDashboards(group['dashboards'], groupIndex);
     }
 
+    private updateColumns(columns: any[], columnId: string) {
+        let alreadyExist = false;
+        const size = this.selectedDashboard.columns.length;
+        for (let n = 0; n < size; n++) {
+            alreadyExist = false;
+            for (let i = 0; i < columns.length; i++) {
+                if (this.selectedDashboard.columns[n].key === columns[i].key) {
+                    this.selectedDashboard.columns[n].updateColumn(columns[i].payload.val());
+                    alreadyExist = true;
+                    break;
+                }
+            }
+            if (!alreadyExist && size > columns.length) {
+                this.selectedDashboard.columns.splice(n, 1);
+                break;
+            }
+        }
+    }
+
     public retrieveGroupById(groupId: string): void {
-        if (this.groups == null) {
+        if (this.groups == null || this.selectedGroup != null && this.selectedGroup.key === groupId) {
             return;
         }
 
@@ -394,18 +442,22 @@ export class KanbanModel implements ISubject {
     }
 
     public retrieveDashboardById(dashboardId: string): void {
-        if (this.selectedGroup == null) {
+        if (this.selectedGroup == null || this.selectedDashboard != null && this.selectedDashboard.key === dashboardId) {
             return;
         }
 
-        for (let n = this.selectedGroup.dashboards.length - 1; n >= 0; n--) {
-            if (this.selectedGroup.dashboards[n].key === dashboardId) {
-                this.selectedDashboard = this.selectedGroup.dashboards[n];
-                break;
+        // console.log(0, dashboardId);
+        // if (this.selectedDashboard != null) {
+        //     console.log(1, this.selectedDashboard.key);
+        // }
+        // if (this.selectedDashboard != null && this.selectedDashboard.key !== dashboardId) {
+            for (let n = this.selectedGroup.dashboards.length - 1; n >= 0; n--) {
+                if (this.selectedGroup.dashboards[n].key === dashboardId) {
+                    this.selectedDashboard = this.selectedGroup.dashboards[n];
+                    break;
+                }
             }
-        }
-
-        // this.loadDashboardColumns(dashboardId);
+        // }
     }
 
     // Stop listening for changes in the database
