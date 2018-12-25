@@ -1,4 +1,5 @@
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+  crossorigin="anonymous">
 <div class="container w-100">
   <div class="w-100 group-profile align-items-center">
     <img src="https://image.freepik.com/free-icon/group_318-27951.jpg" class="mx-auto d-block group-photo">
@@ -8,7 +9,12 @@
   <ngb-tabset>
     <ngb-tab title="Team Members">
       <ng-template ngbTabContent>
-        <button href="#" class="btn btn-secondary d-inline float-right m-3">Invite</button>
+        <div class="form-group row invite inline-block" style="margin: 10px; float: right;">
+          <label for="typeahead-basic" class="mt-3 align-middle text-center" style="vertical-align: center; line-height: 32px;">Invite a member:</label>
+          <input id="typeahead-basic" type="text" class="form-control m-3" style="width: 250px;" [(ngModel)]="searchInput" [ngbTypeahead]="search" />
+          <button href="#" class="btn btn-primary mt-3 mb-3" (click)="sendInvite">Invite</button>
+        </div>
+
         <table class="table table-hover">
           <thead class="thead-light">
             <tr>
@@ -17,7 +23,7 @@
             </tr>
           </thead>
           <tbody class=".align-middle">
-            <tr  *ngFor="let members of model.selectedGroup.getAdmins()">
+            <tr *ngFor="let members of model.selectedGroup.getAdmins()">
               <td class="h5">
                 <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">{{members}}</td>
               <td>
@@ -41,7 +47,8 @@
           <div style="display: inline-block;" *ngFor="let dashboard of model.selectedGroup.dashboards">
             <button type="button" class="btn btn-primary dashboard">{{ dashboard.name }}</button>
           </div>
-          <button type="button" class="btn btn-secondary dashboard" (click)="newDashboardButtonClick(dashboardModal)">Create new board</button>
+          <button type="button" class="btn btn-secondary dashboard" (click)="newDashboardButtonClick(dashboardModal)">Create
+            new board</button>
         </div>
       </ng-template>
     </ngb-tab>
@@ -51,21 +58,21 @@
 
 <!-- Modal for new dashboard-->
 <ng-template #dashboardModal let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form class="form-group">
+        <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)]="newDashboardName"
+          placeholder="Add New Board Title" required autofocus>
+      </form>
     </div>
-    <div class="modal-body">
-      <div>
-        <form class="form-group">
-          <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)]="newDashboardName"
-            placeholder="Add New Board Title" required autofocus>
-        </form>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="createDashboardButtonClick()">Create</button>
-    </div>
-  </ng-template>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="createDashboardButtonClick()">Create</button>
+  </div>
+</ng-template>

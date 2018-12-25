@@ -17,6 +17,7 @@ export class KanbanModel implements ISubject {
     readonly columnsBaseRoute = 'columns/';
     readonly tasksBaseRoute = 'tasks/';
 
+    userListSubscription: any;
     userSubscription: any;
     columnsSubscription: any;
     tasksSubscription: any;
@@ -27,6 +28,7 @@ export class KanbanModel implements ISubject {
     groups: Array<Group>;
     selectedGroup: Group;
     selectedDashboard: Dashboard;
+    usersList: Array<string> = [];
 
     constructor(private database: AngularFireDatabase, public afAuth: AngularFireAuth) {
         this.observers = [];
@@ -34,11 +36,13 @@ export class KanbanModel implements ISubject {
         this.groupsSubscriptions = [];
         this.dashboardsSubscriptions = [];
         this.user = null;
+        this.userListSubscription = null;
         this.userSubscription = null;
         this.columnsSubscription = null;
         this.tasksSubscription = null;
         this.selectedGroup = null;
         this.selectedDashboard = null;
+        this.retrieveAllUsers();
     }
 
     // Returns the current user's data
@@ -451,6 +455,27 @@ export class KanbanModel implements ISubject {
                 break;
             }
         }
+    }
+
+    public retrieveAllUsers() {
+        // let length: number;
+        this.userListSubscription = this.database.list('users').valueChanges()
+            .subscribe(users => {
+                users.forEach(user => {
+                    console.log(user['username']);
+                    this.usersList.push(user['username']);
+                });
+                this.userListSubscription.unsubscribe();
+                this.userListSubscription = null;
+
+            });
+
+        // length = this.usersList.length;
+        // console.log(this.usersList[0]);
+        // for (let x = 0; x < length; x++) {
+        //     console.log(x);
+        //     console.log(this.usersList[x].getKey());
+        // }
     }
 
     public retrieveDashboardById(dashboardId: string): void {

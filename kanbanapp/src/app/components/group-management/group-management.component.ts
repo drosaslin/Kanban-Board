@@ -7,6 +7,8 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { User } from 'src/app/kanban-model/classes/user';
 import { ActivatedRoute } from '@angular/router';
+import {Observable} from 'rxjs';
+import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
 @Component({
   selector: 'app-group-management',
@@ -18,6 +20,8 @@ export class GroupManagementComponent implements OnInit, IObserver {
   newDashboardName: string;
   group: Group;
   groupAllMembers: Map<string, string>;
+  usersList: Array<string>;
+  searchInput: any;
 
   userType = 'Member';
   constructor(
@@ -34,9 +38,19 @@ export class GroupManagementComponent implements OnInit, IObserver {
     this.model.retrieveGroupById(this.groupId);
 
     this.newDashboardName = '';
+    this.usersList = this.model.usersList;
+    console.log(this.usersList);
     // console.log(this.model.selectedGroup);
     // console.log(this.model.selectedGroup.getAdmins());
   }
+
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      distinctUntilChanged(),
+      map(term => term.length < 2 ? []
+        : this.usersList.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+    )
 
   public newDashboardButtonClick(content: string): void {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
