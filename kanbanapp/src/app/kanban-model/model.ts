@@ -359,6 +359,21 @@ export class KanbanModel implements ISubject {
             });
     }
 
+    public resetModel(): void {
+        this.observers = [];
+        this.groups = [];
+        this.groupsSubscriptions = [];
+        this.dashboardsSubscriptions = [];
+        this.user = null;
+        this.userListSubscription = null;
+        this.userSubscription = null;
+        this.columnsSubscription = null;
+        this.tasksSubscription = null;
+        this.selectedGroup = null;
+        this.selectedDashboard = null;
+        this.unsubscribeFromDatabase();
+    }
+
     public registerObserver(observer: IObserver): void {
         this.observers.push(observer);
     }
@@ -371,16 +386,6 @@ export class KanbanModel implements ISubject {
         for (let n = this.observers.length - 1; n >= 0; n--) {
             this.observers[n].update(this.user, this.groups);
         }
-    }
-
-    public resetModel(): void {
-        this.observers = [];
-        this.groups = [];
-        this.user = null;
-        this.selectedGroup = null;
-        this.selectedDashboard = null;
-
-        this.unsubscribeFromDatabase();
     }
 
     private isNewGroup(groupId: string): boolean {
@@ -544,12 +549,18 @@ export class KanbanModel implements ISubject {
 
     // Stop listening for changes in the database
     private unsubscribeFromDatabase(): void {
-        this.userSubscription.unsubscribe();
-        this.columnsSubscription.unsubscribe();
-        this.tasksSubscription.unsubscribe();
-        this.userSubscription = null;
-        this.columnsSubscription = null;
-        this.tasksSubscription = null;
+        if (this.userSubscription != null) {
+            this.userSubscription.unsubscribe();
+            this.userSubscription = null;
+        }
+        if (this.columnsSubscription != null) {
+            this.columnsSubscription.unsubscribe();
+            this.columnsSubscription = null;
+        }
+        if (this.tasksSubscription != null) {
+            this.tasksSubscription.unsubscribe();
+            this.tasksSubscription = null;
+        }
 
         for (let n = this.groupsSubscriptions.length - 1; n >= 0; n--) {
             this.groupsSubscriptions[n].unsubscribe();
@@ -561,25 +572,4 @@ export class KanbanModel implements ISubject {
             this.dashboardsSubscriptions[n] = null;
         }
     }
-
-    // private createDefaultColumns(): Array<string> {
-    //     // Creating the three default columns for the dashboard
-    //     const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
-    //         name: 'To do',
-    //         index: 0,
-    //         tasks: []
-    //     });
-
-    //     const columnRef2 = this.database.database.ref(this.columnsBaseRoute).push({
-    //         name: 'Doing',
-    //         index: 1,
-    //         tasks: []
-    //     });
-
-    //     const columnRef3 = this.database.database.ref(this.columnsBaseRoute).push({
-    //         name: 'Done',
-    //         index: 2,
-    //         tasks: []
-    //     });
-    // }
 }

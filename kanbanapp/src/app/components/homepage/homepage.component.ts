@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireList } from 'angularfire2/database';
 import { KanbanModel } from 'src/app/kanban-model/model';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./homepage.component.css']
 })
 
-export class HomepageComponent implements OnInit, IObserver {
+export class HomepageComponent implements OnInit, OnDestroy, IObserver {
   private groupsList: AngularFireList<any>;
   private closeResult: string;
   private newDashboardName: string;
@@ -35,6 +35,11 @@ export class HomepageComponent implements OnInit, IObserver {
     this.setDefaultCurrentSelectedGroup();
     this.model.registerObserver(this);
     this.model.loadUserProfile();
+  }
+
+  ngOnDestroy() {
+    this.model.resetModel();
+    console.log('homepage destroyed');
   }
 
   public userGroupButtonClick(groupId: string): void {

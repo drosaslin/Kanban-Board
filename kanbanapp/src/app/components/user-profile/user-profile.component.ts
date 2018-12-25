@@ -11,7 +11,7 @@ import { EmailValidator } from '@angular/forms';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit, IObserver {
+export class UserProfileComponent implements OnInit, OnDestroy, IObserver {
   private readonly editText = 'Edit';
   private readonly saveText = 'Save';
 
@@ -44,6 +44,11 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.model.registerObserver(this);
     this.model.loadUserProfile();
     this.setDefaultState();
+  }
+
+  ngOnDestroy() {
+    this.model.resetModel();
+    console.log('user profile destroyed');
   }
 
   public editProfileClick(): void {

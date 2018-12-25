@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { DataService } from 'src/app/services/dataservice';
 import { Group } from '../../kanban-model/classes/group';
 import { KanbanModel } from 'src/app/kanban-model/model';
@@ -15,7 +15,7 @@ import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
   templateUrl: './group-management.component.html',
   styleUrls: ['./group-management.component.css']
 })
-export class GroupManagementComponent implements OnInit, IObserver {
+export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
   groupId: string;
   newDashboardName: string;
   group: Group;
@@ -43,6 +43,11 @@ export class GroupManagementComponent implements OnInit, IObserver {
     console.log(this.usersList);
     // console.log(this.model.selectedGroup);
     // console.log(this.model.selectedGroup.getAdmins());
+  }
+
+  ngOnDestroy() {
+    this.model.resetModel();
+    console.log('group management destroy');
   }
 
   search = (text$: Observable<string>) =>

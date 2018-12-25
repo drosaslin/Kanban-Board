@@ -44,7 +44,6 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnInit() {
     this.dragulaSub = new Subscription();
-    this.tempComment = '';
     this.tempDescription = '';
     this.currentTask = null;
     this.columnTempName = '';
@@ -78,6 +77,8 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   ngOnDestroy() {
+    console.log('dashboard destroyed');
+
     this.dragulaService.destroy('COLUMNS');
     this.groupId = '';
     this.dashboardId = '';
