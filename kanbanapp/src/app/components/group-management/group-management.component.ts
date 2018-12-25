@@ -6,7 +6,7 @@ import { IObserver } from '../../kanban-model/interfaces/iobserver';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { User } from 'src/app/kanban-model/classes/user';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {Observable} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map} from 'rxjs/operators';
 
@@ -28,7 +28,8 @@ export class GroupManagementComponent implements OnInit, IObserver {
     private selectedItems: DataService,
     private modalService: NgbModal,
     private model: KanbanModel,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -59,6 +60,10 @@ export class GroupManagementComponent implements OnInit, IObserver {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  public dashboardButtonClick(dashboardId: string): void {
+    this.router.navigate(['dashboard', this.groupId, dashboardId]);
   }
 
   public createDashboardButtonClick(): void {

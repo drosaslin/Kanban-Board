@@ -336,6 +336,7 @@ export class KanbanModel implements ISubject {
                         this.updateTasks(tasks);
                         this.selectedDashboard.sortTasks();
                         this.notifyObservers();
+                        console.log('task update');
                     });
         }
     }
@@ -487,6 +488,13 @@ export class KanbanModel implements ISubject {
                 break;
             }
         }
+    }
+
+    public addTaskDescription(descr: string, taskId: string): void {
+        this.database.object(this.tasksBaseRoute + taskId)
+            .update({
+                description: descr
+            });
     }
 
     public retrieveAllUsers() {

@@ -45,7 +45,7 @@
       <ng-template ngbTabContent>
         <div class="w-100 m-3 dashboards">
           <div style="display: inline-block;" *ngFor="let dashboard of model.selectedGroup.dashboards">
-            <button type="button" class="btn btn-primary dashboard">{{ dashboard.name }}</button>
+            <button type="button" class="btn btn-primary dashboard" (click)="dashboardButtonClick(dashboard.key)">{{ dashboard.name }}</button>
           </div>
           <button type="button" class="btn btn-secondary dashboard" (click)="newDashboardButtonClick(dashboardModal)">Create
             new board</button>

@@ -4,7 +4,7 @@
 
 <div class="dashboard-container">
   <div class="group-info">
-    <p>{{ model.selectedDashboard.name}}</p>
+    <p>{{ model.selectedDashboard.name }}</p>   
     <div>
       <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{  model.selectedGroup.name }}</a>
     </div>
@@ -26,7 +26,7 @@
           </div>
         </span>
         <ul dragula="ITEMS" [(dragulaModel)]="column.tasks" class="task-container" id="{{ column.key }}" [attr.item-id]="column.key">
-          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, task.id)">
+          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, task.key)">
             <p class="task-name">{{ task.content }}</p>
           </li>
         </ul>
@@ -45,7 +45,7 @@
 <!-- MODAL -->
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{ currentTask.content }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -82,7 +82,7 @@
           </div>
         </div>
 
-        <div class="modal-division-container">
+        <!-- <div class="modal-division-container">
           <label class="label-title" for="dueDate">
             <h5>Due Date</h5>
           </label>
@@ -92,7 +92,7 @@
               <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="modal-division-container">
@@ -102,7 +102,7 @@
         <div class="form-group">
           <div (click)="descriptionTextBoxClick()">
             <textarea class="form-control" [class.task-description]="!isDescriptionTextBoxEnabled" rows="5" id="description"
-              placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled"></textarea>
+              placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled" name="currentTask.description" [(ngModel)]="currentTask.description"></textarea>
           </div>
           <div *ngIf="isDescriptionTextBoxEnabled" class="description-btn-container">
             <button type="button" class="btn btn-success" (click)="saveDescriptionClick()">Save</button>

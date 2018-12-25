@@ -7,6 +7,7 @@ import { KanbanModel } from '../../kanban-model/model';
 import { Group } from 'src/app/kanban-model/classes/group';
 import { User } from 'src/app/kanban-model/classes/user';
 import { Subscription } from 'rxjs';
+import { Task } from 'src/app/kanban-model/classes/task';
 
 @Component({
   selector: 'app-dashboard',
@@ -18,6 +19,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   private dashboardId: string;
   private groupId: string;
 
+  tempDescription: string;
   isAddCommentButtonEnabled: boolean;
   isDescriptionTextBoxEnabled: boolean;
   editText: string;
@@ -29,6 +31,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   isEditTableTextBoxEnabled: Map<string, boolean>;
   addTaskEnabler: Map<string, boolean>;
   dragulaSub: any;
+  currentTask: Task;
 
   constructor(
     private dragulaService: DragulaService,
@@ -40,6 +43,8 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnInit() {
     this.dragulaSub = new Subscription();
+    this.tempDescription = '';
+    this.currentTask = null;
     this.columnTempName = '';
     this.editText = 'Edit';
     this.model.columnsSubscription = null;
@@ -75,10 +80,22 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.groupId = '';
     this.dashboardId = '';
     this.dragulaSub.unsubscribe();
+
+    if (this.model.tasksSubscription != null) {
+      this.model.tasksSubscription.unsubscribe();
+      this.model.tasksSubscription = null;
+    }
   }
 
   public openTaskModal(content, taskId) {
     this.setModalDefaultState();
+
+    for (let n = 0; n < this.model.selectedDashboard.tasks.length; n++) {
+      if (this.model.selectedDashboard.tasks[n].key === taskId) {
+        this.currentTask = this.model.selectedDashboard.tasks[n];
+        console.log(this.currentTask);
+      }
+    }
 
     this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = `Closed with: ${result}`;
@@ -122,16 +139,21 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   public descriptionTextBoxClick(): void {
     if (!this.isDescriptionTextBoxEnabled) {
       this.isDescriptionTextBoxEnabled = true;
+      this.tempDescription = this.currentTask.description;
     }
   }
 
   // Saves the description and disables the description's textbox
   public saveDescriptionClick(): void {
+    this.model.addTaskDescription(this.currentTask.description, this.currentTask.key);
     this.disableDescriptionTextBox();
+    this.tempDescription = '';
   }
 
   // Disables the description's textbox
   public closeDescriptionClick(): void {
+    this.currentTask.description = this.tempDescription;
+    this.tempDescription = '';
     this.disableDescriptionTextBox();
   }
 
