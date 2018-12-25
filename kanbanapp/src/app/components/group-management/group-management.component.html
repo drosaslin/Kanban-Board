@@ -10,8 +10,10 @@
     <ngb-tab title="Team Members">
       <ng-template ngbTabContent>
         <div class="form-group row invite inline-block" style="margin: 10px; float: right;">
-          <label for="typeahead-basic" class="mt-3 align-middle text-center" style="vertical-align: center; line-height: 32px;">Invite a member:</label>
-          <input id="typeahead-basic" type="text" class="form-control m-3" style="width: 250px;" [(ngModel)]="searchInput" [ngbTypeahead]="search" />
+          <label for="typeahead-basic" class="mt-3 align-middle text-center" style="vertical-align: center; line-height: 32px;">Invite
+            a member:</label>
+          <input id="typeahead-basic" type="text" class="form-control m-3" style="width: 250px;" [(ngModel)]="searchInput"
+            [ngbTypeahead]="search" />
           <button href="#" class="btn btn-primary mt-3 mb-3" (click)="sendInvite">Invite</button>
         </div>
 
@@ -23,12 +25,13 @@
             </tr>
           </thead>
           <tbody class=".align-middle">
-            <tr *ngFor="let members of model.selectedGroup.getAdmins()">
+            <tr *ngFor="let member of model.selectedGroup.members['admin']">
               <td class="h5">
-                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">{{members}}</td>
+                <img src="https://openclipart.org/download/247320/abstract-user-flat-4.svg" class="user-photo">
+                {{ member.firstName + ' ' + member.lastName }}</td>
               <td>
                 <div ngbDropdown class="d-inline-block">
-                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>{{ userType }}</button>
+                  <button class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Admin</button>
                   <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
                     <button class="dropdown-item">User</button>
                     <button class="dropdown-item">Admin</button>
@@ -45,7 +48,8 @@
       <ng-template ngbTabContent>
         <div class="w-100 m-3 dashboards">
           <div style="display: inline-block;" *ngFor="let dashboard of model.selectedGroup.dashboards">
-            <button type="button" class="btn btn-primary dashboard" (click)="dashboardButtonClick(dashboard.key)">{{ dashboard.name }}</button>
+            <button type="button" class="btn btn-primary dashboard" (click)="dashboardButtonClick(dashboard.key)">{{
+              dashboard.name }}</button>
           </div>
           <button type="button" class="btn btn-secondary dashboard" (click)="newDashboardButtonClick(dashboardModal)">Create
             new board</button>

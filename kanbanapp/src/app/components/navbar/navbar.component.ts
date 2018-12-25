@@ -32,7 +32,7 @@ export class NavbarComponent implements OnInit, IObserver {
   public logoutClick(): void {
     this.authService.logout();
     this.isLoggedIn = false;
-    this.model.resetModel();
+    this.model.setModelDefaultState();
     this.router.navigate(['']);
   }
 

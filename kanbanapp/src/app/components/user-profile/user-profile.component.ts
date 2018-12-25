@@ -47,7 +47,7 @@ export class UserProfileComponent implements OnInit, OnDestroy, IObserver {
   }
 
   ngOnDestroy() {
-    this.model.resetModel();
+    this.model.setModelDefaultState();
     console.log('user profile destroyed');
   }
 

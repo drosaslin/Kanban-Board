@@ -54,25 +54,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.dashboardId = this.activateRoute.snapshot.paramMap.get('dashboardId');
     this.model.registerObserver(this);
     this.model.loadUserProfile();
-    this.setDefaultStates();
-
-    this.dragulaService.createGroup('COLUMNS', {
-      direction: 'horizontal',
-      moves: (el, source, handle) => handle.className === 'group-handle'
-    });
-
-    this.dragulaSub.add(this.dragulaService.dropModel('COLUMNS')
-      .subscribe(({ targetModel }) => {
-        this.model.updateColumnOrder(targetModel);
-      })
-    );
-
-    this.dragulaSub.add(this.dragulaService.dropModel('ITEMS')
-      .subscribe(({ el, target, source, sourceModel, targetModel, item, sourceIndex, targetIndex }) => {
-        this.model.updateTaskColumn(target.id, item.key);
-      })
-    );
-
+    this.setDefaultState();
     this.setModalDefaultState();
   }
 
@@ -83,11 +65,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.groupId = '';
     this.dashboardId = '';
     this.dragulaSub.unsubscribe();
-
-    if (this.model.tasksSubscription != null) {
-      this.model.tasksSubscription.unsubscribe();
-      this.model.tasksSubscription = null;
-    }
+    this.model.setModelDefaultState();
   }
 
   public openTaskModal(content, taskId) {
@@ -148,7 +126,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   // Saves the description and disables the description's textbox
   public saveDescriptionClick(): void {
-    this.model.addTaskDescription(this.currentTask.description, this.currentTask.key);
+    this.model.updateTaskDescription(this.currentTask.description, this.currentTask.key);
     this.disableDescriptionTextBox();
     this.tempDescription = '';
   }
@@ -166,7 +144,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public addCommentButtonClick(): void {
-    this.model.addTaskComment(this.taskComment, this.model.user.getUsername(), this.currentTask.key);
+    // this.model.updateTaskComment(this.taskComment, this.model.user.getUsername(), this.currentTask.key);
     this.taskComment = '';
   }
 
@@ -192,7 +170,26 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.isEditTableTextBoxEnabled[columnKey] = !this.isEditTableTextBoxEnabled[columnKey];
   }
 
-  private setDefaultStates(): void {
+  private setupDragula(): void {
+    this.dragulaService.createGroup('COLUMNS', {
+      direction: 'horizontal',
+      moves: (el, source, handle) => handle.className === 'group-handle'
+    });
+
+    this.dragulaSub.add(this.dragulaService.dropModel('COLUMNS')
+      .subscribe(({ targetModel }) => {
+        this.model.updateColumnOrder(targetModel);
+      })
+    );
+
+    this.dragulaSub.add(this.dragulaService.dropModel('ITEMS')
+      .subscribe(({ target, item }) => {
+        this.model.updateTaskColumn(target.id, item.key);
+      })
+    );
+  }
+
+  private setDefaultState(): void {
     if (this.model.selectedDashboard != null) {
       const size = this.model.selectedDashboard.columns.length;
       this.addTaskEnabler = new Map();
@@ -221,9 +218,6 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.model.retrieveDashboardById(this.dashboardId);
     this.model.loadDashboardColumns(this.dashboardId);
     this.model.loadDashboardTasks(this.dashboardId);
-    this.setDefaultStates();
-
-    // console.log(this.model.selectedDashboard);
-    // this.updateTasks();
+    this.setDefaultState();
   }
 }

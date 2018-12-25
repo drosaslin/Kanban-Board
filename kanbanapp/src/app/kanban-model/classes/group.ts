@@ -1,18 +1,22 @@
 import { Dashboard } from './dashboard';
+import { User } from './user';
 
 export class Group {
+    private readonly adminPermission = 'admin';
+    private readonly memberPermission = 'member';
+
     key: string;
     name: string;
-    members: Array<string>;
-    admins: Array<string>;
+    members: Map<string, Array<User>>;
     dashboards: Array<Dashboard>;
 
     public constructor(newGroup: any, newKey: string) {
         this.key = newKey;
         this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
-        this.members = (newGroup['members'] == null) ? [] : newGroup['members'];
-        this.admins = (newGroup['admins'] == null) ? [] : newGroup['admins'];
         this.dashboards = [];
+        this.members = new Map<string, Array<User>>();
+        this.members[this.adminPermission] = [];
+        this.members[this.memberPermission] = [];
     }
 
     public getKey(): string {
@@ -23,21 +27,25 @@ export class Group {
         return this.name;
     }
 
-    public getMembers(): Array<any> {
+    public getMembers(): Map<string, Array<User>> {
         return this.members;
-    }
-
-    public getAdmins(): Array<any> {
-        return this.admins;
     }
 
     public getDashboards(): Array<Dashboard> {
         return this.dashboards;
     }
 
+    public addMember(member: any, memberId: string, isAdmin: boolean): void {
+        if (isAdmin) {
+            this.members[this.adminPermission].push(new User(member, memberId));
+        } else {
+            this.members[this.memberPermission].push(new User(member, memberId));
+        }
+
+        console.log(this.members[this.adminPermission], this.members[this.memberPermission]);
+    }
+
     public updateGroup(newGroup: any): void {
         this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
-        this.members = (newGroup['members'] == null) ? [] : newGroup['members'];
-        this.admins = (newGroup['admins'] == null) ? [] : newGroup['admins'];
     }
 }

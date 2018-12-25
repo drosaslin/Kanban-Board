@@ -96,9 +96,13 @@ export class AuthService {
         const groupRef = this.db.database.ref('groups').push({
           members: [],
           name: 'Personal',
-          admins: [this.afAuth.auth.currentUser.uid],
           dashboards: [dashboardRef.key]
         });
+        this.db.database.ref('groups').child(groupRef.key).child('members')
+          .set([{
+            member: this.afAuth.auth.currentUser.uid,
+            permission: 'admin'
+          }]);
 
         // Adds group Id to dashboard
         this.db.database.ref('dashboards/' + dashboardRef.key).update({
@@ -127,12 +131,12 @@ export class AuthService {
           firstName: firstName,
           lastName: lastName,
           username: username,
+          email: email,
           groups: [groupRef.key]
         });
 
-        // Redirects the user to the login page
-        this.logout();
-        this.router.navigate(['']);
+        // Redirects the user to the homepage
+        this.router.navigate(['homepage']);
       });
   }
 

@@ -41,12 +41,10 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
     this.newDashboardName = '';
     this.usersList = this.model.usersList;
     console.log(this.usersList);
-    // console.log(this.model.selectedGroup);
-    // console.log(this.model.selectedGroup.getAdmins());
   }
 
   ngOnDestroy() {
-    this.model.resetModel();
+    this.model.setModelDefaultState();
     console.log('group management destroy');
   }
 

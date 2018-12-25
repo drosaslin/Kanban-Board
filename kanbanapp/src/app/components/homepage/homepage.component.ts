@@ -38,7 +38,7 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
   }
 
   ngOnDestroy() {
-    this.model.resetModel();
+    this.model.setModelDefaultState();
     console.log('homepage destroyed');
   }
 
