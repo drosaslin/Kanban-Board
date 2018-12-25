@@ -8,6 +8,7 @@ import { Group } from 'src/app/kanban-model/classes/group';
 import { User } from 'src/app/kanban-model/classes/user';
 import { Subscription } from 'rxjs';
 import { Task } from 'src/app/kanban-model/classes/task';
+import { TaskComment } from 'src/app/kanban-model/classes/task_comment';
 
 @Component({
   selector: 'app-dashboard',
@@ -43,6 +44,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnInit() {
     this.dragulaSub = new Subscription();
+    this.tempComment = '';
     this.tempDescription = '';
     this.currentTask = null;
     this.columnTempName = '';
@@ -160,6 +162,11 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   // Delete comment from comment box
   public deleteCommentButtonClick(): void {
     console.log('delete comment');
+  }
+
+  public addCommentButtonClick(): void {
+    this.model.addTaskComment(this.taskComment, this.model.user.getUsername(), this.currentTask.key);
+    this.taskComment = '';
   }
 
   // Enables the add comment button if there is any input in the comment's textox

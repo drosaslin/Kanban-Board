@@ -497,6 +497,11 @@ export class KanbanModel implements ISubject {
             });
     }
 
+    public addTaskComment(comment: string, username: string, taskId: string) {
+        this.database.database.ref(this.tasksBaseRoute + taskId).child('comments')
+            .child(this.user.getFirstName()).set(comment);
+    }
+
     public retrieveAllUsers() {
         // let length: number;
         this.userListSubscription = this.database.list('users').valueChanges()

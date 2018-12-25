@@ -75,7 +75,7 @@
                 </a>
               </div>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="members-dropdown">
-                <button class="dropdown-item">Genesis Yau</button>
+                <!-- <button class="dropdown-item">Genesis Yau</button> -->
                 <button class="dropdown-item">David Rosas</button>
               </div>
             </div>
@@ -120,11 +120,11 @@
             name="taskComment" [(ngModel)]="taskComment" (ngModelChange)="commentTextBoxChange()"></textarea>
         </div>
         <div class="comment-btn-container">
-          <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled">Add</button>
+          <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled" (click)="addCommentButtonClick()">Add</button>
         </div>
       </div>
 
-      <div class="modal-division-container">
+      <!-- <div class="modal-division-container">
         <label class="label-title" for="comment">
           <h5>Members Comments</h5>
         </label>
@@ -133,10 +133,10 @@
             <div class="comment-data-container">
               <div class="initials-container rounded-circle">
                 <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
-              </div>
-              <div class="member-comment">
+              </div> 
+              <div class="member-comment" *ngFor="let comment of currentTask.comments">
                 <p class="member-name"><strong>David Rosas</strong></p>
-                <p class="comment">Very good</p>
+                <p class="comment">{{ comment['David Rosas'] }}</p>
               </div>
               <div>
                 <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
@@ -147,7 +147,7 @@
             <hr class="col-xs-12">
           </div>
         </div>
-      </div>
+      </div> -->
     </form>
   </div>
   <div class="modal-footer">

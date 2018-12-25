@@ -8,7 +8,7 @@ export class Task {
     index: number;
     columnId: string;
     dashboardId: string;
-    comments: Array<string>;
+    comments: Array<any>;
 
     public constructor(task: any, taskId: string) {
         this.key = taskId;
