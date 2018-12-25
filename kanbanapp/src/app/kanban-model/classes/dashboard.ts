@@ -60,6 +60,12 @@ export class Dashboard {
         }
     }
 
+    public sortTasks(): void {
+        for (let n = this.columns.length - 1; n > 0; n--) {
+            this.columns[n].sortTasks();
+        }
+    }
+
     public addTask(task: Task): void {
         this.tasks.push(task);
 
@@ -69,7 +75,26 @@ export class Dashboard {
                 break;
             }
         }
-        console.log(10, this.columns);
+    }
+
+    public removeTask(columnId: string): void {
+        // for (let n = 0; n < this.columns.length; n++) {
+        //     if (this.columns[n].key === columnId) {
+        //         this.columns[n].tasks.push(task);
+        //         break;
+        //     }
+        // }
+    }
+
+    public deleteTask(taskIndex: number) {
+        for (let n = 0; n < this.columns.length; n++) {
+            for (let i = 0; i < this.columns[n].tasks.length; i++) {
+                if (this.columns[n].tasks[i].key === this.tasks[taskIndex].key) {
+                    this.columns[n].tasks.splice(i, 1);
+                    break;
+                }
+            }
+        }
     }
 
     private swapColumns(index1: number, index2: number): void {

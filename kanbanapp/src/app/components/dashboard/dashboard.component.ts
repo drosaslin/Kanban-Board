@@ -20,10 +20,13 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   isAddCommentButtonEnabled: boolean;
   isDescriptionTextBoxEnabled: boolean;
+  editText: string;
   closeResult: string;
   taskName: string;
   taskDescription: string;
   taskComment: string;
+  columnTempName: string;
+  isEditTableTextBoxEnabled: Map<string, boolean>;
   addTaskEnabler: Map<string, boolean>;
   dragulaSub: any;
 
@@ -37,13 +40,15 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnInit() {
     this.dragulaSub = new Subscription();
+    this.columnTempName = '';
+    this.editText = 'Edit';
     this.model.columnsSubscription = null;
     this.model.selectedDashboard = null;
     this.groupId = this.activateRoute.snapshot.paramMap.get('groupId');
     this.dashboardId = this.activateRoute.snapshot.paramMap.get('dashboardId');
     this.model.registerObserver(this);
     this.model.loadUserProfile();
-    this.setAddTaskEnablers();
+    this.setDefaultStates();
 
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
@@ -51,20 +56,14 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     });
 
     this.dragulaSub.add(this.dragulaService.dropModel('COLUMNS')
-      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
+      .subscribe(({ targetModel }) => {
         this.model.updateColumnOrder(targetModel);
       })
     );
 
     this.dragulaSub.add(this.dragulaService.dropModel('ITEMS')
-      .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
-        // console.log('dropModel:');
-        // console.log(el);
-        // console.log(source);
-        // console.log(target);
-        // console.log(sourceModel);
-        // console.log(targetModel);
-        // console.log(item);
+      .subscribe(({ el, target, source, sourceModel, targetModel, item, sourceIndex, targetIndex }) => {
+        this.model.updateTaskColumn(target.id, item.key);
       })
     );
 
@@ -78,7 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.dragulaSub.unsubscribe();
   }
 
-  public openTaskModal(content, itemName) {
+  public openTaskModal(content, taskId) {
     this.setModalDefaultState();
 
     this.modalService.open(content, { size: 'lg', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
@@ -146,12 +145,31 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.isAddCommentButtonEnabled = (this.taskComment.length > 0);
   }
 
-  private setAddTaskEnablers(): void {
+  public cancelEditColumnButtonClick(columnKey: string): void {
+    this.isEditTableTextBoxEnabled[columnKey] = false;
+  }
+
+  public editTableButtonClick(columnKey: string, name: string): void {
+    if (this.isEditTableTextBoxEnabled[columnKey]) {
+      this.model.updateColumnName(columnKey, this.columnTempName);
+      this.editText = 'Edit';
+      this.columnTempName = '';
+    } else {
+      this.columnTempName = name;
+      this.editText = 'Save';
+    }
+
+    this.isEditTableTextBoxEnabled[columnKey] = !this.isEditTableTextBoxEnabled[columnKey];
+  }
+
+  private setDefaultStates(): void {
     if (this.model.selectedDashboard != null) {
       const size = this.model.selectedDashboard.columns.length;
       this.addTaskEnabler = new Map();
+      this.isEditTableTextBoxEnabled = new Map();
 
       for (let n = 0; n < size; n++) {
+        this.isEditTableTextBoxEnabled.set(this.model.selectedDashboard.columns[n].key, false);
         this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
       }
     }
@@ -173,7 +191,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.model.retrieveDashboardById(this.dashboardId);
     this.model.loadDashboardColumns(this.dashboardId);
     this.model.loadDashboardTasks(this.dashboardId);
-    this.setAddTaskEnablers();
+    this.setDefaultStates();
 
     // console.log(this.model.selectedDashboard);
     // this.updateTasks();

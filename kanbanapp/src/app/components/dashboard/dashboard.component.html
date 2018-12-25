@@ -12,19 +12,21 @@
 
   <div class="dashboard">
     <div dragula="COLUMNS" [(dragulaModel)]="model.selectedDashboard.columns">
-      <div class="table" *ngFor="let column of model.selectedDashboard.columns;">
+      <div class="table" *ngFor="let column of model.selectedDashboard.columns;" id="column.key">
         <span class="group-handle">
-          <p class="table-name"><strong>{{ column.name }}</strong></p>
+          <p class="table-name" *ngIf="!isEditTableTextBoxEnabled[column.key]"><strong>{{ column.name }}</strong></p>
+          <input class="table-name" type="text" name="column.name" [(ngModel)]="columnTempName" *ngIf="isEditTableTextBoxEnabled[column.key]"/>
           <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
             <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button class="dropdown-item">Edit</button>
+              <button class="dropdown-item" (click)="editTableButtonClick(column.key, column.name)">{{ editText }}</button>
+              <button class="dropdown-item" *ngIf="isEditTableTextBoxEnabled[column.key]" (click)="cancelEditColumnButtonClick(column.key)">Cancel</button>
               <button class="dropdown-item" (click)="deleteTableButtonClick(column.key)">Delete</button>
             </div>
           </div>
         </span>
-        <ul dragula="ITEMS" [(dragulaModel)]="column.tasks" class="task-container">
-          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, item.name)">
+        <ul dragula="ITEMS" [(dragulaModel)]="column.tasks" class="task-container" id="{{ column.key }}" [attr.item-id]="column.key">
+          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, task.id)">
             <p class="task-name">{{ task.content }}</p>
           </li>
         </ul>

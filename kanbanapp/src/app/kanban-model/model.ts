@@ -313,11 +313,10 @@ export class KanbanModel implements ISubject {
                             if (this.isNewColumn(element.key)) {
                                 this.selectedDashboard.columns.push(new Column(element.payload.val(), element.key));
                             } else {
-                                this.updateColumns(columns, element.key);
+                                this.updateColumns(columns);
                             }
                         });
                         this.selectedDashboard.sortColumns();
-                        // console.log(this.selectedDashboard.columns);
                         this.notifyObservers();
                     });
         }
@@ -330,15 +329,23 @@ export class KanbanModel implements ISubject {
                 this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(tasks => {
                         tasks.forEach(element => {
-                            // console.log(20, element.payload.val());
                             if (this.isNewTask(element.key)) {
                                 this.selectedDashboard.addTask(new Task(element.payload.val(), element.key));
                             }
                         });
-                        // console.log(this.selectedDashboard.tasks);
+                        this.updateTasks(tasks);
+                        this.selectedDashboard.sortTasks();
                         this.notifyObservers();
                     });
         }
+    }
+
+    public updateColumnName(key: string, newName: string): void {
+        console.log(key, newName);
+        this.database.database.ref(this.columnsBaseRoute + key)
+            .update({
+                name: newName
+            });
     }
 
     // Updates the user profile's data
@@ -406,7 +413,6 @@ export class KanbanModel implements ISubject {
     }
 
     private isNewColumn(columnId: string): boolean {
-        // console.log(this.selectedDashboard);
         if (this.selectedDashboard === null) {
             return false;
         }
@@ -425,7 +431,7 @@ export class KanbanModel implements ISubject {
         this.loadGroupDashboards(group['dashboards'], groupIndex);
     }
 
-    private updateColumns(columns: any[], columnId: string) {
+    private updateColumns(columns: any[]) {
         let alreadyExist = false;
         const size = this.selectedDashboard.columns.length;
         for (let n = 0; n < size; n++) {
@@ -442,6 +448,32 @@ export class KanbanModel implements ISubject {
                 break;
             }
         }
+    }
+
+    private updateTasks(tasks: any[]) {
+        let alreadyExist = false;
+        const size = this.selectedDashboard.columns.length;
+        for (let n = 0; n < size; n++) {
+            alreadyExist = false;
+            for (let i = 0; i < tasks.length; i++) {
+                if (this.selectedDashboard.tasks[n].key === tasks[i].key) {
+                    this.selectedDashboard.tasks[n].updateTask(tasks[i].payload.val());
+                    alreadyExist = true;
+                    break;
+                }
+            }
+            if (!alreadyExist && size > tasks.length) {
+                this.selectedDashboard.deleteTask(n);
+                this.selectedDashboard.tasks.splice(n, 1);
+                break;
+            }
+        }
+    }
+
+    public updateTaskColumn(destinationId: string, taskKey: string) {
+        this.database.object(this.tasksBaseRoute + taskKey).update({
+            column: destinationId
+        });
     }
 
     public retrieveGroupById(groupId: string): void {

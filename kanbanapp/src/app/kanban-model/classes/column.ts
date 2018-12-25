@@ -21,9 +21,21 @@ export class Column {
         this.name = column['name'];
     }
 
-    public updateTasks(tasks: any[]) {
-        for (let n = 0; n < tasks.length; n++) {
-            // tasks.push(new Task(tasks[n]));
+    public sortTasks() {
+        for (let n = this.tasks.length - 1; n > 0; n--) {
+            for (let i = n - 1; i >= 0; i--) {
+                if (this.tasks[n].index < this.tasks[i].index) {
+                    this.swapTasks(n, i);
+                } else {
+                    break;
+                }
+            }
         }
+    }
+
+    private swapTasks(index1: number, index2: number): void {
+        const temp = this.tasks[index1];
+        this.tasks[index1] = this.tasks[index2];
+        this.tasks[index2] = temp;
     }
 }
