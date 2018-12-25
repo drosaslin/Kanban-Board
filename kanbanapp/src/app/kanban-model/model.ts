@@ -213,10 +213,10 @@ export class KanbanModel implements ISubject {
         this.database.object(this.columnsBaseRoute + columnId).remove();
     }
 
-    public updateColumnOrder(): void {
+    public updateColumnOrder(updatedColumns: Array<Column>): void {
+        this.selectedDashboard.columns = updatedColumns;
         for (let n = 0; n < this.selectedDashboard.columns.length; n++) {
             this.selectedDashboard.columns[n].index = n;
-
             this.database.object(this.columnsBaseRoute + this.selectedDashboard.columns[n].key)
                 .update({
                     index: n
@@ -302,7 +302,6 @@ export class KanbanModel implements ISubject {
     public loadDashboardColumns(dashboardId: string): void {
         if (this.columnsSubscription === null && this.selectedDashboard !== null) {
             this.selectedDashboard.columns = [];
-            this.selectedDashboard.tasks = [];
             this.columnsSubscription =
                 this.database.list(this.columnsBaseRoute, columns => columns.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(columns => {
@@ -314,26 +313,25 @@ export class KanbanModel implements ISubject {
                             }
                         });
                         this.selectedDashboard.sortColumns();
-                        console.log(this.selectedDashboard.columns);
+                        // console.log(this.selectedDashboard.columns);
                         this.notifyObservers();
                     });
         }
     }
 
     public loadDashboardTasks(dashboardId: string): void {
-        console.log(1000);
         if (this.tasksSubscription === null && this.selectedDashboard !== null) {
             this.selectedDashboard.tasks = [];
             this.tasksSubscription =
                 this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(tasks => {
                         tasks.forEach(element => {
-                            console.log(20, element.payload.val());
+                            // console.log(20, element.payload.val());
                             if (this.isNewTask(element.key)) {
                                 this.selectedDashboard.addTask(new Task(element.payload.val(), element.key));
                             }
                         });
-                        console.log(this.selectedDashboard.tasks);
+                        // console.log(this.selectedDashboard.tasks);
                         this.notifyObservers();
                     });
         }

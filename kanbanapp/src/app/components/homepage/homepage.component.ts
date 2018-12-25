@@ -42,6 +42,7 @@ export class HomepageComponent implements OnInit, IObserver {
   }
 
   public dashboardButtonClick(groupId: string, dashboardId: string): void {
+    this.model.selectedDashboard = null;
     this.router.navigate(['dashboard', groupId, dashboardId]);
   }
 

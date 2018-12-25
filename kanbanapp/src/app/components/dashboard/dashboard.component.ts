@@ -52,14 +52,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
     this.dragulaSub.add(this.dragulaService.dropModel('COLUMNS')
       .subscribe(({ el, target, source, sourceModel, targetModel, item }) => {
-        this.model.updateColumnOrder();
-        // console.log('dropModel:');
-        // console.log(el);
-        // console.log(source);
-        // console.log(target);
-        // console.log(sourceModel);
-        // console.log(targetModel);
-        // console.log(item);
+        this.model.updateColumnOrder(targetModel);
       })
     );
 
@@ -182,8 +175,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.model.loadDashboardTasks(this.dashboardId);
     this.setAddTaskEnablers();
 
-    console.log(this.model.selectedDashboard);
-    console.log(this.model.selectedDashboard.columns[0].tasks);
+    // console.log(this.model.selectedDashboard);
     // this.updateTasks();
   }
 }
