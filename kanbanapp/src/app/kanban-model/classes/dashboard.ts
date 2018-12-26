@@ -77,6 +77,17 @@ export class Dashboard {
         }
     }
 
+    public updateColumnTasks(): void {
+        for (let n = 0; n < this.columns.length; n++) {
+            for (let i = 0; i < this.columns[n].tasks.length; i++) {
+                if (this.columns[n].key !== this.columns[n].tasks[i].columnId) {
+                    this.addTask(this.columns[n].tasks[i]);
+                    this.columns[n].tasks.splice(i, 1);
+                }
+            }
+        }
+    }
+
     public removeTask(columnId: string): void {
         // for (let n = 0; n < this.columns.length; n++) {
         //     if (this.columns[n].key === columnId) {

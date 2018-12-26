@@ -56,7 +56,7 @@ export class KanbanModel implements ISubject {
 
     // Creates a new group with no dashboards
     public createNewGroup(groupName: string, dashboardKey: string): void {
-        console.log('createNewGroup');
+        // console.log('createNewGroup');
         // creates a new group in the database
         const groupRef = this.database.database.ref('groups').push({
             members: [{
@@ -76,7 +76,7 @@ export class KanbanModel implements ISubject {
     }
 
     public createNewDashboard(dashboardName: string, groupId: string): void {
-        console.log('createNewDashboard');
+        // console.log('createNewDashboard');
         // const defaultColumns: Array<string> = this.createDefaultColumns();
         const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
             name: 'To do',
@@ -154,7 +154,7 @@ export class KanbanModel implements ISubject {
     }
 
     public createNewColumn(columnName: string) {
-        console.log('createNewColumn');
+        // console.log('createNewColumn');
         const columnRef1 = this.database.database.ref(this.columnsBaseRoute).push({
             name: columnName,
             dashboard: this.selectedDashboard.key,
@@ -182,8 +182,6 @@ export class KanbanModel implements ISubject {
 
         this.database.database.ref(this.dashboardsBaseRoute + this.selectedDashboard.key).child('tasks')
             .child((this.selectedDashboard.tasks.length).toString()).set(taskRef.key);
-
-        // this.updateTasks(task);
     }
 
     public inviteUserToGroup(userEmail: string, groupId: string): void {
@@ -259,7 +257,7 @@ export class KanbanModel implements ISubject {
 
     // Iterate through all dashboards of a group and delete them one by one from the database
     public deleteGroupDashboards(group: Group): void {
-        console.log('deleteGroupDashboards');
+        // console.log('deleteGroupDashboards');
         for (let n = group.dashboards.length - 1; n >= 0; n--) {
             this.deleteDashboard(group.dashboards[n].key);
         }
@@ -267,13 +265,13 @@ export class KanbanModel implements ISubject {
 
     // Deletes the specified dashboard from the database
     public deleteDashboard(dashboardId: string): void {
-        console.log('deleteDashboard');
+        // console.log('deleteDashboard');
         this.database.object(this.dashboardsBaseRoute + dashboardId).remove();
     }
 
     // Iterate through all columns of a dashboard and deletes them one by one from the database
     public deleteDashboardColumns(columns: Array<Column>): void {
-        console.log('deleteDashboardColumns');
+        // console.log('deleteDashboardColumns');
         for (let n = columns.length - 1; n >= 0; n--) {
             this.deleteColumn(columns[n].key);
         }
@@ -281,7 +279,7 @@ export class KanbanModel implements ISubject {
 
     // Deletes the specified column
     public deleteColumn(columnId: string): void {
-        console.log('deleteColumn');
+        // console.log('deleteColumn');
         this.database.object(this.columnsBaseRoute + columnId).remove();
     }
 
@@ -324,7 +322,7 @@ export class KanbanModel implements ISubject {
     }
 
     public updateColumnOrder(updatedColumns: Array<Column>): void {
-        console.log('updateColumnOrder');
+        // console.log('updateColumnOrder');
         this.selectedDashboard.columns = updatedColumns;
         for (let n = 0; n < this.selectedDashboard.columns.length; n++) {
             this.selectedDashboard.columns[n].index = n;
@@ -338,7 +336,7 @@ export class KanbanModel implements ISubject {
     // Retrieving user profile data and loading it in the User's class
     // This function will be called every time the user data changes in the database
     public loadUserProfile(): void {
-        console.log('loadUserProfile');
+        // console.log('loadUserProfile');
         if (this.userSubscription === null) {
             // This function will fire the first time the user is loaded, and every time a change in this user is made.
             // The possible triggers of this function are the following:
@@ -347,7 +345,7 @@ export class KanbanModel implements ISubject {
             // 3. change user's info.
             this.userSubscription = this.database.object(this.usersBaseRoute + this.afAuth.auth.currentUser.uid).valueChanges()
                 .subscribe((user: any) => {
-                    console.log('userProfileResponse');
+                    // console.log('userProfileResponse');
                     this.user = new User(user, this.afAuth.auth.currentUser.uid);
                     this.loadUserGroups(this.user.getGroups());
                 });
@@ -358,7 +356,7 @@ export class KanbanModel implements ISubject {
 
     // Retrieves the groups of the user, and stores their data in an array of type Group
     public loadUserGroups(groups: Array<string>): void {
-        console.log('loadUserGroups');
+        // console.log('loadUserGroups');
         const groupSize: number = groups.length;
 
         // Looping through all groups in the user and adds or deletes the group from the groups array if needed
@@ -373,7 +371,7 @@ export class KanbanModel implements ISubject {
                 this.groupsSubscriptions.push(
                     this.database.object(this.groupsBaseRoute + groups[index]).valueChanges()
                         .subscribe((group: any) => {
-                            console.log('userGroupsResponse');
+                            // console.log('userGroupsResponse');
                             if (this.isNewGroup(groups[index])) {
                                 this.groups.push(new Group(group, groups[index]));
                                 this.loadGroupDashboards(group['dashboards'], this.groups.length - 1);
@@ -389,15 +387,15 @@ export class KanbanModel implements ISubject {
     }
 
     public loadGroupMembers(members: any[], groupIndex: number): void {
-        console.log('loadGroupMembers');
+        // console.log('loadGroupMembers');
         const size = members.length;
-        console.log(members.length);
+        // console.log(members.length);
         for (let n = 0; n < size; n++) {
             if (!this.groups[groupIndex].isAlreadyMember(members[n]['member'])) {
                 this.groupMembersSubscriptions.push(
                     this.database.object(this.usersBaseRoute + members[n]['member']).valueChanges()
                         .subscribe(member => {
-                            console.log('groupMembersResponse');
+                            // console.log('groupMembersResponse');
                             const isAdmin = (members[n]['permission'] === 'admin');
                             this.groups[groupIndex].addMember(member, members[n]['member'], isAdmin);
                         })
@@ -412,7 +410,7 @@ export class KanbanModel implements ISubject {
             return;
         }
 
-        console.log('loadGroupDashboards');
+        // console.log('loadGroupDashboards');
         const size = dashboards.length;
         for (let n = 0; n < size; n++) {
             if (this.isNewDashboard(dashboards[n], groupIndex)) {
@@ -424,12 +422,11 @@ export class KanbanModel implements ISubject {
                     // 3. change dashboard's data.
                     this.database.object(this.dashboardsBaseRoute + dashboards[n]).valueChanges()
                         .subscribe((dashboard: any) => {
-                            console.log('groupDashboardResponse');
+                            // console.log('groupDashboardResponse');
                             if (this.isNewDashboard(dashboards[n], groupIndex)) {
                                 this.groups[groupIndex].dashboards.push(new Dashboard(dashboard, dashboards[n]));
                             } else {
                                 this.updateColumns(dashboard['columns']);
-                                // this.updateTasks(dashboard['tasks']);
                             }
                             this.notifyObservers();
                         })
@@ -440,12 +437,12 @@ export class KanbanModel implements ISubject {
 
     public loadDashboardColumns(dashboardId: string): void {
         if (this.columnsSubscription === null && this.selectedDashboard !== null) {
-            console.log('loadDashbaordColumns');
+            // console.log('loadDashbaordColumns');
             this.selectedDashboard.columns = [];
             this.columnsSubscription =
                 this.database.list(this.columnsBaseRoute, columns => columns.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(columns => {
-                        console.log('dashboardColumnsResponse');
+                        // console.log('dashboardColumnsResponse');
                         columns.forEach(element => {
                             if (this.isNewColumn(element.key)) {
                                 this.selectedDashboard.columns.push(new Column(element.payload.val(), element.key));
@@ -461,21 +458,22 @@ export class KanbanModel implements ISubject {
 
     public loadDashboardTasks(dashboardId: string): void {
         if (this.tasksSubscription === null && this.selectedDashboard !== null) {
-            console.log('loadDashboardTasks');
+            // console.log('loadDashboardTasks');
             this.selectedDashboard.tasks = [];
             this.tasksSubscription =
                 this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').equalTo(dashboardId))
                     .snapshotChanges().subscribe(tasks => {
-                        console.log('dashboardTasksResponse');
+                        // console.log('dashboardTasksResponse');
                         tasks.forEach(element => {
                             console.log(element.payload.val());
                             if (this.isNewTask(element.key)) {
                                 this.selectedDashboard.addTask(new Task(element.payload.val(), element.key));
-                                console.log(this.selectedDashboard.tasks);
+                                // console.log(this.selectedDashboard.tasks);
                             } else {
-                                this.updateTasks(tasks);
+                                this.updateSingleTask(element);
                             }
                         });
+                        this.updateTasks(tasks);
                         this.selectedDashboard.sortTasks();
                         this.notifyObservers();
                     });
@@ -491,7 +489,7 @@ export class KanbanModel implements ISubject {
 
     // Updates the user profile's data
     public updateUserProfile(newFirstName: string, newLastName: string, newUsername: string): void {
-        console.log('updateUserProfile');
+        // console.log('updateUserProfile');
         this.database.object(this.usersBaseRoute + this.user.getKey())
             .update({
                 firstName: newFirstName,
@@ -501,7 +499,7 @@ export class KanbanModel implements ISubject {
     }
 
     public setModelDefaultState(): void {
-        console.log('setModelDefaultState');
+        // console.log('setModelDefaultState');
         this.observers = [];
         this.groups = [];
         this.groupsSubscriptions = [];
@@ -532,7 +530,7 @@ export class KanbanModel implements ISubject {
     }
 
     private isNewGroup(groupId: string): boolean {
-        console.log('isNewGroup');
+        // console.log('isNewGroup');
         for (let n = this.groups.length - 1; n >= 0; n--) {
             if (this.groups[n].getKey() === groupId) {
                 return false;
@@ -543,7 +541,7 @@ export class KanbanModel implements ISubject {
     }
 
     private isNewDashboard(dashboardId: string, groupIndex: number): boolean {
-        console.log('isNewDashboard');
+        // console.log('isNewDashboard');
         for (let n = this.groups[groupIndex].dashboards.length - 1; n >= 0; n--) {
             if (this.groups[groupIndex].dashboards[n].key === dashboardId) {
                 return false;
@@ -554,7 +552,7 @@ export class KanbanModel implements ISubject {
     }
 
     private isNewTask(taskId: string) {
-        console.log('isNewTask');
+        // console.log('isNewTask');
         for (let n = 0; n < this.selectedDashboard.tasks.length; n++) {
             if (this.selectedDashboard.tasks[n].key === taskId) {
                 return false;
@@ -565,7 +563,7 @@ export class KanbanModel implements ISubject {
     }
 
     private isNewColumn(columnId: string): boolean {
-        console.log('isNewColumn');
+        // console.log('isNewColumn');
         if (this.selectedDashboard === null) {
             return false;
         }
@@ -580,13 +578,13 @@ export class KanbanModel implements ISubject {
     }
 
     private updateGroup(group: any, groupIndex: number): void {
-        console.log('updateGroup');
+        // console.log('updateGroup');
         this.groups[groupIndex].updateGroup(group);
         this.loadGroupDashboards(group['dashboards'], groupIndex);
     }
 
     private updateColumns(columns: any[]) {
-        console.log('updateColums');
+        // console.log('updateColums');
         let alreadyExist = false;
         const size = this.selectedDashboard.columns.length;
         for (let n = 0; n < size; n++) {
@@ -605,45 +603,48 @@ export class KanbanModel implements ISubject {
         }
     }
 
+    private updateSingleTask(task: any): void {
+        for (let n = 0; n < this.selectedDashboard.tasks.length; n++) {
+            if (this.selectedDashboard.tasks[n].key === task.key) {
+                this.selectedDashboard.tasks[n].updateTask(task.payload.val());
+                break;
+            }
+        }
+    }
+
     private updateTasks(tasks: any[]) {
-        console.log('updateTasks');
-        console.log(tasks);
+        // console.log('updateTasks');
+        console.log(this.selectedDashboard.tasks);
         let alreadyExist = false;
         let taskIndex = 0;
         const size = this.selectedDashboard.tasks.length;
         for (let n = 0; n < size; n++) {
             alreadyExist = false;
             for (let i = 0; i < tasks.length; i++) {
-                console.log(i);
-                console.log(this.selectedDashboard.tasks[n].key, tasks[i].key);
                 if (this.selectedDashboard.tasks[n].key === tasks[i].key) {
+                    // console.log('updating', tasks[i].payload.val());
                     this.selectedDashboard.tasks[n].updateTask(tasks[i].payload.val());
+                    this.selectedDashboard.updateColumnTasks();
                     alreadyExist = true;
                     taskIndex = i;
                     break;
                 }
             }
 
-            // if  (!alreadyExist) {
-            //     console.log(this.isNewTask(tasks[taskIndex].key), tasks[taskIndex].payload.val(), 'here');
-            // }
             if (!alreadyExist && size < tasks.length) {
-                console.log('new task');
                 this.selectedDashboard.addTask(new Task(tasks[taskIndex].payload.val(), tasks[taskIndex].key));
                 break;
             } else if (!alreadyExist && size > tasks.length) {
-                console.log('old task');
                 this.selectedDashboard.deleteTask(n);
                 this.selectedDashboard.tasks.splice(n, 1);
                 break;
             }
         }
-        console.log(this.selectedDashboard.tasks);
     }
 
     // updates task's column
     public updateTaskColumn(destinationId: string, taskKey: string) {
-        console.log('updateTaskColumn');
+        // console.log('updateTaskColumn');
         this.database.object(this.tasksBaseRoute + taskKey)
             .update({
                 column: destinationId
@@ -652,7 +653,7 @@ export class KanbanModel implements ISubject {
 
     // updates task's description
     public updateTaskDescription(descr: string, taskId: string): void {
-        console.log('updateTaskDescription');
+        // console.log('updateTaskDescription');
         this.database.object(this.tasksBaseRoute + taskId)
             .update({
                 description: descr
@@ -661,7 +662,7 @@ export class KanbanModel implements ISubject {
 
     // Stop listening for changes in the database
     private unsubscribeFromDatabase(): void {
-        console.log('unsubscribeFromDatabase');
+        // console.log('unsubscribeFromDatabase');
         this.unsubscribe(this.userSubscription);
         this.unsubscribe(this.columnsSubscription);
         this.unsubscribe(this.tasksSubscription);
