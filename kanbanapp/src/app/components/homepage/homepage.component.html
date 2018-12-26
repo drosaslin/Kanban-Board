@@ -1,12 +1,6 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <div class="page-container">
-<<<<<<< HEAD
-  <div class="w3-sidebar w3-bar-block" style="width:20%"> 
-    <a href="#" class="w3-bar-item w3-button">看板</a>
-    <a href="#" class="w3-bar-item w3-button">首頁</a>
-    <a href="#" class="w3-bar-item w3-button">Link 3</a>
-=======
   <div class="w3-sidebar w3-bar-block sidebar">
     <h5 class="h5 m-3">Groups</h5>
     <ul class="">
@@ -18,32 +12,9 @@
     </ul>
     <a href="javascript:void(0);" class="w3-bar-item wl-button" (click)="newGroupButtonClick(groupModal)"><i class="fas fa-plus mr-2"></i>Create
       new Group</a>
->>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
   </div>
   
   <!-- Page Content -->
-<<<<<<< HEAD
-
-  <div style="margin-left:20%">
-    <!-- Modal -->
-   
-    <div class="w3-container">
-      <h3>Personal Board</h3>
-      <div style="display: inline-block;" *ngFor="let personalGroup of personalGroups;">
-        <button class="button group-board-btn" [ngStyle]="{'background-color':  color}">{{ personalGroup.name }}</button>
-      </div>
-      <button class="button personal-board-btn" (click)="open(content)">New Board</button>
-      <pre>{{closeResult}}</pre>
-    </div>
-
-    <div id="interval"></div>
-
-    <div class="w3-container">
-      <h3>Group Board</h3>
-      <button class="button group-board-btn">Group1</button>
-      <button class="button group-board-btn">Group2</button>
-      <button class="button group-board-btn">New Board</button>
-=======
   <div *ngFor="let userGroup of model.groups;">
     <div style="margin-left:20%">
       <div class="w3-container">
@@ -62,58 +33,10 @@
           Board</button>
       </div>
       <div id="interval"></div>
->>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
     </div>
   </div>
 </div>
 
-<<<<<<< HEAD
-<ng-template #content let-modal>
-    <div class="modal-header">
-      <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
-      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    <div class="modal-body">
-      <div>
-        <form class="form-group">
-          <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)] ="newBoardName"  placeholder="Add New Board Title" required autofocus>
-        </form>
-        <!-- dropdown list -->
-        <!-- Choose a team -->
-        <div class="row">
-          <div class="col">
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" id="dropdownTeam" ngbDropdownToggle>Choose a team</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item">Team1</button>
-                <button class="dropdown-item">Team2</button>
-                <button class="dropdown-item">Team3</button>
-              </div>
-            </div>
-          </div>
-        </div>
-        <br>
-        <!-- Choose authority -->
-        <div class="row">
-          <div class="col">
-            <div ngbDropdown class="d-inline-block">
-              <button class="btn btn-outline-primary" id="dropdownAuthority" ngbDropdownToggle>Choose authority</button>
-              <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                <button class="dropdown-item" (click)="privateBtn()">Private</button>
-                <button class="dropdown-item">Public</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button type="button" class="btn btn-outline-dark" (click)="createPersonalBoardClick(index)">Create</button>
-    </div>
-</ng-template>
-=======
 <!-- Modal for new group-->
 <ng-template #groupModal let-modal>
   <div class="modal-header">
@@ -156,4 +79,3 @@
     <button type="button" class="btn btn-outline-dark" (click)="createDashboardButtonClick()">Create</button>
   </div>
 </ng-template>
->>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
