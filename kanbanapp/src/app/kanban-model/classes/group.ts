@@ -36,16 +36,54 @@ export class Group {
     }
 
     public addMember(member: any, memberId: string, isAdmin: boolean): void {
-        if (isAdmin) {
-            this.members[this.adminPermission].push(new User(member, memberId));
+        if (!this.isAlreadyMember(memberId)) {
+            if (isAdmin) {
+                this.members[this.adminPermission].push(new User(member, memberId));
+            } else {
+                this.members[this.memberPermission].push(new User(member, memberId));
+            }
         } else {
-            this.members[this.memberPermission].push(new User(member, memberId));
+            this.updateMemberPermission(memberId, isAdmin);
         }
+    }
 
-        console.log(this.members[this.adminPermission], this.members[this.memberPermission]);
+    public updateMemberPermission(memberId: string, isAdmin: boolean): void {
+        if (isAdmin && !this.isMemberInPermission(memberId, this.adminPermission) ||
+            isAdmin && this.isMemberInPermission(memberId, this.adminPermission)) {
+                this.swapPermissions(memberId, isAdmin);
+        }
+    }
+
+    public isAlreadyMember(memberId: string): boolean {
+        return (this.isMemberInPermission(memberId, this.adminPermission) ||
+            this.isMemberInPermission(memberId, this.memberPermission));
     }
 
     public updateGroup(newGroup: any): void {
         this.name = (newGroup['name'] == null) ? '' : newGroup['name'];
+    }
+
+    private swapPermissions(memberId: string, isAdmin: boolean): void {
+        const sourcePermission = (isAdmin) ? this.memberPermission : this.adminPermission;
+        const targetPermission = (isAdmin) ? this.adminPermission : this.memberPermission;
+
+        for (let n = 0; n < this.members[sourcePermission].length; n++) {
+            if (this.members[sourcePermission][n].key === memberId) {
+                const member = this.members[sourcePermission][n];
+                this.members[sourcePermission].splice(n, 1);
+                this.members[targetPermission].push(member);
+                break;
+            }
+        }
+    }
+
+    private isMemberInPermission(memberId: string, permissionType: string): boolean {
+        for (let n = 0; n < this.members[permissionType].length; n++) {
+            if (memberId === this.members[permissionType][n].key) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

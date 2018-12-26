@@ -170,6 +170,21 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.isEditTableTextBoxEnabled[columnKey] = !this.isEditTableTextBoxEnabled[columnKey];
   }
 
+  private setDefaultState(): void {
+    if (this.model.selectedDashboard != null) {
+      const size = this.model.selectedDashboard.columns.length;
+      this.addTaskEnabler = new Map();
+      this.isEditTableTextBoxEnabled = new Map();
+
+      for (let n = 0; n < size; n++) {
+        this.isEditTableTextBoxEnabled.set(this.model.selectedDashboard.columns[n].key, false);
+        this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
+      }
+    }
+
+    this.setupDragula();
+  }
+
   private setupDragula(): void {
     this.dragulaService.createGroup('COLUMNS', {
       direction: 'horizontal',
@@ -187,19 +202,6 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
         this.model.updateTaskColumn(target.id, item.key);
       })
     );
-  }
-
-  private setDefaultState(): void {
-    if (this.model.selectedDashboard != null) {
-      const size = this.model.selectedDashboard.columns.length;
-      this.addTaskEnabler = new Map();
-      this.isEditTableTextBoxEnabled = new Map();
-
-      for (let n = 0; n < size; n++) {
-        this.isEditTableTextBoxEnabled.set(this.model.selectedDashboard.columns[n].key, false);
-        this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
-      }
-    }
   }
 
   // Set the default state of the task's modal

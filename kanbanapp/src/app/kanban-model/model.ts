@@ -178,6 +178,33 @@ export class KanbanModel implements ISubject {
             .child((this.selectedDashboard.columns.length).toString()).set(taskRef.key);
     }
 
+    public inviteUserToGroup(userEmail: string, groupId: string): void {
+        const userInvitation = this.database.list(this.usersBaseRoute, user => user.orderByChild('email').equalTo(userEmail))
+          .snapshotChanges().subscribe(users => {
+            users.forEach(element => {
+                this.addUserToGroup(element.key, groupId);
+                this.addGroupToUser(element, groupId);
+            });
+            userInvitation.unsubscribe();
+        });
+    }
+
+    public addUserToGroup(userId: string, groupId: string): void {
+        const totalMembers = this.selectedGroup.members['admin'].length + this.selectedGroup.members['member'].length;
+
+        this.database.database.ref(this.groupsBaseRoute).child(groupId).child('members')
+            .child((totalMembers).toString()).update({
+                member: userId,
+                permission: 'member'
+          });
+    }
+
+    public addGroupToUser(user: any, groupId: string) {
+        const totalGroups = (user.payload.val()['groups'] == null) ? 0 : user.payload.val()['groups'].length;
+        this.database.database.ref(this.usersBaseRoute).child(user.key).child('groups')
+            .child(totalGroups).set(groupId);
+    }
+
     // Deletes all data related to the specified group id such as: columns, tables, tasks, group info;
     // and updates the user info in the database
     public deleteUserGroup(groupId: string): void {
@@ -229,7 +256,6 @@ export class KanbanModel implements ISubject {
     // }
 
     public retrieveAllUsers() {
-        // let length: number;
         this.userListSubscription = this.database.list('users').valueChanges()
             .subscribe(users => {
                 users.forEach(user => {
@@ -315,12 +341,11 @@ export class KanbanModel implements ISubject {
                         .subscribe((group: any) => {
                             if (this.isNewGroup(groups[index])) {
                                 this.groups.push(new Group(group, groups[index]));
-                                // console.log(group['members']);
-                                this.loadGroupMembers(group['members'], this.groups.length - 1);
                                 this.loadGroupDashboards(group['dashboards'], this.groups.length - 1);
                             } else {
                                 this.updateGroup(group, index);
                             }
+                            this.loadGroupMembers(group['members'], this.groups.length - 1);
                             this.notifyObservers();
                         })
                 );
@@ -332,13 +357,15 @@ export class KanbanModel implements ISubject {
         const size = members.length;
         console.log(members.length);
         for (let n = 0; n < size; n++) {
-            this.groupMembersSubscriptions.push(
-                this.database.object(this.usersBaseRoute + members[n]['member']).valueChanges()
-                    .subscribe(member => {
-                        const isAdmin = (members[n]['permission'] === 'admin');
-                        this.groups[groupIndex].addMember(member, members[n]['member'], isAdmin);
-                    })
-                );
+            if (!this.groups[groupIndex].isAlreadyMember(members[n]['member'])) {
+                this.groupMembersSubscriptions.push(
+                    this.database.object(this.usersBaseRoute + members[n]['member']).valueChanges()
+                        .subscribe(member => {
+                            const isAdmin = (members[n]['permission'] === 'admin');
+                            this.groups[groupIndex].addMember(member, members[n]['member'], isAdmin);
+                        })
+                    );
+            }
         }
     }
 
@@ -474,16 +501,6 @@ export class KanbanModel implements ISubject {
 
         return true;
     }
-
-    // private isNewGroupMember(memberId: string, groupIndex: number): boolean {
-    //     for (let n = this.groups[groupIndex].dashboards.length - 1; n >= 0; n--) {
-    //         if (this.groups[groupIndex].dashboards[n].key === dashboardId) {
-    //             return false;
-    //         }
-    //     }
-
-    //     return true;
-    // }
 
     private isNewTask(taskId: string) {
         for (let n = 0; n < this.selectedDashboard.tasks.length; n++) {

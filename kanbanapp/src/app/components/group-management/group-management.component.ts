@@ -21,11 +21,9 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
   group: Group;
   groupAllMembers: Map<string, string>;
   usersList: Array<string>;
-  searchInput: any;
+  searchInput: string;
 
-  userType = 'Member';
   constructor(
-    private selectedItems: DataService,
     private modalService: NgbModal,
     private model: KanbanModel,
     private route: ActivatedRoute,
@@ -34,13 +32,13 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnInit() {
     this.groupId = this.route.snapshot.paramMap.get('groupId');
-    this.model.loadUserProfile();
     this.model.registerObserver(this);
+    this.model.loadUserProfile();
     this.model.retrieveGroupById(this.groupId);
 
     this.newDashboardName = '';
+    this.searchInput = '';
     this.usersList = this.model.usersList;
-    console.log(this.usersList);
   }
 
   ngOnDestroy() {
@@ -63,6 +61,14 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
     }, (reason) => {
       // this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
     });
+  }
+
+  public inviteButtonClick(): void {
+    if (this.searchInput !== this.model.user.getEmail()) {
+      this.model.inviteUserToGroup(this.searchInput, this.groupId);
+    }
+
+    this.searchInput = '';
   }
 
   public dashboardButtonClick(dashboardId: string): void {
