@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     private modalService: NgbModal,
     private activateRoute: ActivatedRoute,
     private router: Router,
-    private model: KanbanModel
+    public model: KanbanModel
   ) { }
 
   ngOnInit() {

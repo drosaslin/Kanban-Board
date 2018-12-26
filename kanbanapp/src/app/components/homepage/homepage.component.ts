@@ -24,7 +24,7 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
   constructor(
     private modalService: NgbModal,
     private router: Router,
-    private model: KanbanModel
+    public model: KanbanModel
     ) {}
 
   ngOnInit() {

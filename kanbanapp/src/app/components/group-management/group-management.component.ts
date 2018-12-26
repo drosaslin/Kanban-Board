@@ -25,7 +25,7 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
 
   constructor(
     private modalService: NgbModal,
-    private model: KanbanModel,
+    public model: KanbanModel,
     private route: ActivatedRoute,
     private router: Router
   ) { }
