@@ -30,7 +30,7 @@
             <p class="task-name">{{ task.content }}</p>
           </li>
         </ul>
-        <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="addTaskEnabler[column.key]">
+        <input type="text" autocomplete="off" class="task-input" name="taskName" [(ngModel)]="taskName" autofocus *ngIf="addTaskEnabler[column.key]">
         <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(column.key)"
           role="button" aria-disabled="true">add new task</a>
       </div>
@@ -124,19 +124,19 @@
         </div>
       </div>
 
-      <!-- <div class="modal-division-container">
+      <div class="modal-division-container">
         <label class="label-title" for="comment">
           <h5>Members Comments</h5>
         </label>
         <div class="comments-container">
-          <div class="comment-container">
+          <div class="comment-container" *ngFor="let comment of currentTask.comments">
             <div class="comment-data-container">
               <div class="initials-container rounded-circle">
-                <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
+                <a href="javascript:void(0);" class="member-initials" disabled>{{ comment.userFirstName[0] + comment.userLastName[0] }}</a>
               </div> 
-              <div class="member-comment" *ngFor="let comment of currentTask.comments">
-                <p class="member-name"><strong>David Rosas</strong></p>
-                <p class="comment">{{ comment['David Rosas'] }}</p>
+              <div class="member-comment">
+                <p class="member-name"><strong>{{ comment.userFirstName + ' ' + comment.userLastName }}</strong></p>
+                <p class="comment">{{ comment.content }}</p>
               </div>
               <div>
                 <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
@@ -147,10 +147,10 @@
             <hr class="col-xs-12">
           </div>
         </div>
-      </div> -->
+      </div>
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Exit</button>
   </div>
 </ng-template>

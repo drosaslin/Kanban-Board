@@ -56,6 +56,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.model.loadUserProfile();
     this.setDefaultState();
     this.setModalDefaultState();
+    this.setupDragula();
   }
 
   ngOnDestroy() {
@@ -144,8 +145,12 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public addCommentButtonClick(): void {
-    // this.model.updateTaskComment(this.taskComment, this.model.user.getUsername(), this.currentTask.key);
+    console.log(this.taskComment);
+    this.model.addTaskComment(this.taskComment, this.model.user.getFirstName(), this.model.user.getLastName(),
+      this.model.user.getKey(), this.currentTask.key);
+
     this.taskComment = '';
+    this.commentTextBoxChange();
   }
 
   // Enables the add comment button if there is any input in the comment's textox
@@ -181,8 +186,6 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
         this.addTaskEnabler.set(this.model.selectedDashboard.columns[n].key, false);
       }
     }
-
-    this.setupDragula();
   }
 
   private setupDragula(): void {

@@ -1,3 +1,5 @@
+import { Comment } from './comment';
+
 export class Task {
     key: string;
     content: string;
@@ -8,7 +10,7 @@ export class Task {
     index: number;
     columnId: string;
     dashboardId: string;
-    comments: Array<any>;
+    comments: Array<Comment>;
 
     public constructor(task: any, taskId: string) {
         this.key = taskId;
@@ -19,7 +21,13 @@ export class Task {
         this.index = (task['index'] == null) ? -1 : task['index'];
         this.columnId = (task['column'] == null) ? '' : task['column'];
         this.members = (task['members'] == null) ? [] : task['members'];
-        this.comments = (task['comments'] == null) ? [] : task['comments'];
+        this.comments = [];
+
+        if (task['comments'] != null) {
+            for (let n = 0; n < task['comments'].length; n++) {
+                this.comments.push(new Comment(task['comments'][n]));
+            }
+        }
     }
 
     public updateTask(task: any) {
@@ -30,6 +38,5 @@ export class Task {
         this.index = (task['index'] == null) ? -1 : task['index'];
         this.columnId = (task['column'] == null) ? '' : task['column'];
         this.members = (task['members'] == null) ? [] : task['members'];
-        this.comments = (task['comments'] == null) ? [] : task['comments'];
     }
 }
