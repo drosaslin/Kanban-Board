@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, ActivatedRoute } from '@angular/router';
 import { DragulaModule, DragulaService } from 'ng2-dragula';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { GroupManagementComponent } from './components/group-management/group-management.component';
 import { environment } from '../environments/environment';
 
+import { DataService } from './services/dataservice';
 import { AuthService } from './services/auth.service';
 import { AuthGuard } from './guards/auth.guard';
 import { LoginGuard } from './guards/login.guard';
@@ -51,7 +52,7 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'dashboard',
+    path: 'dashboard/:groupId/:dashboardId',
     component: DashboardComponent,
     canActivate: [AuthGuard],
     data: {
@@ -59,7 +60,7 @@ const routes: Routes = [
     }
   },
   {
-    path: 'groupManagement',
+    path: 'groupManagement/:groupId',
     component: GroupManagementComponent,
     canActivate: [AuthGuard],
     data: {
@@ -96,7 +97,8 @@ const routes: Routes = [
     AuthService,
     AuthGuard,
     LoginGuard,
-    KanbanModel
+    KanbanModel,
+    DataService
   ],
   bootstrap: [AppComponent]
 })

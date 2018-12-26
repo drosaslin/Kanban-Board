@@ -1,26 +1,25 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light" *ngIf="isLoggedIn">
-  <a class="navbar-brand" href="#">Kanban Board</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+  <a class="navbar-brand" href="javascript:void(0);" routerLink="/homepage">Kanban Board</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="" routerLink="/homepage"><i class="fas fa-home mr-2" ></i>Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="" routerLink="/homepage"><i class="fas fa-home mr-2"></i>Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="" routerLink="/userProfile"><i class="fas fa-user mr-2" ></i>User Profile</a>
+        <a class="nav-link" href="" routerLink="/userProfile"><i class="fas fa-user mr-2"></i>User Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="" routerLink="/dashboard"><i class="fas fa-clipboard-list mr-2" ></i>Dashboard</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="javascript:void(0);" (click)="logoutClick()"><i class="fas fa-sign-out-alt mr-2" ></i>Log out</a>
+        <a class="nav-link" href="javascript:void(0);" (click)="logoutClick()"><i class="fas fa-sign-out-alt mr-2"></i>Log
+          out</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
-        <h5>Hello, {{username}}</h5>
+      <h5>Hello, {{ (model.user == null) ? '' : model.user.username }}</h5>
     </form>
   </div>
 </nav>

@@ -25,12 +25,14 @@ export class NavbarComponent implements OnInit, IObserver {
     this.username = '';
     this.model.registerObserver(this);
     this.authenticateUser();
+    this.model.loadUserProfile();
   }
 
   // Logout user and redirects it to login page
   public logoutClick(): void {
     this.authService.logout();
     this.isLoggedIn = false;
+    this.model.setModelDefaultState();
     this.router.navigate(['']);
   }
 

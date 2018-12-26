@@ -1,14 +1,11 @@
-import { Component, OnInit, ComponentFactoryResolver, Injectable, Inject, ReflectiveInjector } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
-import { AngularFireDatabase, AngularFireList } from 'angularfire2/database';
-import { AngularFireAuth } from 'angularfire2/auth';
-import { DragulaService } from 'ng2-dragula';
-import { formArrayNameProvider } from '@angular/forms/src/directives/reactive_directives/form_group_name';
-import { NgModel } from '@angular/forms';
+import { AngularFireList } from 'angularfire2/database';
 import { KanbanModel } from 'src/app/kanban-model/model';
 import { User } from '../../kanban-model/classes/user';
 import { Group } from '../../kanban-model/classes/group';
 import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-homepage',
@@ -16,34 +13,42 @@ import { IObserver } from 'src/app/kanban-model/interfaces/iobserver';
   styleUrls: ['./homepage.component.css']
 })
 
-export class HomepageComponent implements OnInit, IObserver {
+export class HomepageComponent implements OnInit, OnDestroy, IObserver {
   private groupsList: AngularFireList<any>;
   private closeResult: string;
-  private newBoardName: string;
+  private newDashboardName: string;
   private newGroupName: string;
-  private personalDashboards: Array<any> = [{ name: 'kek' }, { name: 'hi' }];
+  private currentSelectedGroup: string;
   private userGroups: Array<Group>;
 
   constructor(
     private modalService: NgbModal,
-    private model: KanbanModel
+    private router: Router,
+    public model: KanbanModel
     ) {}
 
   ngOnInit() {
     this.newGroupName = '';
-    this.newBoardName = '';
+    this.newDashboardName = '';
     this.userGroups = [];
 
+    this.setDefaultCurrentSelectedGroup();
     this.model.registerObserver(this);
     this.model.loadUserProfile();
   }
 
-  public open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = 'Closed with: ${result}';
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+  ngOnDestroy() {
+    this.model.setModelDefaultState();
+    console.log('homepage destroyed');
+  }
+
+  public userGroupButtonClick(groupId: string): void {
+    this.router.navigate(['groupManagement', groupId]);
+  }
+
+  public dashboardButtonClick(groupId: string, dashboardId: string): void {
+    this.model.selectedDashboard = null;
+    this.router.navigate(['dashboard', groupId, dashboardId]);
   }
 
   public newGroupButtonClick(content: string): void {
@@ -54,18 +59,35 @@ export class HomepageComponent implements OnInit, IObserver {
     });
   }
 
-  public createNewGroupButtonClick(): void {
-    this.model.createNewGroup(this.newGroupName);
+  public createGroupButtonClick(): void {
+    this.model.createNewGroup(this.newGroupName, null);
     this.newGroupName = '';
   }
 
-  // privateBtn() {
-  //   console.log('AAAAAAAAAAA');
-  // }
+  public deleteGroupButtonClick(groupId: string): void {
+    this.model.deleteUserGroup(groupId);
+  }
 
-  // create() {
-  //   console.log('AAAAAAAAAAA');
-  // }
+  public newDashboardButtonClick(content: string, groupId: string) {
+    this.currentSelectedGroup = groupId;
+
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = 'Closed with: ${result}';
+      this.setDefaultCurrentSelectedGroup();
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  public createDashboardButtonClick(): void {
+    this.model.createNewDashboard(this.newDashboardName, this.currentSelectedGroup);
+    this.setDefaultCurrentSelectedGroup();
+    this.newDashboardName = '';
+  }
+
+  private setDefaultCurrentSelectedGroup(): void {
+    this.currentSelectedGroup = '';
+  }
 
   // 離開彈跳式視窗方法不同時，提示不同訊息
   private getDismissReason(reason: any): string {
@@ -78,31 +100,7 @@ export class HomepageComponent implements OnInit, IObserver {
     }
   }
 
-  public createGroupButtonClick(): void {
-
-  }
-
-  // create new PersonalBoard button
-  public createPersonalBoardClick(): void {
-    const newName = {
-      name: this.newBoardName
-    };
-    this.personalDashboards.push(newName);
-    this.newBoardName = '';
-  }
-
-  // private isNewUserGroup(group: Group): boolean {
-  //   for (let n = this.userGroups.length - 1; n >= 0; n--) {
-  //     if (this.userGroups[n].getKey() === group.getKey()) {
-  //       return false;
-  //     }
-  //   }
-
-  //   return true;
-  // }
-
   public update(user: User, group: Array<Group>): void {
-    this.userGroups = group;
+    console.log(this.model.groups[0].dashboards);
   }
 }
-

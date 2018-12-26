@@ -1,36 +1,42 @@
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ"
+  crossorigin="anonymous">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
 <div class="dashboard-container">
   <div class="group-info">
-    <p>Group Name</p>
+    <p>{{ model.selectedDashboard.name }}</p>   
     <div>
-      <a href="javascript:void(0);" class="project-name" routerLink="/groupManagement">Project Name</a>
+      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{  model.selectedGroup.name }}</a>
     </div>
   </div>
 
   <div class="dashboard">
-    <div dragula="COLUMNS" [(dragulaModel)]="groups">
-      <div class="table" *ngFor="let group of groups; let index = index">
+    <div dragula="COLUMNS" [(dragulaModel)]="model.selectedDashboard.columns">
+      <div class="table" *ngFor="let column of model.selectedDashboard.columns;" id="column.key">
         <span class="group-handle">
-          <p class="table-name"><strong>{{ group.name }}</strong></p>
+          <p class="table-name" *ngIf="!isEditTableTextBoxEnabled[column.key]"><strong>{{ column.name }}</strong></p>
+          <input class="table-name" type="text" name="column.name" [(ngModel)]="columnTempName" *ngIf="isEditTableTextBoxEnabled[column.key]"/>
           <div ngbDropdown #myDrop="ngbDropdown" class="d-inline-block" style="float: right;">
             <button class="btn dropdown-button" id="dropdownBasic1" ngbDropdownToggle></button>
             <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-              <button class="dropdown-item">Edit</button>
-              <button class="dropdown-item" (click)="deleteTableButtonClick(group.name)">Delete</button>
+              <button class="dropdown-item" (click)="editTableButtonClick(column.key, column.name)">{{ editText }}</button>
+              <button class="dropdown-item" *ngIf="isEditTableTextBoxEnabled[column.key]" (click)="cancelEditColumnButtonClick(column.key)">Cancel</button>
+              <button class="dropdown-item" (click)="deleteTableButtonClick(column.key)">Delete</button>
             </div>
           </div>
         </span>
-        <ul dragula="ITEMS" [(dragulaModel)]="group.items" class="task-container">
-          <li *ngFor="let item of group.items" class="task" (click)="openTaskModal(content, item.name)">
-            <p class="task-name">{{ item.name }}</p>
+        <ul dragula="ITEMS" [(dragulaModel)]="column.tasks" class="task-container" id="{{ column.key }}" [attr.item-id]="column.key">
+          <li *ngFor="let task of column.tasks" class="task" (click)="openTaskModal(content, task.key)">
+            <p class="task-name">{{ task.content }}</p>
           </li>
         </ul>
-        <input type="text" class="task-input" name="taskName" [(ngModel)]="taskName" *ngIf="group.isAddTaskEnabled">
-        <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(index)"
+        <input type="text" autocomplete="off" class="task-input" name="taskName" [(ngModel)]="taskName" autofocus *ngIf="addTaskEnabler[column.key]">
+        <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(column.key)"
           role="button" aria-disabled="true">add new task</a>
       </div>
     </div>
     <div>
-      <a href="#" routerLink="null" class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
+      <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
         role="button" aria-disabled="true">+ add new table</a>
     </div>
   </div>
@@ -39,7 +45,7 @@
 <!-- MODAL -->
 <ng-template #content let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+    <h4 class="modal-title" id="modal-basic-title">{{ currentTask.content }}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -69,14 +75,14 @@
                 </a>
               </div>
               <div ngbDropdownMenu aria-labelledby="dropdownBasic2" class="members-dropdown">
-                <button class="dropdown-item">Genesis Yau</button>
+                <!-- <button class="dropdown-item">Genesis Yau</button> -->
                 <button class="dropdown-item">David Rosas</button>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="modal-division-container">
+        <!-- <div class="modal-division-container">
           <label class="label-title" for="dueDate">
             <h5>Due Date</h5>
           </label>
@@ -86,7 +92,7 @@
               <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
             </div>
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div class="modal-division-container">
@@ -96,7 +102,7 @@
         <div class="form-group">
           <div (click)="descriptionTextBoxClick()">
             <textarea class="form-control" [class.task-description]="!isDescriptionTextBoxEnabled" rows="5" id="description"
-              placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled"></textarea>
+              placeholder="Add a description..." [disabled]="!isDescriptionTextBoxEnabled" name="currentTask.description" [(ngModel)]="currentTask.description"></textarea>
           </div>
           <div *ngIf="isDescriptionTextBoxEnabled" class="description-btn-container">
             <button type="button" class="btn btn-success" (click)="saveDescriptionClick()">Save</button>
@@ -114,7 +120,7 @@
             name="taskComment" [(ngModel)]="taskComment" (ngModelChange)="commentTextBoxChange()"></textarea>
         </div>
         <div class="comment-btn-container">
-          <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled">Add</button>
+          <button type="button" class="btn btn-success add-comment-btn" [disabled]="!isAddCommentButtonEnabled" (click)="addCommentButtonClick()">Add</button>
         </div>
       </div>
 
@@ -123,14 +129,14 @@
           <h5>Members Comments</h5>
         </label>
         <div class="comments-container">
-          <div class="comment-container">
+          <div class="comment-container" *ngFor="let comment of currentTask.comments">
             <div class="comment-data-container">
               <div class="initials-container rounded-circle">
-                <a href="javascript:void(0);" class="member-initials" disabled>DR</a>
-              </div>
+                <a href="javascript:void(0);" class="member-initials" disabled>{{ comment.userFirstName[0] + comment.userLastName[0] }}</a>
+              </div> 
               <div class="member-comment">
-                <p class="member-name"><strong>David Rosas</strong></p>
-                <p class="comment">Very good</p>
+                <p class="member-name"><strong>{{ comment.userFirstName + ' ' + comment.userLastName }}</strong></p>
+                <p class="comment">{{ comment.content }}</p>
               </div>
               <div>
                 <button type="button" class="close" aria-label="Close" (click)="deleteCommentButtonClick()">
@@ -145,6 +151,6 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Exit</button>
   </div>
 </ng-template>

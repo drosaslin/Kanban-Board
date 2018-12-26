@@ -6,13 +6,13 @@ export class User {
     private email: string;
     private groups: Array<string>;
 
-    public constructor(newUser: any, newEmail: string, newKey: string) {
+    public constructor(newUser: any, newKey: string) {
         this.key = newKey;
         this.firstName = newUser['firstName'];
         this.lastName = newUser['lastName'];
-        this.groups = newUser['groups'];
         this.username = newUser['username'];
-        this.email = newEmail;
+        this.email = newUser['email'];
+        this.groups = (newUser['groups'] == null) ? [] : newUser['groups'];
     }
 
     public getKey(): string {

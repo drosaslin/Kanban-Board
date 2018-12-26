@@ -11,26 +11,25 @@ import { EmailValidator } from '@angular/forms';
   templateUrl: './user-profile.component.html',
   styleUrls: ['./user-profile.component.css']
 })
-export class UserProfileComponent implements OnInit, IObserver {
-  private readonly editText = 'Edit';
-  private readonly saveText = 'Save';
+export class UserProfileComponent implements OnInit, OnDestroy, IObserver {
+  readonly editText = 'Edit';
+  readonly saveText = 'Save';
 
-  private firstNameBackup: string;
-  private lastNameBackup: string;
-  private usernameBackup: string;
-  private emailBackup: string;
-
-  private firstName: string;
-  private lastName: string;
-  private username: string;
-  private email: string;
-  private initials: string;
-  private password: string;
-  private editButtonText: string;
-  private isEditProfileEnabled: boolean;
+  firstNameBackup: string;
+  lastNameBackup: string;
+  usernameBackup: string;
+  emailBackup: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  initials: string;
+  password: string;
+  editButtonText: string;
+  isEditProfileEnabled: boolean;
 
   constructor(
-    private model: KanbanModel
+    public model: KanbanModel
   ) { }
 
   ngOnInit() {
@@ -44,6 +43,11 @@ export class UserProfileComponent implements OnInit, IObserver {
     this.model.registerObserver(this);
     this.model.loadUserProfile();
     this.setDefaultState();
+  }
+
+  ngOnDestroy() {
+    this.model.setModelDefaultState();
+    console.log('user profile destroyed');
   }
 
   public editProfileClick(): void {

@@ -1,13 +1,28 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
 <div class="page-container">
+<<<<<<< HEAD
   <div class="w3-sidebar w3-bar-block" style="width:20%"> 
     <a href="#" class="w3-bar-item w3-button">看板</a>
     <a href="#" class="w3-bar-item w3-button">首頁</a>
     <a href="#" class="w3-bar-item w3-button">Link 3</a>
+=======
+  <div class="w3-sidebar w3-bar-block sidebar">
+    <h5 class="h5 m-3">Groups</h5>
+    <ul class="">
+      <div *ngFor="let userGroup of model.groups;">
+        <li class="">
+          <a href="javascript:void(0);" (click)="userGroupButtonClick(userGroup.key)">{{ userGroup.name }}</a>
+        </li>
+      </div>
+    </ul>
+    <a href="javascript:void(0);" class="w3-bar-item wl-button" (click)="newGroupButtonClick(groupModal)"><i class="fas fa-plus mr-2"></i>Create
+      new Group</a>
+>>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
   </div>
   
   <!-- Page Content -->
+<<<<<<< HEAD
 
   <div style="margin-left:20%">
     <!-- Modal -->
@@ -28,10 +43,31 @@
       <button class="button group-board-btn">Group1</button>
       <button class="button group-board-btn">Group2</button>
       <button class="button group-board-btn">New Board</button>
+=======
+  <div *ngFor="let userGroup of model.groups;">
+    <div style="margin-left:20%">
+      <div class="w3-container">
+        <div>
+          <h3 style="display: inline-block;">{{ userGroup.name }}</h3>
+          <button type="button" class="close" aria-label="Close" (click)="deleteGroupButtonClick(userGroup.key)">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div *ngFor="let dashboard of userGroup.dashboards;" style="display: inline-block;">
+          <div style="display: inline-block;">
+            <button class="button group-board-btn btn btn-primary" (click)="dashboardButtonClick(userGroup.key ,dashboard.key)">{{ dashboard.name }}</button>
+          </div>
+        </div>
+        <button class="button personal-board-btn btn btn-secondary" (click)="newDashboardButtonClick(dashboardModal, userGroup.key)">New
+          Board</button>
+      </div>
+      <div id="interval"></div>
+>>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
     </div>
   </div>
 </div>
 
+<<<<<<< HEAD
 <ng-template #content let-modal>
     <div class="modal-header">
       <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
@@ -77,3 +113,47 @@
       <button type="button" class="btn btn-outline-dark" (click)="createPersonalBoardClick(index)">Create</button>
     </div>
 </ng-template>
+=======
+<!-- Modal for new group-->
+<ng-template #groupModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Group</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form class="form-group">
+        <input type="text" class="form-control" name="newGroupName" [(ngModel)]="newGroupName" placeholder="Group Name"
+          required autofocus>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="createGroupButtonClick()">Create</button>
+  </div>
+</ng-template>
+
+
+<!-- Modal for new dashboard-->
+<ng-template #dashboardModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Add New Board</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div>
+      <form class="form-group">
+        <input type="text" id="newBoardName" class="form-control" name="newBoardName" [(ngModel)]="newDashboardName"
+          placeholder="Add New Board Title" required autofocus>
+      </form>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-dark" (click)="createDashboardButtonClick()">Create</button>
+  </div>
+</ng-template>
+>>>>>>> ec46aa8c35915dd9726e0dd3c77764640f459d74
