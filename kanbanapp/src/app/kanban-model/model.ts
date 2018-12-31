@@ -241,7 +241,9 @@ export class KanbanModel implements ISubject {
 
         for (let n = this.groups.length - 1; n >= 0; n--) {
             if (this.groups[n].key === groupId) {
-                this.deleteGroupDashboards(this.groups[n]);
+                this.deleteGroupDashboards(this.groups[n].key);
+                // this.deleteGroupColumns(this.groups[n]);
+                // this.deleteGroupTasks(this.groups[n]);
                 this.groups.splice(n, 1);
             } else {
                 groupIds.push(this.groups[n].key);
@@ -256,35 +258,52 @@ export class KanbanModel implements ISubject {
     }
 
     // Iterate through all dashboards of a group and delete them one by one from the database
-    public deleteGroupDashboards(group: Group): void {
-        // console.log('deleteGroupDashboards');
-        for (let n = group.dashboards.length - 1; n >= 0; n--) {
-            this.deleteDashboard(group.dashboards[n].key);
-        }
+    public deleteGroupDashboards(groupId: string): void {
+        const dashboardSubscription = this.database.list(this.dashboardsBaseRoute, dashboards => dashboards.orderByChild('group').
+            equalTo(groupId)).snapshotChanges().subscribe(dashboards => {
+                        dashboards.forEach(element => {
+                            this.deleteDashboardColumns(element.key);
+                            this.deleteDashboardTasks(element.key);
+                            this.database.object(this.dashboardsBaseRoute + element.key).remove();
+                        });
+                        dashboardSubscription.unsubscribe();
+                    });
     }
 
     // Deletes the specified dashboard from the database
     public deleteDashboard(dashboardId: string): void {
-        // console.log('deleteDashboard');
         this.database.object(this.dashboardsBaseRoute + dashboardId).remove();
     }
 
     // Iterate through all columns of a dashboard and deletes them one by one from the database
-    public deleteDashboardColumns(columns: Array<Column>): void {
-        // console.log('deleteDashboardColumns');
-        for (let n = columns.length - 1; n >= 0; n--) {
-            this.deleteColumn(columns[n].key);
-        }
+    public deleteDashboardColumns(dashboardId: string): void {
+        const columnSubscription = this.database.list(this.columnsBaseRoute, columns => columns.orderByChild('dashboard').
+            equalTo(dashboardId)).snapshotChanges().subscribe(dashboards => {
+                        dashboards.forEach(element => {
+                            this.database.object(this.columnsBaseRoute + element.key).remove();
+                        });
+                        columnSubscription.unsubscribe();
+                    });
+    }
+
+    // Iterate through all tasks of a dashboard and deletes them one by one from the database
+    public deleteDashboardTasks(dashboardId: string): void {
+        const taskSubscription = this.database.list(this.tasksBaseRoute, tasks => tasks.orderByChild('dashboard').
+            equalTo(dashboardId)).snapshotChanges().subscribe(tasks => {
+                        tasks.forEach(element => {
+                            this.database.object(this.tasksBaseRoute + element.key).remove();
+                        });
+                        taskSubscription.unsubscribe();
+                    });
     }
 
     // Deletes the specified column
     public deleteColumn(columnId: string): void {
-        // console.log('deleteColumn');
         this.database.object(this.columnsBaseRoute + columnId).remove();
     }
 
     public retrieveAllUsers() {
-        this.userListSubscription = this.database.list('users').valueChanges()
+        this.userListSubscription = this.database.list(this.usersBaseRoute).valueChanges()
             .subscribe(users => {
                 users.forEach(user => {
                     this.usersList.push(user['email']);

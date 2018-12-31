@@ -64,6 +64,7 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public inviteButtonClick(): void {
+    console.log(this.usersList);
     if (this.searchInput !== this.model.user.getEmail()) {
       this.model.inviteUserToGroup(this.searchInput, this.groupId);
     }
