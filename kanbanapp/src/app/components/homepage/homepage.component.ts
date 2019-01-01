@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./homepage.component.css']
 })
 
-export class HomepageComponent implements OnInit, OnDestroy, IObserver {
+export class HomepageComponent implements OnInit, OnDestroy {
   private groupsList: AngularFireList<any>;
   private closeResult: string;
   private newDashboardName: string;
@@ -25,7 +25,7 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
     private modalService: NgbModal,
     private router: Router,
     public model: KanbanModel
-    ) {}
+  ) { }
 
   ngOnInit() {
     this.newGroupName = '';
@@ -33,13 +33,11 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
     this.userGroups = [];
 
     this.setDefaultCurrentSelectedGroup();
-    this.model.registerObserver(this);
     this.model.loadUserProfile();
   }
 
   ngOnDestroy() {
     this.model.setModelDefaultState();
-    console.log('homepage destroyed');
   }
 
   public userGroupButtonClick(groupId: string): void {
@@ -52,16 +50,13 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
   }
 
   public newGroupButtonClick(content: string): void {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = 'Closed with: ${result}';
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.openModal(content);
   }
 
   public createGroupButtonClick(): void {
     this.model.createNewGroup(this.newGroupName, null);
     this.newGroupName = '';
+    this.closeModal();
   }
 
   public deleteGroupButtonClick(groupId: string): void {
@@ -70,23 +65,31 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
 
   public newDashboardButtonClick(content: string, groupId: string) {
     this.currentSelectedGroup = groupId;
-
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-      this.closeResult = 'Closed with: ${result}';
-      this.setDefaultCurrentSelectedGroup();
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
+    this.openModal(content);
   }
 
   public createDashboardButtonClick(): void {
     this.model.createNewDashboard(this.newDashboardName, this.currentSelectedGroup);
     this.setDefaultCurrentSelectedGroup();
     this.newDashboardName = '';
+    this.closeModal();
   }
 
   private setDefaultCurrentSelectedGroup(): void {
     this.currentSelectedGroup = '';
+  }
+
+  private openModal(content: string): void {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = 'Closed with: ${result}';
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private closeModal(): void {
+    this.modalService.dismissAll();
+    this.setDefaultCurrentSelectedGroup();
   }
 
   // 離開彈跳式視窗方法不同時，提示不同訊息
@@ -98,9 +101,5 @@ export class HomepageComponent implements OnInit, OnDestroy, IObserver {
     } else {
       return `with: ${reason}`;
     }
-  }
-
-  public update(user: User, group: Array<Group>): void {
-    console.log(this.model.groups[0].dashboards);
   }
 }
