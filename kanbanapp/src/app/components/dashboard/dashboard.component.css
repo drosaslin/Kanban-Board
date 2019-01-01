@@ -1,31 +1,45 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
 /* ------------------DASHBOARD GENERAL---------------------- */
 
 .dashboard-container {
   width: 100%;
-  margin-left: 5px;
-  margin-right: 5px;
 }
 
 .group-info {
-  padding-left: 5px;
-  padding-right: 5px;
-  margin-top: 10px;
   margin-bottom: 10px;
+  background-color: #EF5360;
+  padding: 5px 15px;
+  color: #fff;
 }
 
 .group-info * {
   display: inline;
-  margin-right: 30px;
+  margin-right: 0;
   font-size: 17px;
+  padding-left: 0;
+}
+
+.dashboard-name{
+  font-size: 25px !important;
 }
 
 .project-name {
-  color: black;
+  float: right;
+  vertical-align: middle;
+  color: #fff;
+  padding-left: 20px !important;
+  text-decoration: none;
+  padding-top: 8px;
 }
 
 .project-name:hover {
-  background-color: lightgray;
   text-decoration: none;
+  color: #4bd8d4;
 }
 
 .small-initials {
