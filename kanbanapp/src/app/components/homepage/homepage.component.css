@@ -5,7 +5,8 @@
 
 .sidebar{
     width: 20%;
-    background-color: #dedede;
+    background-color: #47494C;
+    color: #e3e5e8;
 }
 
 #personalBoardsButton {
@@ -36,6 +37,19 @@ ul {
   transition-duration: 0.4s;
 }
 
+.personal-board-btn{
+    color: #adadad;
+}
+
+#delete{
+    margin-left: 15px;
+    color: red;
+}
+
+.group-header{
+    display: flex;
+}
+
 .personal-board-btn:hover {
     background-color: #adadad;
     color: white;
@@ -48,4 +62,12 @@ ul {
 
 #interval {
     padding:15px 100%;
+}
+
+.btn-primary{
+    background-color: #ef5d60;
+}
+
+a:hover{
+    color: #FFF;
 }
