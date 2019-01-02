@@ -14,12 +14,13 @@
         <a class="nav-link" href="" routerLink="/userProfile"><i class="fas fa-user mr-2"></i>User Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="javascript:void(0);" (click)="logoutClick()"><i class="fas fa-sign-out-alt mr-2"></i>Log
-          out</a>
+        
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
       <h5>Hello, {{ (model.user == null) ? '' : model.user.username }}</h5>
+      <a class="nav-link" href="javascript:void(0);" (click)="logoutClick()"><i class="fas fa-sign-out-alt mr-2"></i>Log
+        out</a>
     </form>
   </div>
 </nav>

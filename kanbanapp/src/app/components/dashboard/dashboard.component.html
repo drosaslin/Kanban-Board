@@ -4,9 +4,9 @@
 
 <div class="dashboard-container">
   <div class="group-info">
-    <p>{{ model.selectedDashboard.name }}</p>   
+    <p class="dashboard-name">{{ model.selectedDashboard.name }}</p>   
     <div>
-      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()">{{  model.selectedGroup.name }}</a>
+      <a href="javascript:void(0);" class="project-name" routerLinkDisabled (click)="groupNameButtonClick()"><i class="fas fa-users"></i>  Group:  {{  model.selectedGroup.name }}</a>
     </div>
   </div>
 
@@ -32,12 +32,12 @@
         </ul>
         <input type="text" autocomplete="off" class="task-input" name="taskName" [(ngModel)]="taskName" autofocus *ngIf="addTaskEnabler[column.key]">
         <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-task-btn hvr-glow" (click)="addTaskButtonClick(column.key)"
-          role="button" aria-disabled="true">add new task</a>
+          role="button" aria-disabled="true"><i class="fas fa-plus"></i> Add new task</a>
       </div>
     </div>
     <div>
       <a href="javascript:void(0);" routerLinkDisabled class="btn btn-secondary btn-lg add-table-btn hvr-glow" (click)="addTableButtonClick()"
-        role="button" aria-disabled="true">+ add new table</a>
+        role="button" aria-disabled="true"><i class="fas fa-plus"></i> Add new table</a>
     </div>
   </div>
 </div>
