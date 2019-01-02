@@ -1,3 +1,6 @@
+body{
+    margin-top: 50px;
+}
 .page-container {
     width: auto;
     height: auto;
@@ -78,8 +81,13 @@ ul {
 
 .btn-primary{
     background-color: #ef5d60;
+    border-color: #ef5d60;
 }
 
 a:hover{
     color: #FFF;
+}
+
+.sidebar{
+    position: fixed;
 }

@@ -1,10 +1,13 @@
 .navbar{
     background-color: #4BD8D4;
     color: #FFF;
+    position: fixed;
+    width: 100% !important;
 }
 
 .navbar-brand{
     color: #FFF;
+    font-weight: bold;
 }
 
 .navbar-brand:hover{
