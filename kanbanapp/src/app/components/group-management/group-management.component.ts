@@ -79,6 +79,7 @@ export class GroupManagementComponent implements OnInit, OnDestroy, IObserver {
   public createDashboardButtonClick(): void {
     this.model.createNewDashboard(this.newDashboardName, this.groupId);
     this.newDashboardName = '';
+    this.modalService.dismissAll();
   }
 
   public update(user: User, group: Group[]): void {
