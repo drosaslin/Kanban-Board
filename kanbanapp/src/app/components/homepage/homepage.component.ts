@@ -59,8 +59,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
     this.closeModal();
   }
 
-  public deleteGroupButtonClick(groupId: string): void {
-    this.model.deleteUserGroup(groupId);
+  public deleteGroupButtonClick(content: string, groupId: string): void {
+    this.currentSelectedGroup = groupId;
+    this.openSmallModal(content);
+  }
+
+  public deleteGroup(): void {
+    this.model.deleteUserGroup(this.currentSelectedGroup);
+    this.closeModal();
   }
 
   public newDashboardButtonClick(content: string, groupId: string) {
@@ -81,6 +87,14 @@ export class HomepageComponent implements OnInit, OnDestroy {
 
   private openModal(content: string): void {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = 'Closed with: ${result}';
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private openSmallModal(content: string): void {
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeResult = 'Closed with: ${result}';
     }, (reason) => {
       this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;

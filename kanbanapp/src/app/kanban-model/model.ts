@@ -211,6 +211,10 @@ export class KanbanModel implements ISubject {
             .child(totalGroups).set(groupId);
     }
 
+    public addTaskDueDate(date: any, taskId: string): void {
+        this.database.database.ref(this.tasksBaseRoute).child(taskId).child('dueDate').update(date);
+    }
+
     public addTaskComment(content: string, firstName: string, lastName: string, userId: string, taskId: string): void {
         let taskIndex = 0;
 

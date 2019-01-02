@@ -4,7 +4,7 @@ export class Task {
     key: string;
     content: string;
     description: string;
-    dueDate: string;
+    dueDate: any;
     label: Array<any>;
     members: Array<any>;
     index: number;

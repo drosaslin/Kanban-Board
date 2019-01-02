@@ -33,6 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
   addTaskEnabler: Map<string, boolean>;
   dragulaSub: any;
   currentTask: Task;
+  currentSelectedColumn: string;
 
   constructor(
     private dragulaService: DragulaService,
@@ -48,6 +49,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.currentTask = null;
     this.columnTempName = '';
     this.editText = 'Edit';
+    this.currentSelectedColumn = '';
     this.model.columnsSubscription = null;
     this.model.selectedDashboard = null;
     this.groupId = this.activateRoute.snapshot.paramMap.get('groupId');
@@ -61,6 +63,7 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
 
   ngOnDestroy() {
     console.log('dashboard destroyed');
+    console.log(this.currentTask);
 
     this.dragulaService.destroy('COLUMNS');
     this.groupId = '';
@@ -100,8 +103,20 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.model.createNewColumn('New Table');
   }
 
-  public deleteTableButtonClick(columnId: string): void {
-    this.model.deleteColumn(columnId);
+  public deleteTableButtonClick(content: string, columnId: string): void {
+    this.currentSelectedColumn = columnId;
+
+    this.modalService.open(content, { size: 'sm', ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  public deleteTable(): void {
+    this.model.deleteColumn(this.currentSelectedColumn);
+    this.currentSelectedColumn = '';
+    this.closeModal();
   }
 
   public groupNameButtonClick(): void {
@@ -139,6 +154,10 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.disableDescriptionTextBox();
   }
 
+  public closeModal(): void {
+    this.modalService.dismissAll();
+  }
+
   // Delete comment from comment box
   public deleteCommentButtonClick(): void {
     console.log('delete comment');
@@ -153,9 +172,23 @@ export class DashboardComponent implements OnInit, OnDestroy, IObserver {
     this.commentTextBoxChange();
   }
 
+  public isOnTime(date: any): boolean {
+    const givenDate = date.year + '-' + date.month + '-' + date.day;
+    const dueDate = new Date(givenDate);
+    const currentDate = new Date();
+    currentDate.setHours(0, 0, 0, 0);
+
+    return currentDate < dueDate;
+  }
+
   // Enables the add comment button if there is any input in the comment's textox
   public commentTextBoxChange(): void {
     this.isAddCommentButtonEnabled = (this.taskComment.length > 0);
+  }
+
+  public dateChange(): void {
+    this.model.addTaskDueDate(this.currentTask.dueDate, this.currentTask.key);
+    console.log(this.currentTask.dueDate);
   }
 
   public cancelEditColumnButtonClick(columnKey: string): void {

@@ -60,6 +60,18 @@ ul {
     color: white;
 }
 
+.confirmation-modal {
+    padding: 1rem;
+}
+
+.confirmation-options {
+    float: right;
+}
+
+.confirmation-options * {
+    margin-left: 25px;
+}
+
 #interval {
     padding:15px 100%;
 }
